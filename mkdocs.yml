@@ -44,6 +44,7 @@ not_in_nav: |
 nav:
   - Home: index.md
   - Firmware and tools:
+      - Chile repeater builder: chile_repeater_builder.md
       - firmware_picker.md
       - notifications.md
       - preset_test.md
