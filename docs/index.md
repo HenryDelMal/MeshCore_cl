@@ -27,6 +27,7 @@ The navigation groups the remaining guides under Documentation, including board-
 ## Tools
 
 - [Firmware picker](firmware_picker.md) and [USB web console](https://flasher.meshcore.io/console)
+- [Chile repeater builder and key provisioner](chile_repeater_builder.md)
 - [Notification builder](notifications.md) and [temporary radio test builder](preset_test.md)
 - [Filter policy playground](filter_tool.md), [telemetry decoder](telemetry_decoder.md), and [management report decoder](management_decoder.md)
 
