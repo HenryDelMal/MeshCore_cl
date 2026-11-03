@@ -1,0 +1,3931 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the open source MeshCore firmware">
+      
+      
+      
+        <link rel="canonical" href="https://HenryDelMal.github.io/MeshCore_cl/research/firmware_memory_budget/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Firmware memory budget - MeshCore Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../_stylesheets/notification_builder.css?v=20261006-channel9">
+    
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/firmware_picker.css?v=20261013-pick-first-1">
+    
+      <link rel="stylesheet" href="../../_stylesheets/telemetry_decoder.css?v=20261022-noise-history">
+    
+      <link rel="stylesheet" href="../../_stylesheets/management_decoder.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/filter_tool.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/preset_test.css?v=20260923-2">
+    
+      <link rel="stylesheet" href="../../_stylesheets/esp32_partition_catalog.css?v=20261001-1">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#firmware-memory-checks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="MeshCore Docs" class="md-header__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Firmware memory budget
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="MeshCore Docs" class="md-nav__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    MeshCore Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware and tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware and tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chile_repeater_builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chile repeater builder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../firmware_picker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware picker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preset_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preset test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../filter_tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../telemetry_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../management_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started and features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started and features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../role_feature_switches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role feature switches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_companion_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_radio_full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion radio full
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_companion_usb_switcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion usb switcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_offline_queue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion offline queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../halo_keymind_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Halo keymind settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware updates and partitions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware updates and partitions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../upgrading_1.17.1.8_to_1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading 1.17.1.8 to 1.17.1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota user guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_easy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota easy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_wizard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lora_ota_automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lora ota automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_station_g2_to_ikoka_stick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota station g2 to ikoka stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_nrf52_bootloader_update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 bootloader update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_nrf52_qspi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 qspi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_meshtower_v2_sdcard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota meshtower v2 sdcard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../esp32_partition_catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 partition catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../esp32_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heltec_v4_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heltec v4 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../host_cli_service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host cli service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio, networking, and power
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Radio, networking, and power
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../radio_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../radio_presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio presets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fleet_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../room_services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../carrier_wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../espnow_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Espnow bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../split_radio_repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split radio repeater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rs232_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rs232 bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../udp_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Udp bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WiFi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flood_filtering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flood filtering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gps_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gps tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_lost_reply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion lost reply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor tracker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nrf52_power_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nrf52 power management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI and protocol reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI and protocol reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_build_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli build matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_command_availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli command availability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../terminal_chat_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal chat cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kiss_modem_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packet_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packet format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../payloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../management_reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats_binary_frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats binary frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../number_allocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number allocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qr_codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qr codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.18.0.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current - 1.18.0.1 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Previous releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Previous releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.9 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.17.1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.8 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Older releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../test-results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-counted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is counted
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What is counted">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mqtt-startup-minimum-and-runtime-qualification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MQTT startup minimum and runtime qualification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-ram-reductions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared RAM reductions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nrf52-companion-flash-savings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nRF52 Companion flash savings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="nRF52 Companion flash savings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#empty-contact-path-cache-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Empty contact-path cache initialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-evidence-and-regression-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release evidence and regression tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11801-known-risk-matrix-2026-10-18-utc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.18.0.1 known-risk matrix, 2026-10-18 UTC
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.18.0.1 known-risk matrix, 2026-10-18 UTC">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pr21-contact-recovery-size-recheck-2026-10-18-utc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR21 contact-recovery size recheck, 2026-10-18 UTC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wio-e5-mini-repeater-gcc-15-experiment-2026-10-18-utc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wio-E5 Mini Repeater GCC 15 experiment, 2026-10-18 UTC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mini-repeater-approved-cut-experiment-2026-10-18-utc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mini Repeater approved-cut experiment, 2026-10-18 UTC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mini-repeater-production-recipe-after-file-logging-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mini Repeater production recipe after file-logging approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shared-contact-ram-and-rak4631-full-recheck-2026-10-19-utc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared contact RAM and RAK4631 Full recheck, 2026-10-19 UTC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#heltec-v3-full-bounded-source-repair-2026-10-19-utc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Heltec V3 Full bounded-source repair, 2026-10-19 UTC
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/HenryDelMal/MeshCore_cl/edit/keymindCascade/docs/research/firmware_memory_budget.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<!-- meshcore-hosted-doc-link:start -->
+<p class="meshcore-hosted-doc-link"><a href="https://mikecarper.github.io/MeshCore/research/firmware_memory_budget/">View this page on MeshCore Docs</a>.</p>
+<!-- meshcore-hosted-doc-link:end -->
+
+<h1 id="firmware-memory-checks">Firmware memory checks</h1>
+<p>Every firmware environment runs <code>scripts/check_firmware_ram.py</code> against its
+linked ELF before producing or uploading an image. <code>build.sh</code>, including
+option 3, also requires a passing report before collecting release files.
+Native host tests do not use a microcontroller RAM budget.</p>
+<p>The check reserves room for enabled runtime allocations as well as static
+data. A firmware image fitting its board's reported RAM total is insufficient:
+the display, packet pool, USB, Bluetooth workers and WiFi can allocate after
+startup. The T096 Full 1.17.1.5 report exposed this distinction.
+MQTT uses an explicit startup minimum plus runtime connection admission. A
+passing build report does not qualify its maximum TLS/WSS/outbox workload.</p>
+<h2 id="what-is-counted">What is counted</h2>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Source of available runtime RAM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nRF52</td>
+<td>Actual <code>__HeapBase</code> and <code>__HeapLimit</code>; excludes SoftDevice, retained state, ISR stack and the dedicated 64 KiB mOTA arena where present</td>
+</tr>
+<tr>
+<td>ESP32, S3, C3, C6</td>
+<td>Linked ESP-IDF memory-region, capability and reservation tables; only internal, byte-addressable heap counts</td>
+</tr>
+<tr>
+<td>RP2040/RP2350</td>
+<td><code>__end__</code> to <code>__HeapLimit</code>, according to the selected linker</td>
+</tr>
+<tr>
+<td>STM32</td>
+<td><code>_end</code> to <code>_estack</code>, minus <code>_Min_Stack_Size</code></td>
+</tr>
+</tbody>
+</table>
+<p>ESP32 PSRAM, instruction-only RAM and RTC RAM never increase the internal
+budget. On chips other than classic ESP32, the late-reclaimed ROM stack region
+is excluded because its silicon-specific reservations are only known at boot.
+Classic ESP32 additionally retains its existing 8 KiB <strong>static DRAM</strong> check.</p>
+<p>The policy adds allowances for task stacks, radio packet pools, screen objects
+and pixel buffers, filesystem/sensor allocations, enabled wireless stacks,
+MQTT connections, OTA scratch and transient allocations. ESP32 images with
+MQTT reserve the same 49,152-byte WiFi allowance even without <code>WIFI_SSID</code> or
+<code>WIFI_OTA_SEEDER</code>: saved runtime credentials can activate WiFi. Multiple WiFi
+features count that allowance once; PSRAM-backed TLS does not remove it.
+ESP32 images with
+RS-232 reserve another 7,168 bytes even when UART defaults off: 3,072 bytes for
+the source-bounded bridge object and allocation metadata, plus an unchanged
+4 KiB for the UART driver and buffers. This
+keeps runtime UART enablement in the budget beside MQTT and ESP-NOW.
+T-LoRa V2.1-1.6 cannot fit all three transports: the qualified linked triple
+image had 190,488 available internal bytes against 196,984 required bytes
+under the earlier allocation estimates. The corrected equivalent requirement
+was 193,400 bytes with the earlier flat MQTT allowance, still 2,912 bytes above
+capacity. Its configured 16 KiB MQTT worker stack adds another 8 KiB under the
+current startup policy; these figures describe historical linked checks.
+Its ordinary release retains separate UART/ESP-NOW and MQTT/ESP-NOW Full
+images; routing capacities remain unchanged.
+A 160x80 ST7735
+RGB565 framebuffer needs 25,602 bytes. T096 recipes instead select
+<code>ST7735_BUFFER_COLOR_DEPTH=8</code>: the RGB332 canvas needs 12,801 bytes, plus
+a source-bounded 1 KiB allowance for the complete sprite object and allocator
+metadata. Each frame expands one 160-pixel scanline into a 320-byte stack buffer
+and sends the same RGB565 wire format. The current primary UI colors remain
+exact; resolution, fonts, all 32 message previews, 350 contacts, 40 channels and
+the 256-frame offline queue are unchanged. Other ST7735 recipes retain the
+16-bit default. A future sprite-object increase beyond the allowance fails a
+C++ assertion rather than silently reducing available heap. The existing loop
+stack and transient margin remain additive.</p>
+<p>The ordinary T096 BLE FEM-on/off policy includes its receiving OTA source
+scratch and full-length previews: the reported 81,474-byte requirement becomes
+69,697 bytes with the smaller canvas and explicit sprite-object allowance.
+The old 75,396-byte linked capacity therefore failed correctly; the check is
+not bypassed or relaxed to accept it. Full Companion's independent 72 KiB
+floor remains in place.</p>
+<p>ESP32 and nRF52 SSD1306 use a source-bounded 2 KiB allowance for the same
+fixed 1,024-byte framebuffer, embedded driver and allocation metadata. The
+OLED auto-detection backend reuses that one buffer across SSD1306/SH1106
+selection and retries. Other display allowances remain unchanged. nRF52 Full
+with that color framebuffer must have at least 72 KiB available before startup allocations.
+Headless and OLED devices use their own smaller totals. The JSON lists each
+component and checks the largest available region against the largest planned
+single allocation.</p>
+<p>Enabled Full host KISS images reserve a separate 2,048-byte
+<code>host_kiss_codec</code> allocation on ESP32 and nRF52, including while KISS is saved
+off. Turning the service on allocates its two host-TX and two encoded-output
+frames plus parser state. The source assertion bounds the complete Codec and
+allocator headroom to this allowance. WiFi/TCP retains its existing network
+allowance; the independent transient margin and all normal-role capacities
+remain additive. Explicit feature-off and ESP-NOW-only images omit this
+allocation. A passing report proves linked capacity, not physical session or
+maximum network-load qualification.</p>
+<h3 id="mqtt-startup-minimum-and-runtime-qualification">MQTT startup minimum and runtime qualification</h3>
+<p>The <code>mqtt_startup_allowance</code> component keeps a 24,576-byte internal startup
+minimum for the default 8,192-byte MQTTBridge worker stack and two active
+clients. Each SDK client task is explicitly configured with a 6,144-byte stack
+and priority 5 on IDF 4 and 5; its maximum configured
+receive/transmit buffers total 1,792 bytes. These stacks and buffers total
+24,064 bytes for two clients, leaving 512 bytes within the existing allowance.
+This is a minimum allowance, not a complete allocation bound for the clients,
+transport objects, TLS records, certificate processing, WebSockets or outboxes.
+The independent 16 KiB transient margin remains in the policy.</p>
+<p><code>MQTT_TASK_STACK_SIZE</code> above 8,192 bytes raises the startup requirement by its
+actual increase and raises the required contiguous allocation when needed.
+Smaller stacks and fewer runtime slots do not lower the existing allowance.
+The default runtime slot array has six entries on PSRAM builds and three on
+internal-only builds. The bridge can expose five active connections when PSRAM
+is present and two otherwise; <code>MQTT_RUNTIME_SLOT_COUNT</code> can restrict that
+capacity. A PSRAM board with unavailable PSRAM uses the two-connection cap.</p>
+<p>The report's separate <code>mqtt.maximum_slot_stack_buffer_allowance_bytes</code> records
+48,384 bytes for five exposed slots or 24,576 bytes for two, with larger worker
+stacks added to either. The five-slot figure extends the minimum by 7,936 bytes
+for each additional client task and buffer pair. It is not added to the startup
+gate: extra clients allocate lazily, and every connection attempt must pass
+runtime admission. It still excludes the maximum TLS/WSS/outbox workload.
+<code>maximum_runtime_load_qualified</code> and <code>physical_validation_performed</code> are false
+in these build reports. A <code>passed</code> startup check must not be presented as
+qualification of five simultaneous PSRAM connections or two internal TLS
+connections.</p>
+<p>The <code>mqtt</code> report also names the production runtime admission thresholds.
+Connection admission and the packet-publishing guard share a contiguous-block
+floor: 4,096 DMA-capable bytes with detected PSRAM, or 8,000 internal bytes without it. Admitting
+another broker while one is connected reserves its startup allocations beside
+that floor, protecting existing packet forwarding. The first connection after
+boot or an outage can bootstrap without that extra reservation, so the
+additional-broker reserve cannot block every disconnected slot's recovery.</p>
+<p>A cold SDK start requires at least 32 KiB of DMA-capable internal free heap.
+The separate 16 KiB allowance covers its SDK task stack/TCB,
+receive/transmit/reassembly buffers and transport or configuration objects,
+alongside the 16 KiB AES reserve. Those ordinary allocations occur after
+admission and do not use the TLS allocation guard. Bootstrap needs a contiguous
+8,192-byte block for plain MQTT. With another connected
+broker, the contiguous minimum includes its publication floor plus the startup
+allowance: 20,480 bytes with PSRAM or 24,384 without it, before the additional
+internal TLS requirement below.</p>
+<p>A retained initialized SDK handle with a stopped task requires 24 KiB free.
+Its separate 8 KiB restart allowance covers the pinned 6 KiB task stack plus
+TCB and allocator overhead. Bootstrap uses the same 8,192-byte block
+minimum as a cold plain-MQTT start. With another connected broker, its contiguous minimum
+is 12,288 bytes with PSRAM or 16,192 without it, before the internal TLS
+requirement below. SDK stop retains its receive/transmit buffers,
+configuration, transport objects and wrapper reassembly buffer, so restarting
+that handle does not need their first-initialization allocation again. A
+wrapper whose SDK initialization has not completed still receives the full
+cold allowance. This distinction also applies after WiFi loss stops SDK tasks
+but keeps their handles.</p>
+<p>All ESP32 clients use 896-byte receive, transmit and wrapper reassembly buffers
+from first initialization. Applying configuration cannot grow the retained SDK
+buffers or wrapper reassembly capacity, so uniform sizing permits later JWT
+reconfiguration without replacing the client. This adds 1,152 bytes to a
+non-JWT client's three buffers on an internal-only board compared with 512-byte
+buffers. The startup allowance already uses 896-byte receive/transmit buffers,
+and cold admission covers the ordinary allocations. WiFi recovery and explicit
+reconfiguration continue to retain clients.</p>
+<p>A warm reconnect keeps its running task and buffers; it requires at least
+16 KiB free and the same 4,096/8,000-byte publication block. The per-client SDK
+stack is independent of <code>MQTT_TASK_STACK_SIZE</code>, which sizes the existing bridge
+worker. TLS with detected PSRAM retains its separate 16,000-byte
+connection block: incoming handshake records are not bounded by the outgoing
+MQTT buffer. With another connected broker this remains 32,384 bytes for a cold
+start, 24,192 for a stopped task, and 16,000 for a warm reconnect. TLS without
+detected PSRAM retains its 60 KiB free-heap and 17,408-byte
+record-block floors for bootstrap. With another connected broker, admission
+reserves that record beside the publication block and ordinary startup
+allocations: 41,792 contiguous bytes for a cold start, 33,600 for a stopped
+task, or 25,408 for a warm reconnect. Both admission and publication use
+detected PSRAM, including a board whose compiled-in PSRAM support failed to
+initialize.</p>
+<p>PSRAM builds allocate WebConfig JSON workspaces and the MQTT wrapper's receive
+reassembly bytes in PSRAM. Task stacks and SDK/DMA owners remain internal.
+The shared packet, raw and status publish check preserves 16 KiB free DMA
+memory and a 4 KiB DMA block. ESP-MQTT fragments synchronous QoS 0 writes into
+its pinned 896-byte SDK buffer; the JSON scratch is already in PSRAM or on the
+worker stack. Queued QoS 1 records can be written whole, so larger records
+raise the required DMA block and total reserve by their size. Admission also
+charges the queued record itself before enqueue, then resamples before the
+next slot because small SDK outbox allocations can consume internal RAM. These bounds
+follow the <a href="https://github.com/espressif/esp-mqtt/blob/bb9c8af9d552b608dd3aabf9617bde757a538ebe/mqtt_client.c">pinned ESP-MQTT implementation</a>.</p>
+<p>PSRAM allocation fallback must leave the 16 KiB DMA reserve available. These
+conservative thresholds describe free heap at admission; they are not extra
+linked capacity or a guarantee against later fragmentation or allocations by
+other tasks. Available linked internal heap cannot establish how much
+DMA-capable heap remains or how it is fragmented after boot. Only runtime
+observations can establish that.</p>
+<p>ESP32-S3 repeater builds with PSRAM also place their channel/scope tables and
+full advert-source history there. Their capacities and persisted formats
+remain unchanged.
+The RAM check still reserves internal fallback for both complete tables;
+moving them out of BSS does not relax startup admission or the DMA reserve.
+If neither heap can safely hold a complete table, startup reports the failed
+allocation and stops rather than running with reduced filtering protection.
+Allocation occurs in <code>MyMesh::begin</code>, after Arduino initializes either QSPI or
+OPI PSRAM. Global constructors retain only the owners' pointers. Other targets
+keep their existing storage. <code>MESH_REPEATER_PSRAM_TABLES=0</code> restores inline
+storage for a custom build. The checker resolves the actual board MCU so the
+complete fallback cannot disappear from a non-G3 S3's budget.</p>
+<p>The IDF 4 WebSocket wrapper on any PSRAM-enabled ESP32 build also prefers PSRAM
+for its two padded 1,025-byte SDK buffers per initialized MQTT client, including
+clients using plain MQTT.
+Five initialized clients move 10,250 bytes of payload from internal RAM.
+Transport objects, task stacks, DMA buffers and radio packet queues keep their
+existing placement. The existing extra-byte overflow fix and guarded internal
+fallback remain in force. These figures describe allocation placement, not a
+measurement of running free heap or qualification of five simultaneous brokers.
+See the <a href="../../test-results/esp32_psram_storage_2026-10-27/">cross-board checks</a>
+for covered families and the distinction between linked and physical results.</p>
+<p>Maximum-load qualification still needs physical boot and sustained reconnect,
+publish and configuration-change tests with the selected number of brokers,
+transport schemes, certificates and enabled UART/browser/OTA features. Record
+DMA free heap, largest DMA block and allocation failures throughout that
+workload. Host admission tests and passing ELF checks provide engineering
+evidence without claiming that hardware validation has been performed.</p>
+<p>The earlier W12 Full MQTT RAM failure (182,768 available against 198,432
+required) and standard portable-slot overflow (1,322,304 against 1,310,720
+bytes) are historical measurements, not the current expanded Full result.
+The 2026-10-18 UTC recheck at <code>060119af8</code> passes with 200,640 internal bytes
+available against 198,432 required, retaining the 16 KiB transient margin.
+Its largest region is 167,872 bytes against 18,464 required; the packaged
+2,280,072-byte application fits the expanded 6,553,600-byte OTA slots.
+MQTT is enabled and all ten declared capability checks pass, without declared
+reductions. This establishes linked capacity and packaged capabilities, not
+physical boot/soak or maximum TLS/WSS/outbox-load qualification. It also does
+not qualify an independently built compact portable-slot recipe.</p>
+<p>The experimental RAK4631 combined Ethernet/UART2/adaptive-storage config adds
+an explicit 3,072-byte allowance for the UART bridge and its TX semaphore.
+Its Ethernet worker reserves 1,024 stack words (4,096 bytes) plus 256 bytes for
+task metadata and allocator overhead. Its bounded TCP transmit queue allocates
+512 bytes only while Ethernet is enabled; another 64 bytes cover allocator
+overhead. The DHCP object, socket state, queue indices and SPI objects are
+static and already reduce the linked heap capacity.</p>
+<p>Ethernet and external OTA share an exclusive ownership contract. Enabling
+Ethernet rejects a live or pinned transfer, releases idle external OTA buffers,
+and blocks encoder, self-source, manual-staging and folder-source allocation
+while Ethernet owns SPI. Disabling Ethernet parks the worker after socket/SPI
+cleanup; the main loop deletes that parked task synchronously and frees its
+TX queue before releasing ownership. The worker stack therefore cannot remain queued for idle-task
+reclamation while OTA allocates again. The budget counts the larger of the
+4,928-byte Ethernet worker/queue or 11,344-byte external OTA workspaces, with the UART
+allowance alongside either mode. It keeps the 8 KiB loop stack, 63 flood rules,
+and reserved 64 KiB OTA handoff arena.</p>
+<p>The shared RAM changes now reserve the lazy folder-source buffers as well:
+up to 4,096 bytes of source leaves and one 2,048-byte encoded output block,
+plus allocation overhead, for the RAK4631. These can coexist with own-image
+metadata and the encoder. The combined budget therefore reserves 11,344 bytes
+for external OTA, or 10,304 with the device encoder disabled, against the
+4,928-byte Ethernet worker/queue. Ethernet and external OTA remain exclusive.
+Freeing static buffers increases available heap; their active allocation cost
+still appears in the memory check.</p>
+<p>This combined config uses a source-bounded 2 KiB SSD1306 allowance. Its named
+128x64 geometry needs one 1,024-byte framebuffer, reused on later starts;
+the driver itself is embedded in a linked global, measured at 156 bytes in
+the ARM test ELF. Including that already-counted object again plus 32 bytes
+for allocation overhead still leaves 836 bytes within the allowance.
+A compile-time assertion
+covers framebuffer, complete driver object and allocator overhead within that
+bound. This corrects a padded allocation estimate; it does not free actual RAM.
+The same source assertion and bound now cover ordinary nRF52 SSD1306 images
+as well; other display drivers keep their existing budgets. These are linked
+capacity checks, not qualification of a published or physically tested image.</p>
+<h2 id="shared-ram-reductions">Shared RAM reductions</h2>
+<p>These changes apply to every board that compiles the corresponding feature.
+They retain stack sizes, radio packet pools, USB buffering, table capacities,
+stored settings, OTA block sizes and source-image limits.</p>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Scope</th>
+<th>RAM reduction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Repeater ACL session state</td>
+<td>Pure repeater builds on all platforms</td>
+<td>36 bytes per client on 32-bit targets; 1,152 bytes for 32 clients</td>
+</tr>
+<tr>
+<td>Compact recent-repeater records</td>
+<td>Repeaters with recent history enabled</td>
+<td>12 to 9 bytes per record; 1,536 bytes for 512 records</td>
+</tr>
+<tr>
+<td>Compact flood-rule flags and aligned counters</td>
+<td>Generalized repeater and room rule engines</td>
+<td>200 to 192 bytes per rule; 504 bytes for 63 repeater rules or 248 bytes for 31 room rules</td>
+</tr>
+<tr>
+<td>One tagged flood-rule target name</td>
+<td>Generalized repeater engine on all platforms</td>
+<td>332 to 300 bytes per extended rule; 2,016 constructor-time heap bytes for all 63 slots</td>
+</tr>
+<tr>
+<td>Streaming Merkle proof generation</td>
+<td>All OTA roles and platforms</td>
+<td>Removes full-leaf-table proof scratch; compressed output needs only one logical block</td>
+</tr>
+<tr>
+<td>Source buffers allocated on demand</td>
+<td>All OTA roles and platforms</td>
+<td>Leaves allocate only the selected image's digest count; unused leaves/output return to the heap</td>
+</tr>
+</tbody>
+</table>
+<p>The ACL source-role pre-script contributes one common compiler definition for
+the entire build. Room/sensor and unknown roles keep the complete session
+layout. The persisted four-byte room synchronization field stays in repeater
+records, so existing ACL files and their checksums remain compatible.</p>
+<p>Recent-history timestamps retain all 32 bits using explicit byte operations,
+avoiding unaligned multi-byte accesses on ARM. The table belongs to the mesh
+loop; network command handlers marshal their work to that loop. These byte
+operations do not provide synchronization for hypothetical concurrent users.
+Flood flags remain internal; FPF files serialize each field explicitly and
+never expose compiler bitfield layout. Multibyte counters remain aligned.
+Repeater rules store either the direct scope name or target region name in
+one 32-byte array because the CLI and stored-policy validator already reject
+both actions together. A spare flag bit identifies the name. FPF6 retains its
+single scope field. FPF7/8 retain both fixed-width name fields; the inactive field
+is emitted as 32 zero bytes. Load reads and validates both fields before
+selecting the shared name, retaining maximum name lengths and refusing a
+malformed two-target policy. Room-engine rows and on-disk formats are unchanged.</p>
+<p>Rule deduplication compares configured fields explicitly, so neither live
+rate-window counters nor struct padding can make different rules share a slot.</p>
+<p>OTA leaf capacity remains controlled by <code>OTA_PROOFGEN_SCRATCH</code>, independently
+of output-buffer size. The maximum source buffers are 4 KiB plus one block on
+ordinary nRF52, 8 KiB plus one block with SD storage, and 16 KiB plus one block
+on legacy ESP32 paths. Non-PSRAM ESP32 Full uses grouped source proofs instead:
+the complete workspace is bounded to 1,536 bytes, while retaining the same
+4,096-block source limit. The check still adds one output block and allocation
+metadata; safety reserves and stacks are unchanged. PSRAM and other platforms
+retain the legacy policy. Explicit larger custom leaf limits also keep the
+legacy implementation. Generic folder sources need no output allocation for raw DATA or
+proofs; own-image raw serving retains its caller-owned compatibility buffer.
+Its nRF52 allowance remains in the budget even when the device encoder is off.
+Queued DATA, PROOF and MANIFEST responses pin their buffers through radio
+backpressure.
+Explicit cancellation or source detach releases the reloadable cache; an
+unpinned cache also expires after 30 seconds. Attached source descriptors
+remain advertised and reload on the next request. Allocation failure refuses
+source loading safely, or falls back to raw DATA if only compression output
+is unavailable. Receive reassembly and serving/inflate buffers remain separate.</p>
+<p>On RAK4631, the OTA context's permanent allocation falls from 28,816 to 20,640
+bytes, an 8,176-byte reduction before table savings. This is idle heap capacity,
+not an additional 8 KiB saving on top of the active-operation savings. The RAM
+policy reserves lazy buffers when active and separately checks the largest
+contiguous allocation. ESP32 history uses its actual default capacities:
+256 records on classic ESP32 and 2,048 on S2/S3/C-series, unless overridden.</p>
+<p>The matched RAK4631 Full combined trial on 8 October 2026 retained all sensor
+drivers, 32 ACL clients, 63 flood rules, 512 recent repeater records, the 8 KiB loop
+stack and the reserved 64 KiB OTA arena:</p>
+<table>
+<thead>
+<tr>
+<th>Linked measurement</th>
+<th style="text-align: right;">Before shared RAM changes</th>
+<th style="text-align: right;">After all five changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Available heap capacity before startup</td>
+<td style="text-align: right;">73,580 bytes</td>
+<td style="text-align: right;">83,300 bytes</td>
+</tr>
+<tr>
+<td>Reserved startup/active allocations</td>
+<td style="text-align: right;">72,584 bytes</td>
+<td style="text-align: right;">77,104 bytes</td>
+</tr>
+<tr>
+<td>Capacity beyond those reservations</td>
+<td style="text-align: right;">996 bytes</td>
+<td style="text-align: right;">6,196 bytes</td>
+</tr>
+<tr>
+<td>Application flash</td>
+<td style="text-align: right;">585,700 bytes</td>
+<td style="text-align: right;">586,260 bytes</td>
+</tr>
+</tbody>
+</table>
+<p>The permanent allocations shrink by 9,720 bytes. The smaller ACL and flood
+tables reduce startup allowances by another 1,656 bytes, while the new
+6,176-byte folder-source allowance counts buffers when active. The resulting
+capacity beyond reservations improves by 5,200 bytes; flash grows by 560 bytes.
+The reports are bound to ELF hashes
+<code>a16c02e43c12d7dadd94b92b9b80cdd22eced7f67e085b1fffb62ea39f09fcce</code>
+and <code>f78110d1609334621098cb6db2039227c2f8fc9ac7f9e6ef7dc3cc63eb8d502f</code>,
+respectively. These are linked capacity checks, not measured free heap after
+boot or physical Ethernet/OTA soak results.</p>
+<p>The five changes pass representative repeater builds for RAK4631 combined
+Full, Heltec V4 (ESP32-S3), Heltec V2 (classic ESP32), and Seeed XIAO RP2040.
+RAK4631 room-server and Heltec V4 sensor builds also pass while retaining
+their complete ACL session layouts. At that measurement, Wio E5 Mini repeater
+compilation passed but linking exceeded flash capacity: the baseline already
+overflowed by 27,200 bytes, and those changes added 224 bytes for a 27,424-byte
+overflow. The newer 1.18.0.1 check below still fails; this cable-only STM32
+image remains unqualified and is not release-ready.</p>
+<p>Regression coverage includes unchanged ACL/FPF file bytes, full capacities,
+timestamp rollover, flag combinations, ARM access widths/alignment, streamed
+proofs against the existing reference algorithm, allocation failures, source
+reload, queued-response lifetimes, and concurrent compressed serving/receiving.
+Synthetic and representative build results are distinct from physical soak
+qualification of every board.</p>
+<p>Generate matched Full/Reduced baseline and combined configs outside the
+repository without starting PlatformIO:</p>
+<pre><code class="language-sh">python3 scripts/generate_rak4631_combined_test.py
+</code></pre>
+<p>Run its printed commands one at a time and preserve each ELF and memory report
+before the next build reuses the environment directory.</p>
+<p>The combined prototype starts with Ethernet off after every restart. Use the
+USB CLI commands <code>eth on</code>, <code>eth.status</code>, and <code>eth off</code>; <code>get eth</code> reports the
+requested mode. UART2 remains independently controlled by
+<code>set bridge.uart 2</code> and <code>set rs232.enabled on|off</code>. Full retains every sensor
+driver; absent sensors do not require a different image.</p>
+<p>With Ethernet on, OTA uses eligible internal-flash deltas. External full-image
+staging, self-serving, manual serving buffers and OTA folders are unavailable
+until Ethernet is off. Active or staged OTA work prevents a mode change.
+RAK15001 and Ethernet share chip-select 26 and cannot be used together; the
+prototype refuses that combination. External storage also needs a matching
+bootloader that permits internal OTA while Ethernet is enabled.</p>
+<p>TCP sends and receives use bounded register operations; a stalled peer cannot
+hold the mesh loop waiting for an acknowledgement. DHCP and listener management
+run in the Ethernet worker. This is synthetic coverage and a build experiment,
+not a physical Ethernet/PoE soak qualification or a replacement release image.</p>
+<p>RAK13800 Companion transport also uses a 1024-word worker by default. Its
+existing four-frame queue stays in the linked object; it adds no raw CLI TX
+ring. Reserve the worker's 4096-byte stack plus 256 bytes for its TCB and
+allocation metadata in addition to OTA source workspaces: USB/BLE folder
+sources can coexist with Companion Ethernet. Stack overrides raise both the
+total and contiguous allocation requirements. Worker shutdown must complete
+before its stack is reclaimed or the shared SPI/storage owner is released.</p>
+<p>Full RAK Companion keeps every OTA target name while storing an eight-bit
+candidate fingerprint instead of a four-byte ID for each name. A lookup
+reconstructs candidate names in the existing 4096-byte heap workspace and
+checks their complete SHA-256:4 IDs before returning a match. Other targets
+retain their existing index. This trades bounded, infrequent display lookup
+work for flash space; no target names or firmware capabilities are removed.</p>
+<p>The <a href="../../test-results/v4_pixel5_font_trial/">small-screen message layout</a> retains complete
+160-byte messages. Its expanded preview records add 2,816 bytes to the
+startup allowance and increase the contiguous history allocation budget.
+The V4 can allocate that history in PSRAM; the guard conservatively reserves
+internal capacity so that PSRAM availability cannot hide a RAM shortage. A
+target may replace the generic UI allowance only with
+<code>MESH_COMPANION_SCREEN_STARTUP_BYTES</code>; a source-side assertion then covers its
+actual startup screens plus ESP32 allocator overhead.</p>
+<p>These are engineering allowances for supported configurations, not measured
+free heap after boot or a guarantee against every future allocation failure.
+Unknown platforms, unknown display drivers and missing linker metadata fail
+closed. <code>MESH_MIN_RUNTIME_HEAP</code> can raise a profile's requirement; it cannot
+lower the calculated requirement. Add an allocation allowance when adding a
+display, transport or other substantial feature.</p>
+<p>Wireless Paper Full keeps 350 contacts and 256 offline frames by lending the
+upper 128 queue slots to its mOTA workspace during a session. An idle WiFi
+mOTA listener leaves all 256 slots available. More than 128 unread frames
+refuses the loan; sync messages with an app first. USB/TCP source detach or
+disconnect returns all 256 slots and releases the ESP32 proof/leaf scratch
+buffers. The display and simultaneous USB, Bluetooth and WiFi remain enabled.</p>
+<h2 id="nrf52-companion-flash-savings">nRF52 Companion flash savings</h2>
+<p>The common nRF52 Companion policy now retains a 960-byte Ed25519 fixed-base
+table in place of the original 30,720-byte table. It evaluates the same signed
+radix-16 digits with constant-time table selection, using more doublings instead
+of storing 32 shifted rows. Compact SHA-512 and scalar arithmetic keep the same
+outputs and wire format. The larger RAM-built table used by infrastructure
+profiles is not enabled for Companions.</p>
+<p>The policy also omits unused USB device MSC/HID/MIDI/vendor/video classes,
+SparkFun's unused automatic NMEA cache and the invisible SSD1306 vendor splash.
+For the exact hash-qualified CC310 archive, the domain wrapper retains P-256
+for BLE Secure Connections and removes unused legacy curves. CDC, DFU, USB host,
+GPS navigation, all Companion fonts, Meshtext, contacts, channels, the Reader
+corpus and the 8 KiB loop stack remain available. Explicit board/user overrides
+and <code>MESH_NRF52_COMPANION_TRIM=0</code> retain their requested values. Other platforms
+do not receive this Companion policy.</p>
+<p>The RAK4631 Full comparison uses the released 1.17.1.10 preview3 ELF at
+<code>9ce2a076</code> and the same target with these changes and Reader chapter/range
+support. Flash is initialized linked code/data; static RAM is <code>.data</code> plus
+ordinary <code>.bss</code>, excluding separately reserved arenas.</p>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th style="text-align: right;">Preview3</th>
+<th style="text-align: right;">With Companion trims and Reader ranges</th>
+<th style="text-align: right;">Difference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linked flash bytes</td>
+<td style="text-align: right;">710,404</td>
+<td style="text-align: right;">652,908</td>
+<td style="text-align: right;">57,496 fewer (56.1 KiB)</td>
+</tr>
+<tr>
+<td>Static RAM bytes</td>
+<td style="text-align: right;">157,028</td>
+<td style="text-align: right;">153,876</td>
+<td style="text-align: right;">3,152 fewer (3.1 KiB)</td>
+</tr>
+<tr>
+<td>Linked heap capacity bytes</td>
+<td style="text-align: right;">78,484</td>
+<td style="text-align: right;">81,636</td>
+<td style="text-align: right;">3,152 more</td>
+</tr>
+<tr>
+<td>UF2 space below the application ceiling</td>
+<td style="text-align: right;">2,048</td>
+<td style="text-align: right;">59,648</td>
+<td style="text-align: right;">57,600 more</td>
+</tr>
+</tbody>
+</table>
+<p>Physical RAK signing averaged 14.4 ms with the original table and 35.9 ms with
+the smaller implementation. All 24 signatures per image, including SHA-512
+block-boundary message lengths, matched byte for byte and verified independently.
+The linked ARM emulator measures 1,928 bytes in signing versus 1,528 before;
+these are crypto function frames only, excluding callers, interrupts and other
+tasks. The loop stack stays at 8 KiB. A full firmware RAM check still applies.</p>
+<p>CI runs <code>scripts/check_nrf52_companion_crypto.py</code> on the actual Full RAK ELF.
+It checks the 960-byte table, executes two RFC 8032 vectors, and rejects crypto
+function stack use above 2 KiB. Reader is now disabled by default in Companion
+builds; an explicit <code>COMPANION_FEATURE_READER=1</code> retains the implementation and
+corpus. Host tests compare
+1,791 scalars and 128 keypair/signature/shared-secret cases against the original
+implementation, plus scalar boundary/random and sanitizer tests. Clean Full
+builds also cover T1000-E and T096. These builds are synthetic coverage for
+those boards; the physical Reader/signing tests use the RAK4631.</p>
+<p>Reader commands support <code>get reader 2</code> and <code>get reader 2:2-12</code>. Text terminals
+stream at most 96 bytes per mesh loop, preserving progress under zero/short
+writes. The TCP console uses one nonblocking socket-send attempt for the stream,
+so a peer that stops reading cannot hold the mesh loop in WiFiClient retries.
+App CLI replies remain bounded and supply a continuation command.
+The physical RAK passed all 21 chapters, ranges, app-style continuation replies,
+a paused USB reader exceeding the 4 KiB queue, and disconnect cancellation.</p>
+<h3 id="empty-contact-path-cache-initialization">Empty contact-path cache initialization</h3>
+<p>The contact-path pool now has an explicit runtime constructor. Its existing
+member defaults still initialize every empty handle and resident entry, and
+<code>Slot()</code> still resets released handles. This moves the local static pool from
+initialized <code>.data</code> to zero-initialized <code>.bss</code>: the vtable pointer and repeated
+<code>NONE</code>/255 slot markers no longer require a 5,780-byte flash load image. The
+pool is constructed on first use by the existing main-loop contact owner.
+Its layout, 390 handle slots, 16 resident paths, reference/snapshot behavior
+and persistent contact records are unchanged.</p>
+<p>The RAK4631 Full release recipe at <code>c0672b90</code>, with the full
+<code>v1.17.1.10-halo-keymind-cascade-dev</code> version and commit suffix, measured:</p>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th style="text-align: right;">Before</th>
+<th style="text-align: right;">Runtime pool construction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linked initialized flash bytes</td>
+<td style="text-align: right;">716,448</td>
+<td style="text-align: right;">710,908</td>
+</tr>
+<tr>
+<td>Application image including EndF</td>
+<td style="text-align: right;">716,528</td>
+<td style="text-align: right;">710,988</td>
+</tr>
+<tr>
+<td>Linked available heap bytes</td>
+<td style="text-align: right;">79,388</td>
+<td style="text-align: right;">79,388</td>
+</tr>
+<tr>
+<td>Required runtime heap bytes</td>
+<td style="text-align: right;">74,576</td>
+<td style="text-align: right;">74,576</td>
+</tr>
+</tbody>
+</table>
+<p>The net flash saving is 5,540 bytes after constructor/guard code. The image
+passes the existing 712,704-byte application ceiling, capability checks, RAM
+budget and DFU handoff checks. Its padded UF2 ends at <code>0xD3A00</code>, below the
+unchanged <code>0xD4000</code> boundary. Sensors, BLE/USB/Ethernet, SD, logging, Meshtext,
+OTA, Reader data and the 8 KiB loop stack remain enabled.</p>
+<p>The contact-cache test compiles a real static pool and checks its zero-initialized
+storage, alongside the existing sanitized eviction, snapshot, migration and
+transaction tests. The compiled ARM Companion check also rejects a pool in an
+initialized ELF section, so compiler promotion cannot silently restore the
+flash image. Its normal linked crypto vectors and Reader retention checks
+remain required.</p>
+<h2 id="release-evidence-and-regression-tests">Release evidence and regression tests</h2>
+<p>Full Companions without PSRAM also use
+<a href="../companion_contact_cache/">16-entry path and shared-secret caches</a>.
+The optional NimBLE capacity trials retain the same RAM guards at 350
+contacts and 256 normal offline frames.</p>
+<p>Each newly built firmware has a matching <code>.memory.json</code> report. It records
+the linked ELF SHA-256, available internal RAM, required RAM, largest region,
+and SHA-256 hashes for the actual firmware files and capability manifest.
+Packaging and resumed builds reject absent reports, failures, stale ELFs,
+missing files and changed firmware. Do not reuse a report for another build.</p>
+<p>Run PlatformIO commands sequentially in this checkout:</p>
+<pre><code class="language-sh">python3 -B test/test_firmware_ram.py
+python3 -B test/test_sh1106_memory.py
+python3 -B test/test_t096_full_memory.py
+python3 -B test/test_st7735_framebuffer.py
+python3 -B test/test_nrf52_ble_startup.py
+python3 -B test/test_shared_mota_queue.py
+python3 -B test/test_cascade_release_package.py
+pio test -e native -f test_ota
+</code></pre>
+<p>Tests cover all resolved firmware environments' hooks, real ELF parsing,
+allocator table formats, excluded memory, allocation failure, package/report
+binding and the published T096 failing budget. Shared mOTA tests exercise
+complete transfers, queue wraparound, unread-message order, source ownership,
+stop/disconnect and repeated reuse. Bluetooth tests inject task and service
+startup failures. The manual staging buffer also has allocation-failure and
+repeated release tests. ESP32 tests run the actual WiFi mOTA listener and source
+framing through complete transfers, idle polling, queue-full refusal, network
+loss, CLI detach and USB/TCP ownership changes under address/leak sanitizers.
+The ST7735 tests check all 256 RGB332 values, exact UI primary colors, full
+160x80 scanout and byte order on both SPI APIs, the unchanged 16-bit path,
+allocation failures, and retained-buffer wake/retry behavior. CI also compiles
+both ordinary T096 BLE FEM variants with their real runtime-RAM gates, not only
+the distinct Full Companion overlay.</p>
+<p>For older releases without saved ELFs, an audit can compare their ESP allocator
+tables against a matching pinned SDK ELF and read reservations from the
+<strong>published application itself</strong> using <code>scripts/audit_esp32_image_ram.py</code>.
+Unrecognized layouts require another matching reference or a historical rebuild.
+An audit must identify original-log/linker calculations separately from new
+ELF checks and verify the published firmware hashes.</p>
+<p>Physical validation remains necessary: boot with and without USB, pair and
+exchange Bluetooth messages, visit every screen, wake with the button, enable
+logging/MQTT, transfer mOTA, and monitor heap during a sustained workload.
+See <a href="https://github.com/mikecarper/MeshCore/blob/keymindCascade/MEMORY_MONITORING.md">memory monitoring</a>
+for runtime diagnostics.</p>
+<h2 id="11801-known-risk-matrix-2026-10-18-utc">1.18.0.1 known-risk matrix, 2026-10-18 UTC</h2>
+<p>The targeted recheck used <code>v1.18.0.1-halo-keymind-cascade-dev</code>,
+<code>usa-cascade-fixed</code>, the Cascade profile, and release-default debug/logging
+policy (<code>DISABLE_DEBUG=0</code>). PlatformIO ran sequentially; new artifacts and
+logs were isolated from existing <code>out/</code> builds. Exact-identity expanded Full
+profiles were selected for ESP32 infrastructure. Required nRF52 receiver
+pairs built both Full and Reduced; a Reduced pass did not replace a Full pass.</p>
+<p>Twenty-five selections passed, producing 31 verified profiles:</p>
+<table>
+<thead>
+<tr>
+<th>Selections</th>
+<th style="text-align: right;">Passing profiles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAK3401 and RAK4631 Full Companion</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>Wio L1 Full/BLE; T096 Full/BLE, each FEM-on/off</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td>RAK4631 canonical and unified Repeater, Full/Reduced</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>RAK3401 unified and RAK13302/W25Q16 Repeater, Full/Reduced</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>MeshTower SD and T096 Repeater, Full/Reduced</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>RAK3x72, Wio-E5 Mini, Wio-E5 Dev and Tiny Relay USB Companion</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>W12 expanded Full Repeater, Room and MQTT Repeater</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>G2 Full Companion/MQTT Repeater, G3 r2 MQTT Repeater, V4 Full FEM-on</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+<p>The separate 26th selection, <code>wio-e5-mini_repeater</code>, was an explicitly
+cable-only control using <code>--allow-no-ota</code>, not an eligible wireless release
+target. Its baseline at <code>3059d7994</code> overflows the existing 245,760-byte app
+region by 38,040 bytes. A private compact-crypto/unused-timer trial recovered
+18,544 bytes but still overflowed by 19,496. That unqualified trial was not
+retained. The 16 KiB filesystem, host CLI and existing features were not cut
+to manufacture a pass; no failing image was published.</p>
+<p>Three reproduced release-target failures were fixed:</p>
+<ul>
+<li><code>975521645</code>: Wio-E5 Dev Companion, 16,468-byte overflow to 508 bytes free.</li>
+<li><code>3059d7994</code>: Tiny Relay Companion, 16,424-byte overflow to 452 bytes free.</li>
+<li><code>29787c0b2</code>: G3 Full MQTT, 232-byte RAM-budget deficit to 1,816 bytes above
+  the required budget. The SH1106 wrapper now releases its previous BusIO
+  adapter before initialization/retry. Source assertions bound its fixed
+  1,024-byte framebuffer, complete display object, adapter and allocation
+  metadata within 2 KiB. Only the ESP32 SH1106 estimate changes; other
+  reserves remain intact. Linked available RAM remains 200,248 bytes.</li>
+</ul>
+<p>The STM32 changes reuse equivalent fixed-loop crypto and omit unused Arduino
+PWM/tone wrappers while retaining the low-level TIM HAL, 100 contacts, eight
+channels, GPIO/ADC interfaces and 32 KiB filesystems. CI now links all four
+small STM32 Companions serially at release-version length (<code>2ae109fea</code>) and
+the exact G3 Full MQTT profile. Display tests cover repeated successful and
+failed initialization, recovery, destruction, addressing and rendering under
+ASan/UBSan, including a missing-cleanup negative control.</p>
+<p>Passes retain their individual source SHAs (<code>060119af8</code>, <code>3059d7994</code>,
+<code>2ae109fea</code>, <code>29787c0b2</code>) and file-bound memory/capability reports. The affected
+G2/Wio L1 selections in this matrix and all four STM32 Companions were rebuilt
+at <code>29787c0b2</code>.
+The final 95 related host tests and artifact-hash checks pass.</p>
+<h3 id="pr21-contact-recovery-size-recheck-2026-10-18-utc">PR21 contact-recovery size recheck, 2026-10-18 UTC</h3>
+<p>The combined PR17–21 merge tree <code>a40b1f662</code> was linked with
+<code>v1.18.0.1-halo-keymind-cascade-dev</code>, <code>usa-cascade-fixed</code>, and the Cascade
+profile. All four unchanged 229,376-byte application limits and runtime RAM
+gates passed. These are build results, not on-device qualification.</p>
+<table>
+<thead>
+<tr>
+<th>USB Companion</th>
+<th style="text-align: right;">Application bytes</th>
+<th style="text-align: right;">Free application bytes</th>
+<th style="text-align: right;">Static RAM bytes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAK3x72</td>
+<td style="text-align: right;">228,744</td>
+<td style="text-align: right;">632</td>
+<td style="text-align: right;">40,220</td>
+</tr>
+<tr>
+<td>Wio-E5 Mini</td>
+<td style="text-align: right;">228,760</td>
+<td style="text-align: right;">616</td>
+<td style="text-align: right;">40,252</td>
+</tr>
+<tr>
+<td>Wio-E5 Dev</td>
+<td style="text-align: right;">228,884</td>
+<td style="text-align: right;">492</td>
+<td style="text-align: right;">40,212</td>
+</tr>
+<tr>
+<td>Tiny Relay</td>
+<td style="text-align: right;">228,940</td>
+<td style="text-align: right;">436</td>
+<td style="text-align: right;">40,220</td>
+</tr>
+</tbody>
+</table>
+<p>The earlier 508/452-byte margins above are historical checkpoints. Continue
+linking every small STM32 Companion at full release-version length: these
+margins do not justify relaxing the application, filesystem or runtime-RAM
+gates. Physical storage and boot checks remain in the
+<a href="../../test-results/hardware_validation_checklist/#pr1721-follow-up-qualification-2026-10-18-utc">hardware checklist</a>.</p>
+<p>Margins remain narrow: RAK4631 Full Companion has 932 flash bytes free;
+canonical/unified RAK4631 Full Repeater have 548/540 bytes above their RAM
+budgets. W12/G2/G3 Full MQTT have 2,208/2,176/1,816 bytes above their budgets.
+These are linked-capacity margins, not measured running free heap.</p>
+<p>No new feature reductions were introduced. Existing declarations remain:
+RAK3401 unified has 47 flood rules, T096 Repeater has four, Reduced profiles
+omit selected optional sensor drivers, and nRF52 Full Companions loan half
+their 256-frame offline queue while mOTA is active. STM32 Companions remain
+cable-only; nRF52 Full Companion source support is not LoRa self-update
+receiver qualification. Exact storage/bootloader requirements still apply.</p>
+<p>This is a targeted build/capacity pass, not the complete canonical release
+matrix at one frozen commit, physical hardware/upgrade/soak qualification,
+or publication of a 1.18.0.1 release.</p>
+<h3 id="wio-e5-mini-repeater-gcc-15-experiment-2026-10-18-utc">Wio-E5 Mini Repeater GCC 15 experiment, 2026-10-18 UTC</h3>
+<p>The separate compiler experiment used source <code>6035f6631</code> and the same
+release recipe above. For the reported comparisons, firmware timestamps
+were fixed at <code>18-Oct-2026</code> and epoch <code>1792281600</code>. The actual compiler
+executables reported Arm GNU
+14.2.Rel1 / GCC 14.2.1 and Arm GNU 15.3.Rel1 / GCC 15.3.1; a private
+<code>platform_packages</code> override selected the latter. Production pins were not
+changed. Each PlatformIO build ran alone, with a fresh private build/output
+directory; no existing <code>out/</code> artifacts were replaced.</p>
+<p>These numbers are linker overflows beyond the <strong>245,760-byte app region</strong>,
+not successful firmware sizes. The 16,384-byte filesystem, host CLI,
+logging policy, radio preset and existing feature declarations were retained.</p>
+<table>
+<thead>
+<tr>
+<th>Matched recipe</th>
+<th style="text-align: right;">GCC 14 overflow</th>
+<th style="text-align: right;">GCC 15 overflow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Original Mini Repeater recipe</td>
+<td style="text-align: right;">38,040</td>
+<td style="text-align: right;">37,700</td>
+</tr>
+<tr>
+<td>Compact crypto and unused timer wrappers</td>
+<td style="text-align: right;">19,496</td>
+<td style="text-align: right;">19,060</td>
+</tr>
+<tr>
+<td>Compact plus best tested five-flag bundle</td>
+<td style="text-align: right;">18,800</td>
+<td style="text-align: right;">18,468</td>
+</tr>
+</tbody>
+</table>
+<p>Here, compact means adding <code>ED25519_COMPACT_SHA512=1</code>,
+<code>ED25519_COMPACT_SCALAR=1</code>, <code>ED25519_COMPACT_FIELD=1</code>,
+<code>RADIOLIB_TONE_UNSUPPORTED</code> and <code>HAL_TIM_MODULE_ONLY</code>. CompactBase was
+already enabled in the original recipe. These private additions were not
+retained in the production Mini Repeater configuration. Their combined
+savings must not be attributed to the compiler upgrade alone.</p>
+<p>The four-flag bundle was <code>-fno-caller-saves -fno-tree-dominator-opts
+-fno-reorder-blocks -fno-reorder-functions</code>. Adding
+<code>-fno-tree-switch-conversion</code> produced the five-flag winner. Full-source
+GCC 15 trials, all with the compact additions, measured:</p>
+<table>
+<thead>
+<tr>
+<th>Additional tuning beyond the four-flag bundle</th>
+<th style="text-align: right;">Overflow bytes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>None</td>
+<td style="text-align: right;">18,500</td>
+</tr>
+<tr>
+<td><code>--param=max-inline-insns-single=70</code></td>
+<td style="text-align: right;">18,556</td>
+</tr>
+<tr>
+<td><code>--param=max-inline-insns-single=30</code></td>
+<td style="text-align: right;">18,556</td>
+</tr>
+<tr>
+<td><code>--param=max-inline-insns-single=15</code></td>
+<td style="text-align: right;">18,588</td>
+</tr>
+<tr>
+<td><code>-fno-inline-functions-called-once</code></td>
+<td style="text-align: right;">27,108</td>
+</tr>
+<tr>
+<td><code>-fno-jump-tables</code></td>
+<td style="text-align: right;">18,588</td>
+</tr>
+<tr>
+<td><code>-fno-tree-switch-conversion</code></td>
+<td style="text-align: right;">18,468</td>
+</tr>
+<tr>
+<td><code>-Os</code> instead of <code>-Oz</code>, compilation and link</td>
+<td style="text-align: right;">18,500</td>
+</tr>
+<tr>
+<td><code>-fno-inline</code></td>
+<td style="text-align: right;">38,116</td>
+</tr>
+<tr>
+<td><code>--param=max-inline-insns-size=0 --param=inline-unit-growth=0</code></td>
+<td style="text-align: right;">18,500</td>
+</tr>
+<tr>
+<td><code>-fno-tree-loop-optimize -fno-tree-scev-cprop -fno-tree-loop-distribute-patterns</code></td>
+<td style="text-align: right;">19,228</td>
+</tr>
+<tr>
+<td><code>-mslow-flash-data</code></td>
+<td style="text-align: right;">27,628</td>
+</tr>
+</tbody>
+</table>
+<p>The winning GCC 15 recipe reproduced the same 18,468-byte overflow in a
+second clean build. Its compiler-only improvement over the matched GCC 14
+recipe is <strong>332 bytes</strong>; the original recipe improves by 340 bytes. The
+19,572-byte recovery relative to the original GCC 14 build includes the
+compact/peripheral and tuning changes, not just GCC 15. The winning linked
+flash extent is 264,228 bytes, still 2,084 bytes beyond the chip's entire
+256 KiB flash even before reserving filesystem space.</p>
+<p>Actual verbose commands were checked across application, crypto library,
+Arduino framework and final LTO link. Experimental compile options were
+installed through the framework's late <code>build.framework_extra_flags.arduino</code>
+hook, preserving board defaults and overriding its inline threshold before
+library/application environments were cloned. A post-script forwarded the
+same tuning to the LTO driver. The true <code>-Os</code> trial also changed
+<code>build_unflags</code> to remove <code>-Oz</code>, so the inherited removal of <code>-Os</code> could not
+silently invalidate that comparison.</p>
+<p>Earlier mixed-scope post-script trials were preserved but excluded from
+the full-source comparison: those options reached framework/link stages,
+not the application/crypto compilation. One later link-only <code>-Os</code> control
+also measured 18,500 bytes; it is not the true full-source <code>-Os</code> trial above.
+No ABI-changing struct/enum options, fast-math assumptions, filesystem cuts,
+or capacity-check overrides were used. Every full-firmware attempt still
+failed at the flash link; none qualifies as a runtime-RAM pass, usable image,
+or hardware validation. GCC 15 was not adopted and no failing image was
+published.</p>
+<p>A private Unicorn 2.1.4 harness also checked generated Cortex-M4 code for
+eight standalone crypto profiles: GCC 14 compact, GCC 15 compact, the GCC 15
+four-flag bundle, its five-flag winner, and the four more aggressive trials
+in the last four table rows. All passed 432 positive function calls:
+40 key generations, 40 signatures and 352 SHA-512 checks. Each profile used
+two RFC 8032 signing vectors, three additional reference signing vectors,
+and 11 SHA-512 boundary lengths in one-shot and three streaming modes.
+All 16 corrupted-expected-signature/digest negative controls were rejected.</p>
+<p>The harness checked explicit Cortex-M4 CPU-model readback, allocated-section
+bounds within physical 256 KiB flash/64 KiB SRAM, read-only executable flash,
+non-executable SRAM, buffer canaries, unchanged inputs, per-instruction stack
+bounds, restored SP/callee-saved registers and bounded execution. Source and
+ELF hashes were verified. Maximum observed standalone call frames were
+3,376 bytes for GCC 14 compact, 3,368 for the GCC 15 winner and most other
+GCC 15 profiles, and 2,960 with no inlining. These are not whole-application
+stack/heap budgets.</p>
+<p>This is CPU instruction emulation, not a Wio-E5 Mini board model. The harness
+independently links repository keypair/sign/SHA-512 code through stable
+exported wrappers, with explicit <code>-Oz</code> at link; it is not the exact full
+firmware LTO image. It does not qualify signature verification, boot,
+interrupts, MMIO, radio, USB, flash/filesystem drivers, sleep, concurrent
+traffic, physical timing or cryptographic side channels. A passing standalone
+harness does not make any overflowing full-firmware image usable.</p>
+<h3 id="mini-repeater-approved-cut-experiment-2026-10-18-utc">Mini Repeater approved-cut experiment, 2026-10-18 UTC</h3>
+<p>The follow-up used an isolated source worktree at <code>9b616f4d1</code>, with the
+same fixed timestamps, release recipe, real GCC 15 executable, compact
+additions and five-flag bundle described above. Only Morse/CW tools and
+automated management reporting were approved feature cuts. No experimental
+firmware source/configuration changes were adopted in the production branch.</p>
+<p>Each comparison retained live USB packet logging for MQTT
+(<code>MESH_PACKET_LOGGING=1</code>, compact and merged USB logging), persistent
+<code>/packet_log</code> logging, the host-service bridge, normal authenticated CLI,
+50 neighbours, radio2 and the 16 KiB filesystem. The existing cable-only
+limitation was unchanged. The management cut also omits its shared
+<code>data.tx</code> routing implementation, not ordinary request/reply statistics.
+The Morse/CW cut removes carrier tools and their timer/state/direct-carrier
+hooks; Morse RX was already disabled for this target.</p>
+<p>These are conservative linked flash extents from the final <code>.data</code> load
+address plus its size, measured from flash base <code>0x08000000</code>, rather than
+PlatformIO's smaller sum of selected section sizes:</p>
+<table>
+<thead>
+<tr>
+<th>Private GCC 15 recipe</th>
+<th style="text-align: right;">Linked extent</th>
+<th style="text-align: right;">App overflow</th>
+<th style="text-align: right;">Saving from control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compact/tuned control, all existing features</td>
+<td style="text-align: right;">264,228</td>
+<td style="text-align: right;">18,468</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Morse/CW tools off</td>
+<td style="text-align: right;">256,832</td>
+<td style="text-align: right;">11,072</td>
+<td style="text-align: right;">7,396</td>
+</tr>
+<tr>
+<td>Management reporting off</td>
+<td style="text-align: right;">254,280</td>
+<td style="text-align: right;">8,520</td>
+<td style="text-align: right;">9,948</td>
+</tr>
+<tr>
+<td>Both approved cuts</td>
+<td style="text-align: right;">246,908</td>
+<td style="text-align: right;">1,148</td>
+<td style="text-align: right;">17,320</td>
+</tr>
+<tr>
+<td>Both cuts and shared numeric GET handlers</td>
+<td style="text-align: right;">246,748</td>
+<td style="text-align: right;">988</td>
+<td style="text-align: right;">17,480</td>
+</tr>
+</tbody>
+</table>
+<p>The two-cut result reproduced in fresh control builds. The proposed GET
+helper groups 27 simple scalar keys using typed member pointers and
+NUL-separated key lists; SET handlers, capability/Observer checks,
+matching rules, replies and persisted layouts are unchanged. It defaults
+off in the prototype and was not adopted merely for its 160-byte saving.</p>
+<p>Further full-source tuning did not close the remaining gap:</p>
+<table>
+<thead>
+<tr>
+<th>Additional option</th>
+<th style="text-align: right;">Without GET helper: overflow</th>
+<th style="text-align: right;">With GET helper: overflow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>None</td>
+<td style="text-align: right;">1,148</td>
+<td style="text-align: right;">988</td>
+</tr>
+<tr>
+<td><code>-mword-relocations</code></td>
+<td style="text-align: right;">1,148</td>
+<td style="text-align: right;">988</td>
+</tr>
+<tr>
+<td><code>-fno-ipa-sra</code></td>
+<td style="text-align: right;">1,844</td>
+<td style="text-align: right;">Not tested</td>
+</tr>
+<tr>
+<td><code>-fno-tree-pre</code></td>
+<td style="text-align: right;">1,148</td>
+<td style="text-align: right;">Not tested</td>
+</tr>
+<tr>
+<td><code>-fno-ipa-ra</code></td>
+<td style="text-align: right;">1,772</td>
+<td style="text-align: right;">Not tested</td>
+</tr>
+<tr>
+<td><code>-fno-tree-sink</code></td>
+<td style="text-align: right;">1,348</td>
+<td style="text-align: right;">Not tested</td>
+</tr>
+<tr>
+<td><code>-fno-ipa-pta</code></td>
+<td style="text-align: right;">Not tested</td>
+<td style="text-align: right;">2,640</td>
+</tr>
+<tr>
+<td><code>-fno-ipa-cp</code></td>
+<td style="text-align: right;">Not tested</td>
+<td style="text-align: right;">1,744</td>
+</tr>
+<tr>
+<td><code>-fno-tree-forwprop</code></td>
+<td style="text-align: right;">Not tested</td>
+<td style="text-align: right;">1,404</td>
+</tr>
+<tr>
+<td><code>-fno-split-wide-types</code></td>
+<td style="text-align: right;">Not tested</td>
+<td style="text-align: right;">3,244</td>
+</tr>
+</tbody>
+</table>
+<p>Separate, unapproved diagnostic controls establish the tradeoffs but are
+not candidates: additionally removing the host-service bridge leaves
+1,620 bytes free on GCC 15 and 1,240 on GCC 14; additionally removing only
+persistent packet-file logging instead leaves 828 and 384 bytes free,
+respectively. Both controls keep live USB/MQTT packet logging enabled.
+Neither extra feature cut was adopted.</p>
+<p>Focused host tests exercised the actual raw RX/TX logging emitters and
+packet codec, exact line framing, maximum packets, short/non-draining
+serial writes, drop recovery, persistent logging callbacks and failed-TX
+handling across all eight carrier/management/file-logging combinations.
+Disabled-management tests verify fail-closed routing, password erasure,
+no management filesystem access and retained shared Fleet/beacon context.
+The full legacy/compact GET-body oracle passes 80,406 comparisons plus
+fallback checks under ASan/UBSan, including distinct fields, NaN/Inf,
+limits, whitespace and capability cases; four negative controls fail as
+expected. All ten CLI contract tests pass. Independent source/evidence
+review found no blocker, and <code>git diff --check</code> passes.</p>
+<p>These tests use host boundary stand-ins; they do not establish physical
+USB/MQTT broker integration, ARM runtime behaviour, board startup, radio
+timing, sleep or sustained load. No approved configuration fits yet, so
+there is no approved runtime-RAM pass or usable Mini Repeater image from
+this experiment. No hardware was flashed, no failing image was published,
+and existing build outputs were not overwritten. Production compiler pins,
+features and capacity checks remain unchanged; the private source/tests,
+configs, verbose logs and linker maps were retained for further work.</p>
+<h3 id="mini-repeater-production-recipe-after-file-logging-approval">Mini Repeater production recipe after file-logging approval</h3>
+<p>After approval to also omit persistent packet-file logging, the three gates
+were adopted only for <code>wio-e5-mini_repeater</code>:
+<code>MESH_ENABLE_CARRIER_TOOLS=0</code>,
+<code>MESH_ENABLE_MANAGEMENT_REPORTING=0</code> and
+<code>MESH_ENABLE_PACKET_FILE_LOGGING=0</code>. All three default to 1 for other
+boards/roles. No compact numeric GET handler was adopted.</p>
+<p>The production recipe retains the existing GCC 14.2 package pin, adds the
+equivalent compact SHA-512/scalar/field implementations and unused Arduino
+timer-wrapper trims, and applies the five measured compiler flags to both
+compilation and the final LTO driver. The target-specific link hook is inert
+for other environments. Existing flash and runtime-RAM checks remain active.</p>
+<p>Canonical <code>build.sh build-firmware</code> links at release-version length
+(<code>v1.18.0.1-halo-keymind-cascade-dev</code>, Cascade, USA preset,
+<code>DISABLE_DEBUG=0</code>) pass:</p>
+<table>
+<thead>
+<tr>
+<th>Canonical target</th>
+<th style="text-align: right;">Linked flash extent</th>
+<th style="text-align: right;">App limit</th>
+<th style="text-align: right;">Flash headroom</th>
+<th style="text-align: right;">Runtime RAM available / required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wio-E5 Mini Repeater</td>
+<td style="text-align: right;">245,376</td>
+<td style="text-align: right;">245,760</td>
+<td style="text-align: right;">384</td>
+<td style="text-align: right;">44,560 / 32,288</td>
+</tr>
+<tr>
+<td>Wio-E5 Mini USB Companion regression control</td>
+<td style="text-align: right;">229,096</td>
+<td style="text-align: right;">229,376</td>
+<td style="text-align: right;">280</td>
+<td style="text-align: right;">24,256 / 17,408</td>
+</tr>
+</tbody>
+</table>
+<p>These are conservative complete flash extents, not PlatformIO's selected
+section sums. The Repeater still reserves its original 16 KiB filesystem,
+50 neighbours, radio2, authenticated administration, host-service bridge and
+runtime-controlled live USB packet logging for an external MQTT bridge.
+The Companion keeps its 32 KiB filesystem and existing features. GCC 15 is
+not required and no toolchain upgrade was adopted.</p>
+<p>The omitted file feature is only node-local <code>/packet_log</code> capture and
+<code>log start|stop|erase</code> / local <code>log</code> dumping. Live raw RX/TX framing, USB
+logging controls, statistics, watchdogs and bridge callbacks remain. Old
+saved log files are left untouched rather than automatically erased.
+Management-disabled routing fails closed and retains shared initialization
+needed by independently enabled Fleet/beacon features.</p>
+<p>Focused coverage now runs in CI alongside an exact cable-only Mini Repeater
+build at release-version length. It covers the feature gates, default-on
+behavior, raw logging and backpressure under all eight flag combinations,
+shared cooperative serial output, crypto equivalence, CLI permissions and
+Morse/radio recovery. Production-source and host-test review found no blocker.</p>
+<p>Both flash margins are narrow: future changes must re-link, not assume these
+images fit. These results qualify linked capacity and host behavior, not
+physical USB/RF/MQTT integration, board boot/sleep or a sustained-load soak.
+The Mini Repeater remains cable-only (<code>--allow-no-ota</code>); no hardware was
+flashed, no release was published and existing outputs were not overwritten.</p>
+<h3 id="shared-contact-ram-and-rak4631-full-recheck-2026-10-19-utc">Shared contact RAM and RAK4631 Full recheck, 2026-10-19 UTC</h3>
+<p>Companion and <code>simple_secure_chat</code> contact sort/match indexes now use <code>uint16_t</code>
+when the complete table has at most 65,535 slots; larger configurations retain
+<code>int</code>. Static 350-contact targets save 764 internal bytes; PSRAM targets save
+96 internal and 716 external bytes; static 100-contact targets save 264 internal
+bytes. Cached nRF52 record placement also saves four bytes per runtime contact.
+Capacities, serialization, queues, stacks, features and fallback behavior remain.</p>
+<p>At <code>aed4c22e5</code>, matched against <code>31e693ec2</code>, RAK4631 Full saves 2,200 static RAM
+bytes and 488 actual DFU application bytes. Its application is 712,112 of 712,704
+bytes (592 free); modeled RAM admission margin rises from 4,516 to 6,716. CRC
+sharing and Reader packing preserve formats/text; Full features and existing SD
+support remain enabled. These are linked/build capacities, not running-heap or
+physical storage measurements.</p>
+<p>Five final-source canonical packages pass across nRF52, ESP32 PSRAM, RP2040 and
+STM32. RAK3x72 USB has four actual BIN bytes free, requiring unchanged hard gates.
+At that revision, V3 Full fails RAM admission on both baseline and final source; its
+100-contact wrapper gains 264 bytes, reducing the deficit from 21,288 to 21,024.
+The direct 350-contact V3 terminal default build passes separately; it is not a
+canonical Full or release-version/preset package. No hardware was flashed.
+See the <a href="../../test-results/contact_memory_2026-10-19/">qualification report</a> and
+its source-bound artifacts, software coverage and limits.</p>
+<h3 id="heltec-v3-full-bounded-source-repair-2026-10-19-utc">Heltec V3 Full bounded-source repair, 2026-10-19 UTC</h3>
+<p>At <code>eb9259f2a</code>, canonical V3 Full passes with 189,616 internal bytes available
+against 183,584 required: 6,032 bytes of modeled margin. The pinned NimBLE
+adapter preserves 15 saved phones and 30 CCCDs. Existing Bluedroid pairings need
+one-time re-pairing. Its 100 contacts, 40 channels, 256 offline frames, MQTT slot,
+Full features and stack sizes remain unchanged.</p>
+<p>Grouped source proofs retain the same 4,096-block capacity with a lazy workspace
+of 1,004 bytes, statically bounded to 1,536. The guard replaces only the old
+16,384-byte leaf allocation with this bound; the output block, metadata,
+transient margin and all other allowances remain additive. Legacy/PSRAM paths
+and larger custom leaf limits retain the existing policy.</p>
+<p>The clean V3 package and constrained RAK regressions pass; physical V3 testing
+still awaits USB attachment. See the <a href="../../test-results/heltec_v3_full_memory_2026-10-19/">V3 qualification report</a>
+for artifact hashes, tests, upgrade behavior and hardware limits.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../_javascript/release_features.js?v=20261024-1"></script>
+      
+        <script src="../../_javascript/hosted_doc_links.js?v=20261007-1"></script>
+      
+        <script src="../../_javascript/notification_builder.js?v=20261006-channel9"></script>
+      
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      
+        <script src="../../_javascript/firmware_picker.js?v=20261024-included-bootloader"></script>
+      
+        <script src="../../_javascript/telemetry_decoder.js?v=20261022-noise-history"></script>
+      
+        <script src="../../_javascript/management_decoder.js"></script>
+      
+        <script src="../../_javascript/filter_tool.js?v=20261030-compact-defaults"></script>
+      
+        <script src="../../_javascript/preset_test.js?v=20260923-2"></script>
+      
+        <script src="../../_javascript/esp32_partition_catalog.js?v=20261001-1"></script>
+      
+    
+  </body>
+</html>

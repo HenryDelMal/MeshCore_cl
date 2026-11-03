@@ -1,0 +1,2998 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the open source MeshCore firmware">
+      
+      
+      
+        <link rel="canonical" href="https://HenryDelMal.github.io/MeshCore_cl/test-results/hardware_validation_esp32_web_console_ota_2026-10-05/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Hardware validation esp32 web console ota 2026 10 05 - MeshCore Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../_stylesheets/notification_builder.css?v=20261006-channel9">
+    
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/firmware_picker.css?v=20261013-pick-first-1">
+    
+      <link rel="stylesheet" href="../../_stylesheets/telemetry_decoder.css?v=20261022-noise-history">
+    
+      <link rel="stylesheet" href="../../_stylesheets/management_decoder.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/filter_tool.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/preset_test.css?v=20260923-2">
+    
+      <link rel="stylesheet" href="../../_stylesheets/esp32_partition_catalog.css?v=20261001-1">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#esp32-web-console-and-browser-ota-2026-10-05" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="MeshCore Docs" class="md-header__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Hardware validation esp32 web console ota 2026 10 05
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="MeshCore Docs" class="md-nav__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    MeshCore Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware and tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware and tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chile_repeater_builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chile repeater builder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../firmware_picker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware picker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preset_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preset test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../filter_tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../telemetry_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../management_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started and features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started and features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../role_feature_switches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role feature switches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_companion_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_radio_full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion radio full
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_companion_usb_switcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion usb switcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_offline_queue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion offline queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../halo_keymind_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Halo keymind settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware updates and partitions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware updates and partitions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../upgrading_1.17.1.8_to_1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading 1.17.1.8 to 1.17.1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota user guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_easy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota easy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_wizard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lora_ota_automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lora ota automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_station_g2_to_ikoka_stick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota station g2 to ikoka stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_nrf52_bootloader_update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 bootloader update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_nrf52_qspi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 qspi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_meshtower_v2_sdcard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota meshtower v2 sdcard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../esp32_partition_catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 partition catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../esp32_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heltec_v4_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heltec v4 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../host_cli_service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host cli service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio, networking, and power
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Radio, networking, and power
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../radio_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../radio_presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio presets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fleet_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../room_services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../carrier_wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../espnow_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Espnow bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../split_radio_repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split radio repeater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rs232_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rs232 bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../udp_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Udp bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WiFi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flood_filtering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flood filtering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gps_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gps tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_lost_reply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion lost reply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor tracker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nrf52_power_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nrf52 power management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI and protocol reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI and protocol reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_build_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli build matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_command_availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli command availability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../terminal_chat_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal chat cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kiss_modem_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packet_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packet format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../payloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../management_reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats_binary_frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats binary frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../number_allocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number allocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qr_codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qr codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.18.0.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current - 1.18.0.1 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Previous releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Previous releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.9 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.17.1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.8 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Older releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-gap-and-reproduced-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage gap and reproduced failures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-physical-observations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final physical observations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#artifacts-and-host-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifacts and host checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remaining-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remaining limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-candidate-follow-up-recorded-2026-10-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release candidate follow-up recorded 2026-10-07
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/HenryDelMal/MeshCore_cl/edit/keymindCascade/docs/test-results/hardware_validation_esp32_web_console_ota_2026-10-05.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<!-- meshcore-hosted-doc-link:start -->
+<p class="meshcore-hosted-doc-link"><a href="https://mikecarper.github.io/MeshCore/test-results/hardware_validation_esp32_web_console_ota_2026-10-05/">View this page on MeshCore Docs</a>.</p>
+<!-- meshcore-hosted-doc-link:end -->
+
+<h1 id="esp32-web-console-and-browser-ota-2026-10-05">ESP32 web console and browser OTA - 2026-10-05</h1>
+<p>This is a local qualification checkpoint, not a release approval. GitHub writes
+and publication of 1.17.1.9 remain on hold. Firmware source for the final runs
+is <code>7821329851f69b6b945f061bc4d15212d43c3198</code>.</p>
+<h2 id="coverage-gap-and-reproduced-failures">Coverage gap and reproduced failures</h2>
+<p>Earlier component and simulated-peripheral tests did not establish the complete
+V4 browser flow. In particular, accepting a <code>Started</code> reply did not prove that
+a normal WiFi client could discover the hotspot or connect to its HTTP server.
+The actual embedded uploader also had to receive its completion response before
+the radio restarted. Those boundaries needed physical qualification.</p>
+<p>The physical V4 runs found three failures:</p>
+<ul>
+<li>ESP-NOW could leave the AP protocol mask at 15, including the proprietary LR
+  bit. OTA returned an IP, but an ordinary WiFi client could not discover it.
+  Explicitly restoring the AP to b/g/n (mask 7) made it discoverable.</li>
+<li>The old AsyncElegantOTA implementation restarted from its network callback.
+  A real browser upload installed the new image but timed out waiting for its
+  completion response. The fixed implementation lets the response finish and
+  schedules the reboot outside that callback.</li>
+<li>Repeated stop/start could leave port 80 unavailable while CLI still reported
+  success. The private, source-pinned AsyncTCP build now allows rebinding past
+  completed connections, and OTA verifies that the listener actually started.</li>
+</ul>
+<p>Host regressions also cover background ESP-NOW retries undoing an OTA pause,
+WebConfig teardown retaining OTA's WiFi, upload ownership and interruption,
+failed binds, and complete CRLF replies through the stock web console client.
+Negative controls fail with the old AP protocol, TCP binding, callback reboot,
+USB sleep guard, or line delimiter behavior.</p>
+<h2 id="final-physical-observations">Final physical observations</h2>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Result and boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V4 actual browser upload</td>
+<td>PASS. Chromium ran the unchanged embedded AsyncElegantOTA page. Multipart upload returned HTTP 200 <code>OK</code>; normal reboot loaded a distinct target version. USB answered afterward without another reset or unplug.</td>
+</tr>
+<tr>
+<td>V4 OTA startup</td>
+<td>PASS for WiFi off -&gt; OTA, WebConfig setup AP -&gt; OTA, ESP-NOW coexistence, WebConfig LAN -&gt; OTA, and an active LAN uploader -&gt; OTA AP. The returned URLs served real pages across deferred cleanup.</td>
+</tr>
+<tr>
+<td>V4 USB idle</td>
+<td>PASS for 600 seconds with no transmitted commands or keepalives, power saving on, USB logging on, and DTR asserted. Subsequent query and close/reopen passed; uptime advanced from 111 to 717 seconds.</td>
+</tr>
+<tr>
+<td>V4 DTR deasserted</td>
+<td>PASS for immediate queries, 30 seconds idle, and reopen using an opener that established RTS low before deasserting DTR. No reset or startup delay was added.</td>
+</tr>
+<tr>
+<td>XIAO S3 WIO Companion</td>
+<td>Restored from the temporary Repeater test role using an application-only flash. Partition signature and identity were preserved. All 60 read-only replies met the two-second deadline, including 10 held query pairs and 10 reopen pairs; maximum latency was 22 ms.</td>
+</tr>
+</tbody>
+</table>
+<p>The V4 console runs above use the unchanged official <code>SerialConsole</code> through
+Node Web Streams and a physical Linux serial transport on Mercerwood. They do
+not exercise Chromium's OS Web Serial backend on that remote V4. Earlier
+physical XIAO browser tests are separate evidence, not a substitute for it.
+The client is pinned to <code>meshcore-dev/flasher.meshcore.io</code> revision
+<code>45a5257bf792b11a83f4c51c18d4f312addfb677</code>, with <code>lib/console.js</code> SHA-256
+<code>107d3ad867915aea8b2454c324327397a0f9e2f0469656046054011bc64475f9</code>.</p>
+<p>The first disposable LAN association failed. A separate run with a fresh SSID,
+explicit WPA2/RSN CCMP configuration, AP readiness, and credential readback
+passed on the same firmware. The first failure is retained; these observations
+do not identify which test-network difference caused it.</p>
+<p>Two DTR-deasserted first-query runs also failed. Their original pyserial opener
+briefly presented the USB hardware reset combination; the boot log recorded
+<code>USB_UART_CHIP_RESET</code>. Correcting the opener's line-state order passed without
+a reset or settle delay. These are retained test-fixture failures, not evidence
+that the user's intermittent console hang has been fixed.</p>
+<p>During the 600-second idle run, dispatcher flags changed from 0 to 8. The radio
+remained in RX with no receive errors, zero received packets, and a configured
+five-minute receive-silence watchdog. This is consistent with the existing
+radio recovery policy on a quiet channel; uptime proves the MCU did not reboot.
+It is not an error-free RF stress qualification.</p>
+<h2 id="artifacts-and-host-checks">Artifacts and host checks</h2>
+<p>V4 application installed by the successful browser run:</p>
+<ul>
+<li>Version: <code>v1.17.1.9-hil-ota-upload-78213298</code>.</li>
+<li>Size: 2,093,336 bytes.</li>
+<li>SHA-256: <code>ebee70b05528b21aaaeddf8bc80f2762b7ad767ff5b6f29eadf8e2a78e90859d</code>.</li>
+</ul>
+<p>XIAO application restored after console testing:</p>
+<ul>
+<li>Version: <code>v1.17.1.9-hil-web-ota-78213298</code>.</li>
+<li>Size: 2,082,584 bytes.</li>
+<li>SHA-256: <code>605a6b904756ab6d8dcdee8fd9288a996103c59e4f339d7768ece3497c57cfb3</code>.</li>
+</ul>
+<p>Both firmware builds passed. On this source, focused host checks passed:
+OTA startup 7, OTA lifecycle 15, async web lifecycle 2, official web console 3,
+WebConfig 40, and V4 partition migrator 4. PlatformIO was run serially.</p>
+<p>Private raw logs and safe reports are retained under
+<code>/tmp/meshcore-hil-20261004/web-console-investigation</code>, including the failed
+runs. The index <code>782-evidence-index-safe.json</code> records evidence hashes.
+Temporary V4 settings and the Pi network are restored after testing. The G2,
+its recovery ACLs, and its running MQTT services were not changed by this run.</p>
+<h2 id="remaining-limits">Remaining limits</h2>
+<p>The subsequent <a href="../hardware_validation_heltec_v4_native_console_2026-10-06/">current Full V4 native browser qualification</a>
+adds actual Pi Chromium Web Serial, the unchanged setup GUI's five-second
+deadline, and measured fresh-flash and power-saving console idle results. The
+older source and boundaries above remain historical evidence. Neither report
+qualifies every host OS, physical USB adapter, cold power cycle, ESP32 board,
+firmware profile, or radio traffic load. USB-attached console checks do not
+establish CPU sleep, measured current or button wake. The subsequent V4
+button-wake profile correction passed host/build validation and another native
+GUI fresh-flash plus 180-second open/closed console check, as recorded in that
+linked report. On 2026-10-06 the user separately confirmed V4 button screen wake;
+its firmware revision and CPU sleep state were not specified. The operator
+USB tests included no actual button press or sleep/current measurement.</p>
+<h2 id="release-candidate-follow-up-recorded-2026-10-07">Release candidate follow-up recorded 2026-10-07</h2>
+<p>The following source-scoped observations were originally recorded in the
+1.17.1.9 candidate release notes. They are retained here as historical test
+results, including failed attempts and their separate recoveries. Build and
+publication status in this snapshot does not override the final
+<a href="../../releases/1.17.1.9/#verification-scope">release notes</a>. Older passing
+images do not qualify a later firmware revision or turn an earlier failure
+into a pass. Latest-source V4 hardware was unavailable for a repeat; that is
+a physical coverage limitation, not a failed latest-source test.</p>
+<p>The <a href="https://github.com/mikecarper/MeshCore/actions/runs/37550980479">earlier c5 GitHub unit workflow</a>
+passed all four jobs. Host regressions exercise production OTA callbacks,
+the official configuration GUI and app protocol behavior, including MD5
+ordering, rejected second files, incomplete POSTs, cleanup and subsequent
+valid uploads. Sanitizer fixtures cover these OTA lifecycle cases. These
+checks use MeshCore's actual-code fixtures; MeshBench is not integrated.</p>
+<p>For <code>1e421ff4</code>, the coupled production WebConfig credential interception,
+NVS commit, CLI routing and MQTT consumer fixture passed four tests, including
+fresh portal-only setup, legacy fallback, reconnects, raw-PSK boundaries,
+failed and interrupted writes, and mutations that restore the old credential
+lookup. The broader WiFi and MQTT host suites passed 62 and 14 cases,
+respectively, with some overlap. The WebConfig host suite passed 53 cases,
+including the embedded page in an isolated Chromium headless browser.
+Seven infrastructure power-lifecycle cases
+and six portal-ownership cases passed. Five V4 setup-page cases include actual
+button/session handling under both signed and unsigned <code>char</code>. The new tests
+are explicitly included in the unit workflow. The <a href="https://github.com/mikecarper/MeshCore/actions/runs/37570287426">current GitHub unit workflow</a>
+at documentation and host-test commit <code>4c5f58f4</code> passed all four jobs; its
+firmware source remains <code>1e421ff4</code>. The completed local release passed the
+strict package checks below; V4 OTA and G2/V4 portal-to-MQTT hardware checks
+remain pending.</p>
+<p>The completed local all-board release has 463 qualified recipes and 926
+firmware files. Its complete checksum inventory, capability and memory
+checks passed independent read-only revalidation. All 94 exact ESP32
+board/role migration ZIPs and their combined archive passed validation.
+The 114 nRF52 infrastructure targets each have a qualified Full/Reduced
+pair with matching actual DFU identity, firmware and flash layout. These
+results qualify local packages from <code>1e421ff4</code>; they do not qualify the
+pending physical upgrade paths or publish the release. The newer
+<code>bd4cbf281</code> source protects ordinary setup/OTA APs from the SDK's shared
+long-range WiFi flag, defers conflicting ESP-NOW starts and keeps long-range
+protocol writes out of saved WiFi settings. It reports an active ESP-NOW
+conflict before starting an AP. The subsequent <code>8c4e09275</code> source also defers
+MQTT station maintenance and Full Companion station recovery while an AP
+owns WiFi. Final builds and hardware qualification of this candidate remain
+pending. Final public assets and catalogs still require their separate
+inventory and digest checks.</p>
+<p>The physical G2 and V4 tests used the unchanged embedded browser uploader
+and the normal host console, retaining the stock 5-second first-command
+deadline. The earlier <code>c5fe8a0e</code> applications passed AP uploads with HTTP
+200/OK, automatic restart, and preserved identities, ACLs and saved settings.
+The G2's initial upload completed in 19.053 seconds; the V4's completed in
+16.392 seconds. First ordinary replies took 1.385 and 1.010 seconds,
+respectively, without a cable replug or reset rescue.</p>
+<p>On the G2, a full valid first file followed by a second file returned HTTP
+409 without an observed MCU restart. A full-file request with an incomplete
+closing multipart boundary also left uptime continuous. A valid upload then
+passed through that same running listener in 18.767 seconds. Full-image
+wrong-MD5 requests had already returned HTTP 400 without restart on parent
+<code>70bf4bdf</code>. The tests do not claim that rejected requests leave the inactive
+flash slot untouched. A fresh 385-second sample of unmodified Cisien
+meshcoretomqtt had all four brokers connected, zero publish failures and no
+service restarts; both the original and recovery Admin ACLs were preserved.
+The earlier G2 LAN upload stall is treated as a local slow-WiFi limitation,
+not a release blocker. LAN upload was not qualified by these AP tests.</p>
+<p>The new <code>1e421ff4</code> G2 Full Observer application also passed the unchanged
+native AP uploader: HTTP 200/OK in 18.437 seconds, firmware-owned restart,
+and first ordinary <code>ver</code> reply in 1.304 seconds. Live EndF body identity,
+the exact G2 target and source were verified, with the original 15 settings,
+both Admin ACLs, services and the Pi's exact SlowFi connection preserved.
+This qualifies that AP update, not fresh WebConfig provisioning into the
+on-device MQTT consumer; that check and the new-source V4 checks remain pending.</p>
+<p>On parent <code>70bf4bdf</code>, both G2 and V4 passed four 600-second quiet intervals:
+port open and closed with logging off, then open and closed with USB logging,
+all with power saving enabled. Uptime remained continuous, with no host
+keepalive writes during the intervals. The V4 reported radio-watchdog event
+bit 8; this was not an MCU reset or an all-zero-error result. Its USB-logging
+open interval received 26 bytes. The V4 also passed the first unchanged
+native setup-GUI connection immediately after a fresh flash, with the first
+clock reply in 73.3 ms. These quiet and fresh-flash checks were not repeated
+on <code>c5fe8a0e</code>, whose change was confined to OTA completion behavior. The
+newer canonical-WiFi source <code>1e421ff4</code> has the narrower G2 results below.</p>
+<p>On <code>1e421ff4</code>, the G2 passed one 600.022-second open-port quiet interval
+with USB logging and power saving enabled, with no host writes and continuous
+uptime. The following 600-second closed-port interval ended in a stock-browser
+reopen failure at the test helper's 5-second acquisition gate, before <code>ver</code>
+was sent. The host then had VMIN=1/VTIME=0; the ordinary exclusive serial
+client still replied in 21 ms, with continuous uptime and unchanged core error
+flags. This is an unresolved browser/native-port acquisition result, not a
+qualified closed-port pass or evidence of an MCU crash. A cleanup-overlay bug
+in that test helper was also found and fixed for the instrumented repeat;
+the earlier failed receipt is retained.</p>
+<p>The instrumented G2 repeat on the same <code>1e421ff4</code> source passed both
+600-second open and closed quiet intervals with USB logging and power saving
+enabled, continuous uptime and no host keepalive writes. Original settings and
+the host were restored. The maximum stock Enter-to-reply time was 3.584 seconds.
+The second native port open took 5.532 seconds; click-to-connected took
+8.201 seconds. That acquisition time is separate from the unchanged 5-second
+command deadline, and the helper's connected wait started after its click RPC
+returned. This repeat does not reclassify the earlier failure or establish its
+cause. The separate logging-off run also passed both 600-second open and
+closed quiet intervals with power saving enabled, 85 successful queries,
+continuous uptime and restored original settings. Together the completed
+runs qualify all four quiet intervals on this G2 and source.</p>
+<p>The subsequent 100-cycle acceptance attempt stopped after 32 completed cycles.
+All 86 stock commands passed, with a maximum Enter-to-reply time of 450 ms
+and no observed MCU reset. The failure was an automation timeout while
+clicking the stock close-overlay button; this is separate from the stock
+command deadline. At the failed-trial snapshot, the UI had marked itself
+disconnected while native close had not started. Native close subsequently
+fulfilled in 105.5 ms, and the serial port and page closed. The cause of the
+earlier disconnect or click delay remains unproven. The failed receipt is
+retained; 100-cycle qualification and follow-up diagnosis remain pending.</p>
+<p>A separate Linux Chromium 139 comparison isolated an inherited host TTY
+setting: VMIN=0/VTIME=0 produced device-lost stream termination, while changing
+only VMIN to 1 gave a stock <code>ver</code> reply in 154.1 ms without reset or replug.
+That finding does not establish the cause of the later reopen failure above.
+See the <a href="../../research/linux_chromium_web_serial_tty/">Linux Web Serial report</a>
+for primary browser-source evidence and the bounded host preflight.</p>
+<p>The physical RAK3401 Companion on <code>70bf4bdf</code> passed 21 malformed-request
+cases with 217 request/reply frames. Its Full Repeater passed the official
+native setup GUI and 600-second open/closed quiet intervals with power saving
+on, continuous uptime and zero core error flags. It was returned to the
+then-current <code>c5fe8a0e</code> Full Companion; the first stock SDK reply took 25.9 ms
+without an initial retry or settling delay. Original identity, contacts,
+channels, custom variables, RX power-saving settings and actual packet-stream
+mode were restored. The planned reboot needed to restore stream mode was
+separate from the stability measurements. An initial SWD programming failure
+was recovered and verified; this was not a first-attempt programming pass.
+These tests did not qualify RAK3401 BLE DFU, LoRa OTA or bootloader updates.</p>
+<p>The actual published <code>9053038f</code> 1.17.1.8 Full V4 installed newer applications
+over both AP and a controlled shared WiFi LAN, but its old page did not
+receive HTTP completion. Check <code>ver</code> before retrying a stalled old page.
+These trials used already expanded application slots; actual phone-hotspot
+uploads remain untested. The requested legacy small-slot G2 trial now has a
+verified existing 16 MiB backup and genuinely programmed and verified the
+official 1.14.1 stock components and small-slot table while preserving NVS.
+Its first stock USB <code>ver</code> request reached the five-second host command limit;
+a later read-only probe replied without reset. A separately recorded stock
+setup restored and verified the original identity, 22 common settings and two
+Admin ACLs after normal reboots. Password setters were confirmed and the guest
+password persisted; stock has no admin-password getter. The final <code>start ota</code>
+returned its expected URL, but the test's AP scan timed out. A subsequent
+completed native scan found no <code>MeshCore-OTA</code> AP at any BSSID. A later
+read-only NVS audit identified the test starting-state problem: earlier
+preconditioning had saved the WiFi long-range protocol flag, which stock
+inherited. Its long-range AP beacons cannot be received by the ordinary
+WiFi clients used here. This does not establish a stock AP startup bug.
+A separately recorded correction changed only the fresh live NVS protocol
+flag and its entry CRC, with exact readback and unchanged stock components
+and small-slot table. After stock identity, common settings, ACL and guest/
+private-identity checks, a completed fresh scan found the exact G2 OTA AP.
+This establishes the genuine stock WiFi-only starting boundary. The earlier
+failed receipts remain failed. The first native migration controller then
+failed on a missing host <code>iw</code> executable before any HTTP or image-upload
+step. It may already have associated with the AP; that outcome was not
+verified. Its return to SlowFi and owned guard cleanup passed. A separately
+reviewed retry retained the firmware/controller inputs, separately pinned
+the old runtime log and checked host executables before using fresh guards.
+It associated with the exact stock AP and observed one native bridge-image
+POST with the exact bytes, SHA256 and MD5, but the old embedded page did not
+complete its HTTP response before the uploader deadline. Browser closure,
+return to SlowFi and guard cleanup passed; that transaction remains failed.
+A later scan found the exact migration AP. A separately recorded stage2
+continuation then verified the actual expanded-layout-ready page and uploaded
+the exact <code>1e421ff4</code> ordinary Full application through the unchanged native
+page, with matching MD5 and HTTP 200/OK in 14.526 seconds. That upload phase
+also passed its network return and guard cleanup. The subsequent controlled
+Pi AP phase failed on a host <code>FileNotFoundError</code> before any final HTTP request.
+The host's scheduled WiFi refresh also interrupted that AP phase. Its later
+guard-file cleanup refused an unproven network state; a separate read-only
+qualification and owned-file cleanup then verified the original network,
+dead controller and removal of all prior guard profiles and files. A new
+proof-only attempt stopped before AP activation because reloading services
+moved the host hold timer's relative deadline. Its failed receipt is retained,
+and the held host script was restored. The next proof used a fixed absolute
+hold deadline, but stopped before AP activation when a host-file permission
+check rejected the actual private service file; its failed receipt and host
+restoration are preserved. A third proof verified and ran the isolated Pi
+AP with the independent return timer armed, then reached the five-minute
+client/DHCP discovery deadline without a verified G2 client or any HTTP
+request. It returned to SlowFi, removed its owned network resources and
+restored the host's scheduled WiFi recovery script. Final
+running-image/layout/identity/settings HTTP verification remains unproven;
+the successful firmware upload does not establish that final verification.
+After that completed failed WiFi check, separate USB maintenance installed
+the <code>8c4e09275</code> ordinary Full Observer application. Full application
+readback and the normal running version matched, while the bootloader,
+partition table, NVS, OTA selection and checked filesystem region stayed
+unchanged. This maintenance does not qualify the WiFi-only upgrade. The
+saved-settings check found RX boosted gain off instead of its original on;
+the other 21 common settings, identity, passwords and two Admin ACLs matched.
+A separate checked CLI repair restored gain on and verified all 22 settings.
+The first extras restoration then missed the five-second CLI deadline while
+changing bridge source. A later read-only probe found continuous uptime,
+zero core error flags and the requested source value; it does not establish
+the missing command acknowledgment or its save duration. After checking that
+state, a separate restoration completed with the original WiFi pair, saved
+extras, all 22 common settings, identity, passwords and both Admin ACLs
+verified. The MQTT worker was running with valid effective configuration;
+broker connectivity was not tested. Original TTY settings, all three host
+services and SlowFi were restored, and the exact temporary host executable
+alias was removed. The earlier timeout and WiFi proof failure remain recorded.
+The loader correction is included in <code>88c851080</code>. Its G2 ordinary Full Observer
+application was independently read back in full after installation, and normal
+boot matched the exact new runtime and EndF footer. The checked lower 64 KiB,
+OTA selection and first 64 KiB of the filesystem stayed unchanged. A separate
+read-only post-boot check verified the original identity, passwords, two Admin
+ACLs, all 22 common settings, seven supported bridge fields and saved extras.
+Core error flags were zero; the MQTT worker was running with valid configuration,
+without a broker-connectivity claim. Original TTY settings, all three host
+services and SlowFi were restored. This USB maintenance does not qualify the
+failed WiFi-only final verification. The fresh all-board build and V4 hardware
+checks remain pending.
+These are separate
+outcomes; the initial failed transactions remain failed. The earlier c5
+AP upload success does not turn those old HTTP-completion failures into
+passes. The <a href="../../upgrading_1.17.1.8_to_1.17.1.9/">upgrade guide</a> keeps the
+old and new updater behavior separate.</p>
+<p>Original host services, temporary network changes and owned test resources
+were restored after the historical completed hardware checks. The current
+new-source V4 native AP OTA trial has not yet produced a verified result;
+its return to SlowFi and original host-service state also remain unverified.
+The legacy G2 check established the stock starting boundary with its original
+identity, common settings and ACLs verified, then completed the expansion and
+Full application upload over WiFi. It has not yet qualified the final running
+image through HTTP. Post-verdict <code>88c851080</code> G2 firmware readback, normal boot,
+original-settings acceptance and host restoration passed separately over USB.
+The all-board build and current V4 hardware qualification remain pending. These
+checks keep publication pending. Build qualification does not
+establish physical compatibility on every board. Quiet USB trials do not
+measure MCU sleep/current draw, stack high-water, sustained log backpressure
+or long-term fleet reliability. Linux native-browser tests required host TTY
+preparation; they do not qualify every browser or operating system. Hardware
+CDC has finite buffers, and closing a Linux TTY does not necessarily produce
+a hardware session reset. See the historical <a href="../hardware_validation_heltec_v4_native_console_2026-10-06/">V4 console report</a>
+and <a href="../usb_serial_backpressure/">USB backpressure results</a>
+for their exact source revisions and measured scope.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../_javascript/release_features.js?v=20261024-1"></script>
+      
+        <script src="../../_javascript/hosted_doc_links.js?v=20261007-1"></script>
+      
+        <script src="../../_javascript/notification_builder.js?v=20261006-channel9"></script>
+      
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      
+        <script src="../../_javascript/firmware_picker.js?v=20261024-included-bootloader"></script>
+      
+        <script src="../../_javascript/telemetry_decoder.js?v=20261022-noise-history"></script>
+      
+        <script src="../../_javascript/management_decoder.js"></script>
+      
+        <script src="../../_javascript/filter_tool.js?v=20261030-compact-defaults"></script>
+      
+        <script src="../../_javascript/preset_test.js?v=20260923-2"></script>
+      
+        <script src="../../_javascript/esp32_partition_catalog.js?v=20261001-1"></script>
+      
+    
+  </body>
+</html>

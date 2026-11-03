@@ -1,0 +1,4561 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the open source MeshCore firmware">
+      
+      
+      
+        <link rel="canonical" href="https://HenryDelMal.github.io/MeshCore_cl/kiss_modem_protocol/">
+      
+      
+        <link rel="prev" href="../companion_protocol/">
+      
+      
+        <link rel="next" href="../packet_format/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Kiss modem protocol - MeshCore Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../_stylesheets/notification_builder.css?v=20261006-channel9">
+    
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/firmware_picker.css?v=20261013-pick-first-1">
+    
+      <link rel="stylesheet" href="../_stylesheets/telemetry_decoder.css?v=20261022-noise-history">
+    
+      <link rel="stylesheet" href="../_stylesheets/management_decoder.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/filter_tool.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/preset_test.css?v=20260923-2">
+    
+      <link rel="stylesheet" href="../_stylesheets/esp32_partition_catalog.css?v=20261001-1">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#meshcore-kiss-modem-protocol" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MeshCore Docs" class="md-header__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Kiss modem protocol
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MeshCore Docs" class="md-nav__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    MeshCore Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware and tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware and tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chile_repeater_builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chile repeater builder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firmware_picker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware picker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preset_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preset test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filter_tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../telemetry_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started and features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started and features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../role_feature_switches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role feature switches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_radio_full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion radio full
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_usb_switcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion usb switcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_offline_queue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion offline queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../halo_keymind_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Halo keymind settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware updates and partitions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware updates and partitions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrading_1.17.1.8_to_1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading 1.17.1.8 to 1.17.1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota user guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_easy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota easy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_wizard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lora_ota_automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lora ota automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_station_g2_to_ikoka_stick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota station g2 to ikoka stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_bootloader_update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 bootloader update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_qspi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 qspi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_meshtower_v2_sdcard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota meshtower v2 sdcard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../esp32_partition_catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 partition catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../esp32_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heltec_v4_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heltec v4 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../host_cli_service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host cli service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio, networking, and power
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Radio, networking, and power
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio presets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fleet_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../room_services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../carrier_wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../espnow_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Espnow bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../split_radio_repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split radio repeater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rs232_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rs232 bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../udp_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Udp bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../WiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WiFi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flood_filtering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flood filtering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gps_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gps tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_lost_reply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion lost reply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensor_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor tracker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nrf52_power_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nrf52 power management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI and protocol reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI and protocol reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_build_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli build matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_command_availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli command availability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal_chat_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal chat cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#serial-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serial Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Serial Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-firmware-host-kiss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full firmware host KISS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dedicated-modem-serial-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dedicated modem serial configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frame-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame Format
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Frame Format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#type-byte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Byte
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standard-kiss-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard KISS Commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Standard KISS Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#host-to-tnc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Host to TNC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tnc-to-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TNC to Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fast-dual-profile-receive-switching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fast dual-profile receive switching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#host-output-backpressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Host Output Backpressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#csma-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CSMA Behavior
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sethardware-extensions-0x06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SetHardware Extensions (0x06)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SetHardware Extensions (0x06)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frame-format_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame Format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-sub-commands-host-to-tnc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request Sub-commands (Host to TNC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response-sub-commands-tnc-to-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response Sub-commands (TNC to Host)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Codes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#station-g3-physical-radio-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Station G3 physical radio slot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unsolicited-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unsolicited Events
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#radio-parameters-setradio-radio-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Radio Parameters (SetRadio / Radio response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#secondary-radio-parameters-setradio2-radio2-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secondary Radio Parameters (SetRadio2 / Radio2 response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-extended-secondary-radio-setradio2ext-radio2ext-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional Extended Secondary Radio (SetRadio2Ext / Radio2Ext response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#temporary-secondary-radio-settempradio2-tempradio2-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Temporary Secondary Radio (SetTempRadio2 / TempRadio2 response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version-version-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version (Version response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encrypted-encrypted-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encrypted (Encrypted response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airtime-airtime-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airtime (Airtime response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noise-floor-noisefloor-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Noise Floor (NoiseFloor response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stats-stats-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stats (Stats response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#battery-battery-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery (Battery response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcu-temperature-mcutemp-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCU Temperature (MCUTemp response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device-name-devicename-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Name (DeviceName response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reboot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reboot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensor-permissions-getsensors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensor Permissions (GetSensors)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensor-data-sensors-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensor Data (Sensors response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cryptographic-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cryptographic Algorithms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packet_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packet format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../payloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats_binary_frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats binary frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../number_allocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number allocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qr_codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qr codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.18.0.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current - 1.18.0.1 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Previous releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Previous releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.9 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.8 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Older releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#serial-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serial Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Serial Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-firmware-host-kiss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full firmware host KISS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dedicated-modem-serial-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dedicated modem serial configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frame-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame Format
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Frame Format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#type-byte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Byte
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standard-kiss-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard KISS Commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Standard KISS Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#host-to-tnc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Host to TNC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tnc-to-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TNC to Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fast-dual-profile-receive-switching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fast dual-profile receive switching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#host-output-backpressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Host Output Backpressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#csma-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CSMA Behavior
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sethardware-extensions-0x06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SetHardware Extensions (0x06)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SetHardware Extensions (0x06)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frame-format_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame Format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-sub-commands-host-to-tnc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request Sub-commands (Host to TNC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response-sub-commands-tnc-to-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response Sub-commands (TNC to Host)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Codes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#station-g3-physical-radio-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Station G3 physical radio slot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unsolicited-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unsolicited Events
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#radio-parameters-setradio-radio-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Radio Parameters (SetRadio / Radio response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#secondary-radio-parameters-setradio2-radio2-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secondary Radio Parameters (SetRadio2 / Radio2 response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-extended-secondary-radio-setradio2ext-radio2ext-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional Extended Secondary Radio (SetRadio2Ext / Radio2Ext response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#temporary-secondary-radio-settempradio2-tempradio2-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Temporary Secondary Radio (SetTempRadio2 / TempRadio2 response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version-version-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version (Version response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encrypted-encrypted-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encrypted (Encrypted response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airtime-airtime-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airtime (Airtime response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noise-floor-noisefloor-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Noise Floor (NoiseFloor response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stats-stats-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stats (Stats response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#battery-battery-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery (Battery response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcu-temperature-mcutemp-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCU Temperature (MCUTemp response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device-name-devicename-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Name (DeviceName response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reboot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reboot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensor-permissions-getsensors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensor Permissions (GetSensors)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensor-data-sensors-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensor Data (Sensors response)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cryptographic-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cryptographic Algorithms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/HenryDelMal/MeshCore_cl/edit/keymindCascade/docs/kiss_modem_protocol.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<!-- meshcore-hosted-doc-link:start -->
+<p class="meshcore-hosted-doc-link"><a href="https://mikecarper.github.io/MeshCore/kiss_modem_protocol/">View this page on MeshCore Docs</a>.</p>
+<!-- meshcore-hosted-doc-link:end -->
+
+<h1 id="meshcore-kiss-modem-protocol">MeshCore KISS Modem Protocol</h1>
+<p>Standard KISS TNC firmware for MeshCore LoRa radios. Compatible with any KISS client (Direwolf, APRSdroid, YAAC, etc.) for sending and receiving raw packets. MeshCore-specific extensions (cryptography, radio configuration, telemetry) are available through the standard SetHardware (0x06) command.</p>
+<p>Use <code>heltec_v4_r8_kiss_modem</code> for either the plain or TFT Heltec V4 R8,
+and <code>WioTrackerL1_kiss_modem</code> for either OLED or E-Ink Wio L1. These modem
+images leave the displays off. The historical TFT/E-Ink build names and
+their OTA target identities remain available for explicit updates; they
+are omitted from ordinary build lists when the shared recipe is present.</p>
+<p>KISS protocol version 2 adds an opt-in logical port 1 for MeshCore's second
+time-shared LoRa profile. It is still one physical transceiver: the firmware
+fast-switches between <code>radio</code> and <code>radio2</code>; it does not create a second radio.</p>
+<h2 id="serial-configuration">Serial Configuration</h2>
+<h3 id="full-firmware-host-kiss">Full firmware host KISS</h3>
+<p>Full ESP32 and nRF52 LoRa firmware includes a separate, default-off raw
+radio2 host service. It preserves the device's normal Companion, Repeater,
+Room Server or Sensor role on radio1. It is enabled in the Full sensor/OTA
+profile on nRF52; reduced infrastructure images omit the service.</p>
+<p>Configure the desired saved radio2 RF tuple in <code>rxtx</code> mode, then use:</p>
+<pre><code class="language-text">set kiss.transport usb
+set kiss on
+get kiss
+</code></pre>
+<p>Both choices are saved. <code>set kiss off</code> stops the service and releases its
+runtime radio2 protocol lease without changing the saved radio2 tuple.
+Temporary radio settings and Meshtext/Ethernet radio2 owners block admission.
+The service never chooses a frequency, takes another service's radio2 lease,
+crosses raw packets onto radio1, or feeds them into MeshCore parsing/bridges.
+If the initial radio2 change is still pending, the connection waits and sends
+READY when radio2 becomes available; no reconnect is needed. DATA received
+while waiting is discarded, so hosts should wait for the initial READY.</p>
+<p>USB remains the normal CLI until an initial KISS FEND (<code>C0</code>). A delimiter
+inside an unfinished Companion frame or an active mOTA session keeps its
+original protocol ownership. During the raw
+session, USB Companion framing and text/debug output are parked. Send the
+standard KISS RETURN frame (<code>C0 FF C0</code>) to leave the session, then issue CLI
+commands normally. A detected USB disconnect/reset also ends the session.
+UART-to-USB adapters without a disconnect signal may require RETURN.
+If the radio2 settings change mid-session, USB stays quarantined until RETURN
+or disconnect, so leftover binary bytes cannot become CLI commands.
+For Espressif USB-Serial/JTAG (<code>303A:1001</code>), open the host port with DTR and
+RTS deasserted; those lines control boot/reset selection. Other USB CDC
+devices, including nRF52/TinyUSB, retain their normal DTR handling.</p>
+<p>ESP32 also supports <code>set kiss.transport tcp</code>. Enable station WiFi separately
+and connect to its address on TCP <strong>5004</strong>. The service accepts one client,
+does not bind the setup AP, and has no authentication. Use a trusted LAN.
+WiFi loss, RETURN, setting changes and invalidated radio2 generations close
+the connection and discard queued host work. A second client cannot displace
+an existing owner. USB remains available for management in TCP mode.</p>
+<p>The Full service uses standard KISS escaping and the following frames:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Direction</th>
+<th>Payload and meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>00</code></td>
+<td>Both</td>
+<td>Raw DATA, 1-255 bytes, exclusively radio2</td>
+</tr>
+<tr>
+<td><code>0F</code></td>
+<td>Device to host</td>
+<td><code>01</code>: READY, initially and after each completed TX</td>
+</tr>
+<tr>
+<td><code>06</code></td>
+<td>Device to host</td>
+<td><code>F8 01</code>: TX succeeded; <code>F8 00</code>: TX failed</td>
+</tr>
+<tr>
+<td><code>FF</code></td>
+<td>Host to device</td>
+<td>Empty payload: RETURN to CLI/close TCP</td>
+</tr>
+</tbody>
+</table>
+<p>Other ports and parameter/control commands are ignored. RF parameters are
+configured through the ordinary saved radio2 CLI, not RNode control commands.
+Wait for READY before sending the next packet. The device retains at most
+two queued host frames plus one in-flight transmission, uses bounded I/O,
+and preserves normal CAD, duty budget and MeshCore transmit fairness.
+<code>get kiss</code> includes RX/TX/failure/drop/malformed counters. A drop counter can
+include received packets that could not fit in the bounded host output queue.</p>
+<p>The raw RF payload has no additional header. It uses the ordinary private
+LoRa sync word (<code>0x12</code>, represented as <code>0x1424</code> by SX126x), explicit headers,
+CRC and normal IQ. Peers must match RF parameters, including preamble timing
+appropriate for the time-shared receiver. Only one physical radio is present.</p>
+<p>This is a generic host modem. Reticulum/RNode interoperability requires host
+adaptation for RNode's one-byte RF header, fragmentation/reassembly of larger
+packets and transmit pacing. The Full image runs no Reticulum router and
+imports no RNode firmware code. The separate dedicated KISS firmware below
+retains its original two-port interface and binary configuration extensions.</p>
+<h3 id="dedicated-modem-serial-configuration">Dedicated modem serial configuration</h3>
+<p>115200 baud, 8N1, no flow control.</p>
+<h2 id="frame-format">Frame Format</h2>
+<p>Standard KISS framing per the KA9Q/K3MC specification.</p>
+<table>
+<thead>
+<tr>
+<th>Byte</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0xC0</code></td>
+<td>FEND</td>
+<td>Frame delimiter</td>
+</tr>
+<tr>
+<td><code>0xDB</code></td>
+<td>FESC</td>
+<td>Escape character</td>
+</tr>
+<tr>
+<td><code>0xDC</code></td>
+<td>TFEND</td>
+<td>Escaped FEND (FESC + TFEND = 0xC0)</td>
+</tr>
+<tr>
+<td><code>0xDD</code></td>
+<td>TFESC</td>
+<td>Escaped FESC (FESC + TFESC = 0xDB)</td>
+</tr>
+</tbody>
+</table>
+<pre><code>+------+-----------+--------------+------+
+| FEND | Type Byte | Data (escaped)| FEND |
+| 0xC0 |  1 byte   | 0-510 bytes  | 0xC0 |
++------+-----------+--------------+------+
+</code></pre>
+<h3 id="type-byte">Type Byte</h3>
+<p>The type byte is split into two nibbles:</p>
+<table>
+<thead>
+<tr>
+<th>Bits</th>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7-4</td>
+<td>Port</td>
+<td><code>0</code> primary <code>radio</code>; <code>1</code> secondary <code>radio2</code> for Data only in protocol v2; controls stay on port 0</td>
+</tr>
+<tr>
+<td>3-0</td>
+<td>Command</td>
+<td>Command number</td>
+</tr>
+</tbody>
+</table>
+<p>Maximum unescaped frame size: 512 bytes.</p>
+<h2 id="standard-kiss-commands">Standard KISS Commands</h2>
+<h3 id="host-to-tnc">Host to TNC</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Value</th>
+<th>Data</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data</td>
+<td><code>0x00</code></td>
+<td>Raw packet</td>
+<td>Queue on primary <code>radio</code>; use type <code>0x10</code> to queue on <code>radio2</code> in v2 (one pending packet total)</td>
+</tr>
+<tr>
+<td>TXDELAY</td>
+<td><code>0x01</code></td>
+<td>Delay (1 byte)</td>
+<td>Transmitter keyup delay in 10ms units (default: 50 = 500ms)</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td><code>0x02</code></td>
+<td>P (1 byte)</td>
+<td>CSMA persistence parameter 0-255 (default: 63)</td>
+</tr>
+<tr>
+<td>SlotTime</td>
+<td><code>0x03</code></td>
+<td>Interval (1 byte)</td>
+<td>CSMA slot interval in 10ms units (default: 10 = 100ms)</td>
+</tr>
+<tr>
+<td>TXtail</td>
+<td><code>0x04</code></td>
+<td>Delay (1 byte)</td>
+<td>Post-TX hold time in 10ms units (default: 0)</td>
+</tr>
+<tr>
+<td>FullDuplex</td>
+<td><code>0x05</code></td>
+<td>Mode (1 byte)</td>
+<td>0 = half duplex, nonzero = full duplex (default: 0)</td>
+</tr>
+<tr>
+<td>SetHardware</td>
+<td><code>0x06</code></td>
+<td>Sub-command + data</td>
+<td>MeshCore extensions (see below)</td>
+</tr>
+<tr>
+<td>Return</td>
+<td><code>0xFF</code></td>
+<td>-</td>
+<td>Exit KISS mode (no-op)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tnc-to-host">TNC to Host</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Value</th>
+<th>Data</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data</td>
+<td><code>0x00</code></td>
+<td>Raw packet</td>
+<td>Received packet from primary <code>radio</code></td>
+</tr>
+<tr>
+<td>Data</td>
+<td><code>0x10</code></td>
+<td>Raw packet</td>
+<td>Received packet from secondary <code>radio2</code> (v2)</td>
+</tr>
+</tbody>
+</table>
+<p>Data frames carry raw packet data only, with no metadata prepended. The Data command payload is limited to 255 bytes to match the MeshCore maximum transmission unit (MAX_TRANS_UNIT); frames larger than 255 bytes are silently dropped. The KISS specification recommends at least 1024 bytes for general-purpose TNCs; this modem is intended for MeshCore packets only, whose protocol MTU is 255 bytes. A v2 port-1 Data packet reaches RF only while <code>radio2</code> is configured <code>rxtx</code>; with <code>off</code> or <code>rx</code>, the modem returns <code>TxDone(0)</code> and never falls back to primary.</p>
+<p>Only one packet may be pending for radio transmission at a time. If the host sends a second Data frame before the first has completed, the modem responds with Error (0xF1) and TxBusy (0x07).</p>
+<h3 id="fast-dual-profile-receive-switching">Fast dual-profile receive switching</h3>
+<p>After OpenHop (or another KISS client) configures <code>radio2</code> or <code>tempradio2</code>,
+the board's <code>radio_driver.loop()</code> performs the RF hops locally. KISS does not
+send a command for every hop: that would be slower than the serial link alone.
+The shared scanner uses a <strong>600 µs nominal retune allowance</strong> per hop, with
+the profile timing/preamble calculation accounting for it. It is a measured
+target rather than a hard maximum; packet handling and a slow board loop can
+extend an individual hop. The KISS parser services at most 32 incoming bytes
+per outer loop so a busy OpenHop serial peer cannot starve the scanner.</p>
+<p>Thus “around 0.6 ms” refers to the on-board RF setting transition, not a full
+host-to-board request/response round trip. The returned Data port (<code>0x00</code> or
+<code>0x10</code>) identifies which profile actually received each packet.</p>
+<p><code>SetRadio2</code> and <code>SetTempRadio2</code> acknowledge that their tuple was accepted and
+scheduled; they do not acknowledge that a receiver has already entered that
+tuple. The next local scanner service performs the retune. KISS clients should
+configure the profiles once and let the board perform automatic time-sharing;
+a 115200-baud serial round trip cannot be a 0.6 ms receive-hop control plane.
+Clients that need temporary-lease state can poll <code>GetTempRadio2</code>.</p>
+<h3 id="host-output-backpressure">Host Output Backpressure</h3>
+<p>Outbound frames are encoded into a 2-slot queue and flushed when serial output space is available; <code>loop()</code> never blocks on writes. Radio TX state advances independently of host read speed. TxDone is retained until it can be queued. If the outbound queue is full, the modem responds with Error (0xF1) and TxBusy (0x07). Hosts should read serial promptly to avoid delayed responses.</p>
+<h3 id="csma-behavior">CSMA Behavior</h3>
+<p>The TNC implements p-persistent CSMA for half-duplex operation:</p>
+<ol>
+<li>When a packet is queued, monitor carrier detect</li>
+<li>When the channel clears, generate a random value 0-255</li>
+<li>If the value is less than or equal to P (Persistence), wait TXDELAY then transmit</li>
+<li>Otherwise, wait SlotTime and repeat from step 1</li>
+</ol>
+<p>In full-duplex mode, CSMA is bypassed and packets transmit after TXDELAY.</p>
+<h2 id="sethardware-extensions-0x06">SetHardware Extensions (0x06)</h2>
+<p>MeshCore-specific functionality uses the standard KISS SetHardware command. The first byte of SetHardware data is a sub-command. Standard KISS clients ignore these frames.</p>
+<h3 id="frame-format_1">Frame Format</h3>
+<pre><code>+------+------+-------------+--------------+------+
+| FEND | 0x06 | Sub-command | Data (escaped)| FEND |
+| 0xC0 |      |   1 byte    |   variable   | 0xC0 |
++------+------+-------------+--------------+------+
+</code></pre>
+<h3 id="request-sub-commands-host-to-tnc">Request Sub-commands (Host to TNC)</h3>
+<table>
+<thead>
+<tr>
+<th>Sub-command</th>
+<th>Value</th>
+<th>Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GetIdentity</td>
+<td><code>0x01</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetRandom</td>
+<td><code>0x02</code></td>
+<td>Length (1 byte, 1-64)</td>
+</tr>
+<tr>
+<td>VerifySignature</td>
+<td><code>0x03</code></td>
+<td>PubKey (32) + Signature (64) + Data</td>
+</tr>
+<tr>
+<td>SignData</td>
+<td><code>0x04</code></td>
+<td>Data to sign</td>
+</tr>
+<tr>
+<td>EncryptData</td>
+<td><code>0x05</code></td>
+<td>Key (32) + Plaintext</td>
+</tr>
+<tr>
+<td>DecryptData</td>
+<td><code>0x06</code></td>
+<td>Key (32) + MAC (2) + Ciphertext</td>
+</tr>
+<tr>
+<td>KeyExchange</td>
+<td><code>0x07</code></td>
+<td>Remote PubKey (32)</td>
+</tr>
+<tr>
+<td>Hash</td>
+<td><code>0x08</code></td>
+<td>Data to hash</td>
+</tr>
+<tr>
+<td>SetRadio</td>
+<td><code>0x09</code></td>
+<td>Freq (4) + BW (4) + SF (1) + CR (1)</td>
+</tr>
+<tr>
+<td>SetTxPower</td>
+<td><code>0x0A</code></td>
+<td>Power dBm (1)</td>
+</tr>
+<tr>
+<td>GetRadio</td>
+<td><code>0x0B</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetTxPower</td>
+<td><code>0x0C</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetCurrentRssi</td>
+<td><code>0x0D</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>IsChannelBusy</td>
+<td><code>0x0E</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetAirtime</td>
+<td><code>0x0F</code></td>
+<td>Packet length (1)</td>
+</tr>
+<tr>
+<td>GetNoiseFloor</td>
+<td><code>0x10</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetVersion</td>
+<td><code>0x11</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetStats</td>
+<td><code>0x12</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetBattery</td>
+<td><code>0x13</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetMCUTemp</td>
+<td><code>0x14</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetSensors</td>
+<td><code>0x15</code></td>
+<td>Permissions (1)</td>
+</tr>
+<tr>
+<td>GetDeviceName</td>
+<td><code>0x16</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Ping</td>
+<td><code>0x17</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Reboot</td>
+<td><code>0x18</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>SetSignalReport</td>
+<td><code>0x19</code></td>
+<td>Enable (1): 0x00=disable, nonzero=enable</td>
+</tr>
+<tr>
+<td>GetSignalReport</td>
+<td><code>0x1A</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>SetRadio2</td>
+<td><code>0x1B</code></td>
+<td>Radio2 parameters (13; see below)</td>
+</tr>
+<tr>
+<td>GetRadio2</td>
+<td><code>0x1C</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>SetTempRadio2</td>
+<td><code>0x1D</code></td>
+<td>Radio2 parameters + duration (15)</td>
+</tr>
+<tr>
+<td>GetTempRadio2</td>
+<td><code>0x1E</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>SetRadio2Ext</td>
+<td><code>0x1F</code></td>
+<td>Radio2 parameters + protocol (14)</td>
+</tr>
+<tr>
+<td>GetRadio2Ext</td>
+<td><code>0x20</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>GetRadioSlot</td>
+<td><code>0x22</code></td>
+<td>- (Station G3 only)</td>
+</tr>
+<tr>
+<td>SetRadioSlot</td>
+<td><code>0x23</code></td>
+<td>Mode (1): 0=auto, 1=slot 1, 2=slot 2 (Station G3 only)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="response-sub-commands-tnc-to-host">Response Sub-commands (TNC to Host)</h3>
+<p>Response codes use the high-bit convention: <code>response = command | 0x80</code>. Generic and unsolicited responses use the <code>0xF0</code>+ range.</p>
+<table>
+<thead>
+<tr>
+<th>Sub-command</th>
+<th>Value</th>
+<th>Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td><code>0x81</code></td>
+<td>PubKey (32)</td>
+</tr>
+<tr>
+<td>Random</td>
+<td><code>0x82</code></td>
+<td>Random bytes (1-64)</td>
+</tr>
+<tr>
+<td>Verify</td>
+<td><code>0x83</code></td>
+<td>Result (1): 0x00=invalid, 0x01=valid</td>
+</tr>
+<tr>
+<td>Signature</td>
+<td><code>0x84</code></td>
+<td>Signature (64)</td>
+</tr>
+<tr>
+<td>Encrypted</td>
+<td><code>0x85</code></td>
+<td>MAC (2) + Ciphertext</td>
+</tr>
+<tr>
+<td>Decrypted</td>
+<td><code>0x86</code></td>
+<td>Plaintext</td>
+</tr>
+<tr>
+<td>SharedSecret</td>
+<td><code>0x87</code></td>
+<td>Shared secret (32)</td>
+</tr>
+<tr>
+<td>Hash</td>
+<td><code>0x88</code></td>
+<td>SHA-256 hash (32)</td>
+</tr>
+<tr>
+<td>Radio</td>
+<td><code>0x8B</code></td>
+<td>Freq (4) + BW (4) + SF (1) + CR (1)</td>
+</tr>
+<tr>
+<td>TxPower</td>
+<td><code>0x8C</code></td>
+<td>Power dBm (1)</td>
+</tr>
+<tr>
+<td>CurrentRssi</td>
+<td><code>0x8D</code></td>
+<td>RSSI dBm (1, signed)</td>
+</tr>
+<tr>
+<td>ChannelBusy</td>
+<td><code>0x8E</code></td>
+<td>Result (1): 0x00=clear, 0x01=busy</td>
+</tr>
+<tr>
+<td>Airtime</td>
+<td><code>0x8F</code></td>
+<td>Milliseconds (4)</td>
+</tr>
+<tr>
+<td>NoiseFloor</td>
+<td><code>0x90</code></td>
+<td>dBm (2, signed)</td>
+</tr>
+<tr>
+<td>Version</td>
+<td><code>0x91</code></td>
+<td>Version (1) + Reserved (1)</td>
+</tr>
+<tr>
+<td>Stats</td>
+<td><code>0x92</code></td>
+<td>RX (4) + TX (4) + Errors (4)</td>
+</tr>
+<tr>
+<td>Battery</td>
+<td><code>0x93</code></td>
+<td>Millivolts (2)</td>
+</tr>
+<tr>
+<td>MCUTemp</td>
+<td><code>0x94</code></td>
+<td>Temperature (2, signed)</td>
+</tr>
+<tr>
+<td>Sensors</td>
+<td><code>0x95</code></td>
+<td>CayenneLPP payload</td>
+</tr>
+<tr>
+<td>DeviceName</td>
+<td><code>0x96</code></td>
+<td>Name (variable, UTF-8)</td>
+</tr>
+<tr>
+<td>Pong</td>
+<td><code>0x97</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>SignalReport</td>
+<td><code>0x9A</code></td>
+<td>Status (1): 0x00=disabled, 0x01=enabled</td>
+</tr>
+<tr>
+<td>Radio2</td>
+<td><code>0x9C</code></td>
+<td>Saved radio2 parameters (13)</td>
+</tr>
+<tr>
+<td>TempRadio2</td>
+<td><code>0x9E</code></td>
+<td>Active temporary radio2 + remaining minutes (15)</td>
+</tr>
+<tr>
+<td>Radio2Ext</td>
+<td><code>0xA0</code></td>
+<td>Saved radio2 parameters + protocol (14)</td>
+</tr>
+<tr>
+<td>RadioSlot</td>
+<td><code>0xA2</code></td>
+<td>Saved mode, active slot, detected mask, reboot needed (4 bytes)</td>
+</tr>
+<tr>
+<td>OK</td>
+<td><code>0xF0</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Error</td>
+<td><code>0xF1</code></td>
+<td>Error code (1)</td>
+</tr>
+<tr>
+<td>TxDone</td>
+<td><code>0xF8</code></td>
+<td>Result (1): 0x00=failed, 0x01=success</td>
+</tr>
+<tr>
+<td>RxMeta</td>
+<td><code>0xF9</code></td>
+<td>SNR (1) + RSSI (1)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="error-codes">Error Codes</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>InvalidLength</td>
+<td><code>0x01</code></td>
+<td>Request data too short</td>
+</tr>
+<tr>
+<td>InvalidParam</td>
+<td><code>0x02</code></td>
+<td>Invalid parameter value</td>
+</tr>
+<tr>
+<td>NoCallback</td>
+<td><code>0x03</code></td>
+<td>Feature not available</td>
+</tr>
+<tr>
+<td>MacFailed</td>
+<td><code>0x04</code></td>
+<td>MAC verification failed</td>
+</tr>
+<tr>
+<td>UnknownCmd</td>
+<td><code>0x05</code></td>
+<td>Unknown sub-command</td>
+</tr>
+<tr>
+<td>EncryptFailed</td>
+<td><code>0x06</code></td>
+<td>Encryption failed</td>
+</tr>
+<tr>
+<td>TxBusy</td>
+<td><code>0x07</code></td>
+<td>Radio TX busy, or host output queue full</td>
+</tr>
+<tr>
+<td>SaveFailed</td>
+<td><code>0x08</code></td>
+<td>Setting could not be saved; running slot unchanged</td>
+</tr>
+</tbody>
+</table>
+<h3 id="station-g3-physical-radio-slot">Station G3 physical radio slot</h3>
+<p><code>GetRadioSlot</code> takes no data and replies with four bytes: saved mode (<code>0</code> auto,
+<code>1</code> or <code>2</code> forced socket), active socket (<code>0</code> unavailable, <code>1</code> or <code>2</code>), detected
+socket mask (bit 0 = socket 1, bit 1 = socket 2), and reboot-needed flag (<code>0</code> or
+<code>1</code>). This selects the physical SX1262 daughterboard socket, not the logical
+<code>radio2</code> PHY profile. Other boards return <code>UnknownCmd</code>.</p>
+<p><code>SetRadioSlot</code> requires exactly one mode byte (<code>0</code>–<code>2</code>). An <code>OK</code> means the mode
+was saved; the running socket stays unchanged until a separate <code>Reboot</code> command
+or power cycle. Radio settings and identity are untouched. A failed save returns
+<code>SaveFailed</code>, with no change to the running socket.</p>
+<p>If no usable socket is found during boot, the normal KISS modem has not started.
+Use the separate USB recovery console: <code>!g3 get radio.slot</code>,
+<code>!g3 set radio.slot auto</code>, then <code>!g3 reboot</code>. Recovery accepts only these
+prefixed management commands (and <code>!g3 help</code>), never KISS packet payloads.</p>
+<h3 id="unsolicited-events">Unsolicited Events</h3>
+<p>The TNC sends these SetHardware frames without a preceding request:</p>
+<p><strong>TxDone (0xF8)</strong>: Sent after radio transmission completes. Contains a single byte: 0x01 for success, 0x00 for failure. Delivery to the host may be delayed under serial backpressure but is not dropped.</p>
+<p><strong>RxMeta (0xF9)</strong>: Sent after each Data frame (type 0x00 or v2 type 0x10) with SNR (1 byte, signed, value x4) and RSSI (1 byte, signed, dBm). It remains exactly two bytes; the Data port identifies the receiving profile. Queued with the data frame; omitted if the data frame cannot be queued. Enabled by default; toggle with SetSignalReport. Standard KISS clients ignore this frame.</p>
+<h2 id="data-formats">Data Formats</h2>
+<h3 id="radio-parameters-setradio-radio-response">Radio Parameters (SetRadio / Radio response)</h3>
+<p>All values little-endian.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frequency</td>
+<td>4 bytes</td>
+<td>Hz (e.g., 869618000)</td>
+</tr>
+<tr>
+<td>Bandwidth</td>
+<td>4 bytes</td>
+<td>Hz (e.g., 62500)</td>
+</tr>
+<tr>
+<td>SF</td>
+<td>1 byte</td>
+<td>Spreading factor (5-12)</td>
+</tr>
+<tr>
+<td>CR</td>
+<td>1 byte</td>
+<td>Coding rate (5-8)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="secondary-radio-parameters-setradio2-radio2-response">Secondary Radio Parameters (SetRadio2 / Radio2 response)</h3>
+<p><code>SetRadio2</code> is the binary KISS equivalent of <code>radio2</code>. It changes only RAM
+state for this KISS session; it does not write the Mesh CLI profile file.
+All values are little-endian. The mode values are <code>0=off</code>, <code>1=rx</code>, and
+<code>2=rxtx</code>. An <code>off</code> tuple may contain zero radio parameters, which are ignored.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frequency</td>
+<td>4 bytes</td>
+<td>Hz</td>
+</tr>
+<tr>
+<td>Bandwidth</td>
+<td>4 bytes</td>
+<td>Hz</td>
+</tr>
+<tr>
+<td>SF</td>
+<td>1 byte</td>
+<td>Spreading factor (5-12)</td>
+</tr>
+<tr>
+<td>CR</td>
+<td>1 byte</td>
+<td>Coding rate (5-8)</td>
+</tr>
+<tr>
+<td>Mode</td>
+<td>1 byte</td>
+<td><code>off</code>, <code>rx</code>, or <code>rxtx</code> as above</td>
+</tr>
+<tr>
+<td>Preamble</td>
+<td>2 bytes</td>
+<td>Symbols; <code>0</code> chooses automatic</td>
+</tr>
+</tbody>
+</table>
+<p><code>GetRadio2</code> returns this exact 13-byte tuple. The modem preserves the exact
+frequency and bandwidth values sent by the host even though its radio driver
+uses floating-point MHz/kHz internally.</p>
+<h3 id="optional-extended-secondary-radio-setradio2ext-radio2ext-response">Optional Extended Secondary Radio (SetRadio2Ext / Radio2Ext response)</h3>
+<p>These additive commands retain protocol version 2 and all existing OpenHop
+commands unchanged. <code>SetRadio2Ext</code> takes the exact 13-byte secondary tuple above
+followed by one protocol byte: <code>0</code> = MeshCore (LoRa sync word <code>0x12</code>), or <code>2</code> =
+raw Ethernet (sync word <code>0x16</code>). Other values, unavailable wire support, invalid
+modem tuples and lengths other than 14 bytes are rejected without changing the
+saved or active profile. <code>GetRadio2Ext</code> takes no data and returns the saved tuple
+plus that protocol byte, exactly 14 bytes.</p>
+<p>Both modes use explicit-header, CRC-on, normal-IQ LoRa. Ethernet frames remain
+raw Data on KISS port 1 (<code>0x10</code>); the modem adds no IP stack, ARP implementation
+or WiFi server. Hosts provide Ethernet/IPv4/TCP and must respect the one-pending-
+TX limit by waiting for <code>TxDone</code> before submitting another Data frame. The
+standard KISS <code>TXDELAY</code> default is 500 ms; hosts may explicitly change it for a
+low-delay link. Signal reports retain their existing two-byte format.</p>
+<p>The extended setting is RAM-only and has the same saved/temporary semantics as
+<code>SetRadio2</code>: an active <code>SetTempRadio2</code> lease is not interrupted, and its expiry
+or cancellation restores the saved tuple <strong>including its protocol</strong>. The legacy
+13-byte <code>SetRadio2</code> and 15-byte <code>SetTempRadio2</code> always select MeshCore; the legacy
+<code>GetRadio2</code> remains exactly 13 bytes and does not report the protocol. Hosts that
+need Ethernet must first probe <code>GetRadio2Ext</code>; older firmware replies
+<code>UnknownCmd</code>. Do not silently fall back to MeshCore when this probe fails.</p>
+<p>Builders can opt a compatible raw KISS modem into Ethernet wire support with
+<code>MESH_ENABLE_ETHERNET_WIRE=1</code>, leaving <code>MESH_ENABLE_ETHERNET_TUNNEL=0</code>. The wire
+flag defaults to the tunnel flag, so existing Companion builds are unchanged.
+The radio chip must independently support the requested profile; for example,
+SX1276 cannot use SF5 even when Ethernet wire support is compiled in.</p>
+<p>Bench images compiled with <code>MESH_HIL_TX_FREQ_MHZ</code> additionally support the
+read-only SetHardware <code>GetLabTxGuard</code> (<code>0x21</code>, no request data). Its response
+<code>0xA1</code> is the compiled allowed frequency as <code>u32</code> little-endian Hz; the standard
+909.5 MHz bench lock returns <code>909500000</code>. It proves the same frequency boundary
+used by the radio TX guard, not merely a requested setting. Production images
+without this explicit build flag return <code>UnknownCmd</code>; no setter exists.</p>
+<h3 id="temporary-secondary-radio-settempradio2-tempradio2-response">Temporary Secondary Radio (SetTempRadio2 / TempRadio2 response)</h3>
+<p><code>SetTempRadio2</code> is the binary KISS equivalent of <code>tempradio2</code>: the 13-byte
+secondary tuple followed by <code>duration_minutes:u16</code>, from 1 to 10080. It is
+RAM-only and automatically restores the saved <code>radio2</code> tuple on expiry or
+reboot. A mode <code>off</code> with duration zero cancels the temporary lease and
+immediately restores saved <code>radio2</code>; all other <code>off</code>/zero-duration combinations
+are invalid. <code>GetTempRadio2</code> returns the active 13-byte tuple plus remaining
+minutes, rounded up. It returns a zero/off tuple with zero duration when no
+temporary lease is active.</p>
+<p>Changing saved <code>radio2</code> during an active temporary lease does not interrupt
+the active tuple; the replacement becomes active when the lease ends. Pending
+KISS Data is bound to a profile generation at queue time. If that profile is
+replaced before RF transmission begins, the modem sends normal <code>TxDone(0)</code> and
+never falls back to the other profile.</p>
+<h3 id="version-version-response">Version (Version response)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Version</td>
+<td>1 byte</td>
+<td>Firmware version</td>
+</tr>
+<tr>
+<td>Reserved</td>
+<td>1 byte</td>
+<td>Always 0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="encrypted-encrypted-response">Encrypted (Encrypted response)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MAC</td>
+<td>2 bytes</td>
+<td>HMAC-SHA256 truncated to 2 bytes</td>
+</tr>
+<tr>
+<td>Ciphertext</td>
+<td>variable</td>
+<td>AES-128 block-encrypted data with zero padding</td>
+</tr>
+</tbody>
+</table>
+<h3 id="airtime-airtime-response">Airtime (Airtime response)</h3>
+<p>All values little-endian.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Airtime</td>
+<td>4 bytes</td>
+<td>uint32_t, estimated air time in milliseconds</td>
+</tr>
+</tbody>
+</table>
+<h3 id="noise-floor-noisefloor-response">Noise Floor (NoiseFloor response)</h3>
+<p>All values little-endian.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Noise floor</td>
+<td>2 bytes</td>
+<td>int16_t, dBm (signed)</td>
+</tr>
+</tbody>
+</table>
+<p>The modem recalibrates the noise floor every 2 seconds with an AGC reset every 30 seconds.</p>
+<h3 id="stats-stats-response">Stats (Stats response)</h3>
+<p>All values little-endian.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RX</td>
+<td>4 bytes</td>
+<td>Packets received</td>
+</tr>
+<tr>
+<td>TX</td>
+<td>4 bytes</td>
+<td>Packets transmitted</td>
+</tr>
+<tr>
+<td>Errors</td>
+<td>4 bytes</td>
+<td>Receive errors</td>
+</tr>
+</tbody>
+</table>
+<h3 id="battery-battery-response">Battery (Battery response)</h3>
+<p>All values little-endian.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Millivolts</td>
+<td>2 bytes</td>
+<td>uint16_t, battery voltage in mV</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mcu-temperature-mcutemp-response">MCU Temperature (MCUTemp response)</h3>
+<p>All values little-endian.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Temperature</td>
+<td>2 bytes</td>
+<td>int16_t, tenths of degC (e.g., 253 = 25.3degC)</td>
+</tr>
+</tbody>
+</table>
+<p>Returns <code>NoCallback</code> error if the board does not support temperature readings.</p>
+<h3 id="device-name-devicename-response">Device Name (DeviceName response)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name</td>
+<td>variable</td>
+<td>UTF-8 string, no null terminator</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reboot">Reboot</h3>
+<p>Sends an <code>OK</code> response, flushes serial, then reboots the device. The host should expect the connection to drop.</p>
+<h3 id="sensor-permissions-getsensors">Sensor Permissions (GetSensors)</h3>
+<table>
+<thead>
+<tr>
+<th>Bit</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>0x01</code></td>
+<td>Base (battery)</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>0x02</code></td>
+<td>Location (GPS)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>0x04</code></td>
+<td>Environment (temp, humidity, pressure)</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>0x07</code> for all permissions.</p>
+<h3 id="sensor-data-sensors-response">Sensor Data (Sensors response)</h3>
+<p>Data returned in CayenneLPP format. See <a href="https://docs.mydevices.com/docs/lorawan/cayenne-lpp">CayenneLPP documentation</a> for parsing.</p>
+<h2 id="cryptographic-algorithms">Cryptographic Algorithms</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Algorithm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity / Signing / Verification</td>
+<td>Ed25519</td>
+</tr>
+<tr>
+<td>Key Exchange</td>
+<td>X25519 (ECDH)</td>
+</tr>
+<tr>
+<td>Encryption</td>
+<td>AES-128 block encryption with zero padding + HMAC-SHA256 (MAC truncated to 2 bytes)</td>
+</tr>
+<tr>
+<td>Hashing</td>
+<td>SHA-256</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Data payload limit (255 bytes) matches MeshCore MAX_TRANS_UNIT; no change needed for KISS "1024+ recommended" (that applies to general TNCs, not MeshCore)</li>
+<li>Modem generates identity on first boot (stored in flash)</li>
+<li>All multi-byte values are little-endian unless stated otherwise</li>
+<li>SNR values in RxMeta are multiplied by 4 for 0.25 dB precision</li>
+<li>TxDone is sent as a SetHardware event after each transmission</li>
+<li>Legacy KISS clients use only type 0x00 data and remain compatible. Version-2-aware clients can use type 0x10 to send on, or identify reception from, <code>radio2</code>.</li>
+<li>Standard KISS clients can safely ignore all SetHardware (0x06) frames</li>
+<li>See <a href="../packet_format/">packet_format.md</a> for packet format</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.action.edit", "content.code.copy", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../_javascript/release_features.js?v=20261024-1"></script>
+      
+        <script src="../_javascript/hosted_doc_links.js?v=20261007-1"></script>
+      
+        <script src="../_javascript/notification_builder.js?v=20261006-channel9"></script>
+      
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      
+        <script src="../_javascript/firmware_picker.js?v=20261024-included-bootloader"></script>
+      
+        <script src="../_javascript/telemetry_decoder.js?v=20261022-noise-history"></script>
+      
+        <script src="../_javascript/management_decoder.js"></script>
+      
+        <script src="../_javascript/filter_tool.js?v=20261030-compact-defaults"></script>
+      
+        <script src="../_javascript/preset_test.js?v=20260923-2"></script>
+      
+        <script src="../_javascript/esp32_partition_catalog.js?v=20261001-1"></script>
+      
+    
+  </body>
+</html>

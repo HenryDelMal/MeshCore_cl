@@ -1,0 +1,3177 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the open source MeshCore firmware">
+      
+      
+      
+        <link rel="canonical" href="https://HenryDelMal.github.io/MeshCore_cl/test-results/morse_rx_hil_2026-10-12/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Morse rx hil 2026 10 12 - MeshCore Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../_stylesheets/notification_builder.css?v=20261006-channel9">
+    
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/firmware_picker.css?v=20261013-pick-first-1">
+    
+      <link rel="stylesheet" href="../../_stylesheets/telemetry_decoder.css?v=20261022-noise-history">
+    
+      <link rel="stylesheet" href="../../_stylesheets/management_decoder.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/filter_tool.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/preset_test.css?v=20260923-2">
+    
+      <link rel="stylesheet" href="../../_stylesheets/esp32_partition_catalog.css?v=20261001-1">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#morse-receive-hardware-checkpoint-12-october-2026" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="MeshCore Docs" class="md-header__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Morse rx hil 2026 10 12
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="MeshCore Docs" class="md-nav__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    MeshCore Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware and tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware and tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chile_repeater_builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chile repeater builder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../firmware_picker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware picker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preset_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preset test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../filter_tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../telemetry_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../management_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started and features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started and features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../role_feature_switches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role feature switches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_companion_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_radio_full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion radio full
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_companion_usb_switcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion usb switcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_offline_queue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion offline queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../halo_keymind_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Halo keymind settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware updates and partitions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware updates and partitions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../upgrading_1.17.1.8_to_1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading 1.17.1.8 to 1.17.1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota user guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_easy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota easy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_wizard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lora_ota_automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lora ota automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_station_g2_to_ikoka_stick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota station g2 to ikoka stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_nrf52_bootloader_update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 bootloader update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_nrf52_qspi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 qspi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_meshtower_v2_sdcard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota meshtower v2 sdcard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../esp32_partition_catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 partition catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../esp32_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heltec_v4_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heltec v4 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../host_cli_service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host cli service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio, networking, and power
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Radio, networking, and power
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../radio_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../radio_presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio presets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fleet_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../room_services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../carrier_wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../espnow_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Espnow bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../split_radio_repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split radio repeater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rs232_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rs232 bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../udp_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Udp bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WiFi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flood_filtering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flood filtering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gps_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gps tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_lost_reply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion lost reply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor tracker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nrf52_power_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nrf52 power management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI and protocol reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI and protocol reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_build_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli build matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_command_availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli command availability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../terminal_chat_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal chat cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kiss_modem_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packet_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packet format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../payloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../management_reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats_binary_frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats binary frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../number_allocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number allocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qr_codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qr codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.18.0.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current - 1.18.0.1 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Previous releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Previous releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.9 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.17.1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.8 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Older releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-and-host-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation and host verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware-identities-and-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware identities and isolation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observations-not-a-new-maximum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observations, not a new maximum
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-acknowledgement-and-retained-capture-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote acknowledgement and retained-capture evidence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-hardware-work-stopped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why hardware work stopped
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ready-to-resume-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ready-to-resume experiment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#follow-up-13-october-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Follow-up: 13 October 2026
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controlled-speed-and-human-timing-follow-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controlled speed and human-timing follow-up
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faster-experimental-rf-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Faster experimental RF comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/HenryDelMal/MeshCore_cl/edit/keymindCascade/docs/test-results/morse_rx_hil_2026-10-12.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<!-- meshcore-hosted-doc-link:start -->
+<p class="meshcore-hosted-doc-link"><a href="https://mikecarper.github.io/MeshCore/test-results/morse_rx_hil_2026-10-12/">View this page on MeshCore Docs</a>.</p>
+<!-- meshcore-hosted-doc-link:end -->
+
+<h1 id="morse-receive-hardware-checkpoint-12-october-2026">Morse receive hardware checkpoint - 12 October 2026</h1>
+<p>Status: <strong>incomplete hardware validation</strong>. The release default remains
+25 WPM / 902.100 MHz and the public limit remains 60 WPM. Experimental
+255-WPM builds are not a validated release limit.</p>
+<h2 id="implementation-and-host-verification">Implementation and host verification</h2>
+<ul>
+<li>Companion, repeater, room and sensor command paths support bounded receive
+  sessions, a volatile 4096-character capture, paged reads and checked LoRa
+  recovery. Receive duration is one second through five minutes.</li>
+<li>Remote receive starts only after its acknowledgement has actually transmitted.</li>
+<li>Fresh focused Morse run: 56/56 passed. Additional high-speed HIL OFF-debounce
+  tests and decoder matrix: 3/3 passed, including 188 synthetic waveform cases.</li>
+<li>Radio/role regression run: 390/390. RS232 overlap: 19/19. USB/BLE/logging:
+  222 test methods with no functional failures; eight optional DFU emulation
+  subcases skipped because the host lacks Unicorn.</li>
+<li>Build checks passed for the tested nRF52 companions/repeater, ESP32 room and
+  sensor, and compact STM32 builds. Compact STM32 retains TX but excludes RX
+  by default to respect its existing flash boundary.</li>
+</ul>
+<h2 id="hardware-identities-and-isolation">Hardware identities and isolation</h2>
+<p>The Mercerwood Pi was reached at <code>100.78.195.38</code>. Only identity-verified
+application DFU packages were written through the existing <code>mcfirmware.sh</code>
+path. No bootloader or SoftDevice was replaced, no services were stopped,
+and the Pi was not rebooted by this test.</p>
+<table>
+<thead>
+<tr>
+<th>Board</th>
+<th>USB chip serial</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAK4631</td>
+<td><code>9AB3B64C641BA927</code></td>
+</tr>
+<tr>
+<td>Heltec T096</td>
+<td><code>651F8E496197F882</code></td>
+</tr>
+<tr>
+<td>Heltec MeshPocket</td>
+<td><code>93DA83ADF7B2092B</code></td>
+</tr>
+</tbody>
+</table>
+<p>The RAK3401 service radio and MeshTower were left alone.</p>
+<p>Early tests put CW at 909.5 MHz and packet profiles elsewhere. This was
+corrected: the requested CW default is <strong>902.100 MHz</strong>, separate from the
+LoRa lab control tuple <strong>909.5 MHz / 500 kHz / SF5 / CR5</strong>. Results from the
+early layout are not proof of packet-spectrum isolation.</p>
+<p><code>set radio</code> only saves Companion primary settings. The test runners now use
+<code>set tempradio</code> and poll the exact active tuple; saved or pending settings
+do not satisfy the check. The USB-only HIL recipes explicitly include the
+existing temporary-radio capability. Names and saved primary settings are
+not changed by the corrected runners.</p>
+<h2 id="observations-not-a-new-maximum">Observations, not a new maximum</h2>
+<ul>
+<li>With experimental warm-XOSC TX, 800-us PA ramp, RSSI window 2 and 1-ms
+  polling, MeshPocket-to-RAK decoded the alphabet/digit, word-spacing and
+  punctuation messages correctly in one 120-WPM sweep at 902.100 MHz.</li>
+<li>Reverse-direction captures contained additional noise characters. At
+  200/240 WPM, there were real character errors in both directions. Strict
+  comparison includes extra characters; matching only a substring is not
+  accepted.</li>
+<li>Keeping ordinary FSK packet preamble/sync/CRC did not establish a reliable
+  faster limit. That experiment is not enabled in production.</li>
+<li>A no-transmitter control can produce extra characters; the source of those
+  RSSI excursions is not established. Noise, another carrier and a radio
+  measurement artifact must not be conflated without further evidence.</li>
+<li>Sample-gap diagnostics confirmed mostly 1/2-ms cadence after noncritical
+  sensor, display and filesystem work was deferred during capture. The
+  protection of voltage cutoffs, GPIO expiry, watchdogs, transport input and
+  stop commands remains active.</li>
+<li>Integer-millisecond timing maps 219-255 WPM to the same nominal five-ms dot.
+  SPI/PA overhead further slows the envelope. USB-observed TX duration is
+  not a precision measurement of physical on-air WPM.</li>
+</ul>
+<h2 id="remote-acknowledgement-and-retained-capture-evidence">Remote acknowledgement and retained-capture evidence</h2>
+<p>A 30-second LoRa-controlled test physically demonstrated:</p>
+<ol>
+<li>A six-minute request was rejected in 0.682 seconds.</li>
+<li>The valid request was acknowledged in 0.684 seconds before RX started.</li>
+<li>The timed receiver returned to LoRa after 30.889 seconds as observed by
+   the host.</li>
+<li>All 34 retained characters read locally were returned byte-for-byte in
+   the remote LoRa read.</li>
+</ol>
+<p>The decoded RF text was not equal to the transmitted message, so this run
+failed overall. It used the early shared CW/control frequency and is not a
+clean decoder validation. The full five-minute and multiple-page remote
+tests remain outstanding.</p>
+<h2 id="why-hardware-work-stopped">Why hardware work stopped</h2>
+<p>At approximately 22:43 Pacific the RAK USB connection disappeared during the
+zero-gate isolated-frequency sweep. It subsequently reported
+<code>v1.17.1.10-halo-keymind-cascade-preview3-9ce2a076</code>, with <code>get morse</code> unknown,
+instead of the just-verified Morse application. Another concurrent job had
+flashed the shared RAK. This is not evidence of a Morse firmware crash.
+The affected sweep is incomplete and must not be counted as a completed
+speed test. Hardware writes were stopped for user coordination.</p>
+<h2 id="ready-to-resume-experiment">Ready-to-resume experiment</h2>
+<p>An isolated HIL-only <code>MESH_MORSE_HIL_FAST_OFF_DEBOUNCE=1</code> experiment keeps
+ON confirmation at two ms and permits OFF confirmation at one ms for fast
+nominal dots. Default/production behavior, capture size and low-speed timing
+are unchanged. Synthetic tests pass; physical results are still pending.</p>
+<p>The following application-only packages were compiled and staged on the Pi
+but <strong>not installed</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RAK_4631_companion_radio_usb-morse-fastoff.zip</code></td>
+<td><code>0340b6135c36c7d6cb61be45ac28555ead5a2f6529feb3702466b284d2abd204</code></td>
+</tr>
+<tr>
+<td><code>Mesh_pocket_companion_radio_usb-morse-fastoff.zip</code></td>
+<td><code>e0d94389310244655136564a1dbd55d5e4d4d18a17bbae6e1c7ae018f5bc7952</code></td>
+</tr>
+</tbody>
+</table>
+<p>Pi run directory: <code>/home/mikec/hwtest/runs/morse-20261012.3Lp6jA</code>.
+Local raw evidence is retained in the ignored <code>out/morse-rx/</code> directory;
+the strict test runners are in <code>tools/hil/morse_bench.py</code> and
+<code>tools/hil/morse_remote.py</code>.</p>
+<p>Before resuming, coordinate exclusive use of those three radios, verify the
+installed images and exact USB identities, and run the isolated timing A/B,
+repeated mixed-message speed boundary tests, and the five-minute multipage
+LoRa capture/recovery test. Only then choose and verify any production cap
+or tuning changes. No commit or push was performed for this checkpoint.</p>
+<h2 id="follow-up-13-october-2026">Follow-up: 13 October 2026</h2>
+<p>The original checkpoint above is historical. Its implementation and Reader /
+RS232 integration were subsequently pushed as <code>0be4c7488</code> and <code>396304822</code>.</p>
+<ul>
+<li>The receiver now keeps its timing estimate in Q5 rather than whole
+  milliseconds, eliminating the rounding deadband without changing its
+  4168-byte production allocation. Letter/word split thresholds of 2.25/5.5
+  dot units tolerate ordinary +/-20% gap jitter; doubled letter spacing
+  remains explicitly ambiguous, not a supported exact-decoding result.</li>
+<li>A volatile, default-off HIL transmitter injects seeded phase jitter,
+  gradual speed drift and modest extra spacing. Its exact pre-key duration
+  check retains the 180-second ceiling. Shipping images contain neither
+  the HIL configuration nor its command branch.</li>
+<li>Fresh focused verification passed 108/108 tests. The real HIL scheduler
+  and receiver passed 154 exact human-timing vectors through experimental
+  240 WPM; 84 additional supported synthetic vectors passed. These are
+  software tests, not physical RF speed qualification.</li>
+<li>The CI stability group passed 106/106. The bridge recovery fixture now
+  includes the actual RS232 power/heartbeat helpers and verifies byte-exact
+  retained short writes. Source/published documentation links passed 7/7
+  tests plus browser-script checks.</li>
+<li>Compact STM32 USB Companion links at 228868/229376 flash bytes with
+  unchanged commands and ITU character support. An exhaustive 256-byte
+  comparison verifies the compact ASCII lookup against the original.</li>
+<li>All four nRF52 HIL targets compiled. Fresh application-only DFU packages
+  were installed on the identity-bound RAK4631, MeshPocket and T096 without
+  changing their bootloaders or SoftDevices.</li>
+<li>A five-minute remote receive session expired and restored LoRa. All 424
+  captured characters were returned exactly in four LoRa pages, but the
+  decoded RF text did not match the nine transmitted messages: this is a
+  transport/recovery pass and a decoding failure, not an overall pass.</li>
+<li>Six-second no-intentional-TX controls at 902.1 and 903.1 MHz were empty
+  on the RAK, but produced false characters on the MeshPocket. A subsequent
+  25-WPM alphabet/digit message decoded exactly from Pocket to RAK; the
+  reverse direction had errors. One clean message does not establish a
+  zero-error speed limit.</li>
+</ul>
+<p>RF investigation and repeated standard/uneven-timing speed qualification
+remain in progress. Default 25 WPM, public ceiling 60 WPM, radio bandwidth,
+and shipping RF filtering have not been changed. Packet control stays at
+909.5 MHz / 500 kHz / SF5 / CR5; CW remains separate at 902.100 MHz by default.
+Raw results remain in <code>out/morse-rx/</code> and the Pi run directory above.</p>
+<h2 id="controlled-speed-and-human-timing-follow-up">Controlled speed and human-timing follow-up</h2>
+<p>These are <strong>conditional laboratory results</strong>, not a promise of error-free
+reception on every board or with automatic noise detection. CW stayed at
+902.100 MHz, packet control at 909.5 MHz / 500 kHz / SF5 / CR5, and requested
+chip TX power at -9 dBm. The Pocket / RAK pair used a volatile <strong>HIL-only
+-80 dBm receive floor</strong> against strong received tones. Shipping images do not
+contain this receive-floor setting. Earlier automatic-threshold quiet controls
+produced false characters on the Pocket and T096; that remains a separate
+qualification limitation.</p>
+<p>The original 2.25 / 5.5-dot letter / word boundaries failed ordinary uneven
+timing even at 25 WPM. With seeded +/-20% phase jitter, gradual -10% duration
+drift, and <strong>no extra letter or word spacing</strong>, the first sweep passed only
+2/6 messages at each of 25, 60 and 120 WPM. A short, fully retained RF trace
+decoded <code>VW MN DOG</code> as <code>VW MNDOG</code> in all six directions/rate combinations.
+All 20 expected marks remained present; the second word gap measured
+246 / 246 ms at 25 WPM, 100 / 102 ms at 60, and 54 / 52 ms at 120. The old
+word thresholds were 264, 110 and 55 ms respectively.</p>
+<p>The receiver now uses the ordinary <strong>2 / 5-dot gap midpoints</strong>, without changing
+mark classification, RX allocation, RF filtering or the public speed limit.
+The same tight human-timing profile (seed 6789), with two repetitions of all
+three mixed alphabet/digit, word and punctuation messages in both directions,
+then passed strictly:</p>
+<table>
+<thead>
+<tr>
+<th>Requested WPM</th>
+<th>Pocket to RAK</th>
+<th>RAK to Pocket</th>
+<th>Total exact messages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>25</td>
+<td>6/6</td>
+<td>6/6</td>
+<td>12/12</td>
+</tr>
+<tr>
+<td>60</td>
+<td>6/6</td>
+<td>6/6</td>
+<td>12/12</td>
+</tr>
+<tr>
+<td>120</td>
+<td>6/6</td>
+<td>6/6</td>
+<td>12/12</td>
+</tr>
+</tbody>
+</table>
+<p>Only leading/trailing capture whitespace is removed in the physical harness;
+extra internal spaces, noise characters, missing letters and <code>?</code> fail the test.
+There were no cleanup errors. This establishes zero observed errors in those
+36 messages under the stated laboratory conditions, not universal 100%
+reliability or a 120-WPM release qualification.</p>
+<p>The production-equivalent RF comparison uses cold-XOSC TX, 3400-us PA ramp,
+RSSI window 0, two-ms sampling and ordinary OFF debounce. Compile guards and
+actual PlatformIO/SCons flag tests prevent faster experimental settings or a
+different receiver clock from being mislabeled as shipping RF behavior.
+The lab maximum override and diagnostics still make these HIL applications,
+not release images.</p>
+<p>Requested WPM is not measured RF pace. Four strict 13-word <code>PARIS</code> trials per
+rate transmitted 643 dot units, omitting the unsent final seven-unit word gap:</p>
+<table>
+<thead>
+<tr>
+<th>Requested WPM</th>
+<th>Host-observed duration</th>
+<th>PARIS-equivalent pace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>60</td>
+<td>14.354-14.365 seconds</td>
+<td>53.7 WPM</td>
+</tr>
+<tr>
+<td>120</td>
+<td>7.937-7.940 seconds</td>
+<td>97.2 WPM</td>
+</tr>
+</tbody>
+</table>
+<p>The pace includes CLI response and polling overhead; it is not an oscilloscope
+measurement of RF edges. It also does not substitute for varied-text testing.</p>
+<p>Latest focused verification passed 129/129 test methods. The actual HIL
+scheduler / decoder matrix has 175 exact results plus one explicitly
+unsupported 240-WPM / two-ms-sampling / 50%-extended-spacing case. The separate
+human envelope matrix has 84 exact results plus 14 explicitly unsupported
+doubled-character-spacing cases. Unsupported transcripts remain checked and
+visible; they are not normalized or counted as exact-decoding passes.
+Former-threshold negative controls reproduce the tight-gap failure. The
+production receiver remains 4168 bytes, and compact STM32 still links at
+228868/229376 flash bytes with its unchanged feature boundary.</p>
+<p>Evidence filenames in the directories above:</p>
+<ul>
+<li><code>squelch80-production-rf-human-tight-20261013.json</code> (before gap correction)</li>
+<li><code>production-tight-gap-trace-20261013.json</code> (complete short RF traces)</li>
+<li><code>production-tight-gap-fixed-repeat-20261013.json</code> (36/36 corrected messages)</li>
+<li><code>production-pace-baseline-20261013.json</code> (host-inclusive PARIS pace)</li>
+</ul>
+<p>The tested application-only gap-correction packages were:</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RAK_4631_companion_radio_usb-prod-rf-gap-20261013.zip</code></td>
+<td><code>26cc93db4f6a602e24a35828cca79efaef002b13b18192fe763eb5426515ec6b</code></td>
+</tr>
+<tr>
+<td><code>Mesh_pocket_companion_radio_usb-prod-rf-gap-20261013.zip</code></td>
+<td><code>9d1f76c1cc42e1d30ca5daa3d30fe30232d426d72b80278cac67d2d98c21a178</code></td>
+</tr>
+</tbody>
+</table>
+<p>The T096's earlier image and measurements do not qualify its speed under this
+new gap correction. No LR1110 or SX127x physical speed limit is established by
+the SX1262 pair. Default 25 WPM and the public 60-WPM ceiling remain unchanged.</p>
+<p>The next faster <strong>production-RF</strong> timing buckets did not meet the zero-error
+criterion, even with the same HIL receive floor:</p>
+<table>
+<thead>
+<tr>
+<th>Requested WPM</th>
+<th>Standard timing</th>
+<th>Tight human timing, two repeats</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>130</td>
+<td>5/6</td>
+<td>11/12</td>
+</tr>
+<tr>
+<td>150</td>
+<td>2/6</td>
+<td>6/12</td>
+</tr>
+<tr>
+<td>170</td>
+<td>0/6</td>
+<td>Not repeated in this corrected sweep</td>
+</tr>
+<tr>
+<td>200</td>
+<td>0/6</td>
+<td>Not repeated in this corrected sweep</td>
+</tr>
+</tbody>
+</table>
+<p>At 130 and 150 some failures affected the initial short mark; 150 also had
+later body errors. The first RF mark currently begins before the command
+reply and the remaining foreground-loop work. That is a possible delay window,
+not a measured explanation of all these errors. No unproved transmitter or
+mark-classifier adjustment was made to improve the reported score.</p>
+<p>Additional boundary evidence:</p>
+<ul>
+<li><code>production-gap-fixed-standard-boundary-20261013.json</code></li>
+<li><code>production-gap-fixed-human-boundary-20261013.json</code></li>
+</ul>
+<p>A second human-style pattern, using +/-20% jitter, gradual <strong>+10% duration
+drift</strong> (slowing down), no extra gaps and seed 12345, passed another 6/6 mixed
+messages at each of 25, 60 and 120 WPM in both directions. Across the corrected
+speeding-up and slowing-down profiles, that is 18/18 messages at each rate,
+54/54 overall, under the same controlled receive threshold.</p>
+<p>The subsequent 30-second <strong>automatic-threshold</strong>, no-intentional-TX control
+was not clean overall: the RAK captured <code>E E</code>, while the Pocket was empty.
+This is evidence against an unconditional production zero-error claim; it is
+not a diagnosis of the source of the quiet RSSI excursions. The current
+shipping speed ceiling remains unchanged.</p>
+<ul>
+<li><code>production-gap-fixed-human-slowing-20261013.json</code></li>
+<li><code>production-gap-fixed-auto-quiet-20261013.json</code></li>
+</ul>
+<p>Short, fully retained two-second initial-window traces sharpen the initial-mark
+finding. At 130 WPM, the failed first <code>E</code> measured 18 ms, exactly twice the
+nominal nine-ms unit; a successful first <code>E</code> measured 16 ms. At 150, the
+corresponding failed/successful widths were 16/14 ms against an eight-ms unit.
+Those widths were also common among later dots, so these recordings do <strong>not</strong>
+show an unusually long first mark. The later learned units were 11/10 ms,
+making comparable later dots classify correctly. Two-ms sample phase and the
+initial untrained threshold can therefore matter near this boundary. The
+trace has no transmitter deadline timestamps and does not prove that CLI work
+caused the errors. These partial diagnostic captures are not complete-message
+qualification failures or passes.</p>
+<ul>
+<li><code>production-initial-mark-trace-20261013.json</code></li>
+</ul>
+<h2 id="faster-experimental-rf-comparison">Faster experimental RF comparison</h2>
+<p>The corrected fast SX1262 HIL applications use warm-XOSC TX, an 800-us PA
+ramp, RSSI window 2, one-ms sampling and the experimental short OFF-confirmation
+minimum. These are <strong>not shipping RF settings</strong>. The same -80 dBm HIL receive
+floor and exact-message checks were used on the same Pocket / RAK pair.</p>
+<table>
+<thead>
+<tr>
+<th>Requested WPM</th>
+<th>Standard timing, two repeats</th>
+<th>Tight human timing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>120</td>
+<td>Previously all-pass; not repeated in this boundary sweep</td>
+<td>6/6</td>
+</tr>
+<tr>
+<td>150</td>
+<td>Not tested in this boundary sweep</td>
+<td>5/6</td>
+</tr>
+<tr>
+<td>200</td>
+<td>12/12</td>
+<td>3/6</td>
+</tr>
+<tr>
+<td>255</td>
+<td>10/12</td>
+<td>Not tested in this boundary sweep</td>
+</tr>
+</tbody>
+</table>
+<p>The tight human profile is again +/-20% jitter, -10% duration drift, no
+added letter/word spacing and seed 6789. At 150, <code>DOG</code> became <code>DKG</code> in one
+direction. At 200, three messages had real body or punctuation errors.
+The shortest timing bucket therefore does not qualify as zero-error, and
+neither does the higher uneven-keying speed. Integer rounding maps requested
+219-255 WPM to the same five-ms dot, so 255 is not 255 measured WPM.</p>
+<p>The fast steady-PARIS pace check gives:</p>
+<table>
+<thead>
+<tr>
+<th>Requested WPM</th>
+<th>Host-observed duration</th>
+<th>PARIS-equivalent pace</th>
+<th>Exact PARIS messages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>120</td>
+<td>6.868 seconds</td>
+<td>112.3 WPM</td>
+<td>2/2</td>
+</tr>
+<tr>
+<td>200</td>
+<td>4.273-4.277 seconds</td>
+<td>180.5 WPM</td>
+<td>2/2</td>
+</tr>
+<tr>
+<td>255</td>
+<td>3.669 seconds</td>
+<td>210.3 WPM</td>
+<td>1/2</td>
+</tr>
+</tbody>
+</table>
+<p>The failed 255 PARIS capture contained <code>PANIS</code> in place of one <code>PARIS</code>.
+These rates include the same host/CLI overhead as the production-equivalent
+pace measurement; pace is calculated only for the 643-unit PARIS payload,
+not by applying that reference count to the other test messages.</p>
+<p>The strongest observed all-pass points are therefore <strong>200 requested WPM
+for machine timing on the fast HIL pair</strong>, and <strong>120 requested WPM for the
+tested uneven timing</strong>. Their steady-PARIS references are approximately
+181 and 112 WPM respectively. With production-equivalent RF timing, the
+tested uneven-timing reference is approximately 97 WPM. None of these
+conditional limits resolves the automatic-threshold quiet-control failure
+or qualifies another board/radio family. Shipping defaults remain unchanged.</p>
+<ul>
+<li><code>fast-gap-fixed-standard-max-20261013.json</code></li>
+<li><code>fast-gap-fixed-human-boundary-20261013.json</code></li>
+<li><code>fast-gap-fixed-pace-20261013.json</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Fast HIL package</th>
+<th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RAK_4631_companion_radio_usb-fast-gap-20261013.zip</code></td>
+<td><code>7722ca7a0008c660217535c19e9dd17d5923fc90510f9850b2ce188a6d753951</code></td>
+</tr>
+<tr>
+<td><code>Mesh_pocket_companion_radio_usb-fast-gap-20261013.zip</code></td>
+<td><code>8d153c544f19e01d45e178105b704840f855a53cb8fda2044ba102cb19b85521</code></td>
+</tr>
+</tbody>
+</table>
+<p>Final cleanup confirmed both selected radios had Morse stopped, configured
+25 WPM / 902.100 MHz, default HIL timing and automatic squelch restored.
+Their saved primary settings still held an earlier 919.5-MHz lab tuple; those
+two test devices were explicitly changed to <strong>909.5 / 500 / SF5 / CR5</strong>, and
+that tuple was also confirmed live. No service radio was changed. The pair
+remains on the identified fast HIL applications, not shipping images.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../_javascript/release_features.js?v=20261024-1"></script>
+      
+        <script src="../../_javascript/hosted_doc_links.js?v=20261007-1"></script>
+      
+        <script src="../../_javascript/notification_builder.js?v=20261006-channel9"></script>
+      
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      
+        <script src="../../_javascript/firmware_picker.js?v=20261024-included-bootloader"></script>
+      
+        <script src="../../_javascript/telemetry_decoder.js?v=20261022-noise-history"></script>
+      
+        <script src="../../_javascript/management_decoder.js"></script>
+      
+        <script src="../../_javascript/filter_tool.js?v=20261030-compact-defaults"></script>
+      
+        <script src="../../_javascript/preset_test.js?v=20260923-2"></script>
+      
+        <script src="../../_javascript/esp32_partition_catalog.js?v=20261001-1"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3230 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the open source MeshCore firmware">
+      
+      
+      
+        <link rel="canonical" href="https://HenryDelMal.github.io/MeshCore_cl/esp32_wifi_partition_migration/">
+      
+      
+        <link rel="prev" href="../esp32_partition_catalog/">
+      
+      
+        <link rel="next" href="../heltec_v4_wifi_partition_migration/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Esp32 wifi partition migration - MeshCore Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../_stylesheets/notification_builder.css?v=20261006-channel9">
+    
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/firmware_picker.css?v=20261013-pick-first-1">
+    
+      <link rel="stylesheet" href="../_stylesheets/telemetry_decoder.css?v=20261022-noise-history">
+    
+      <link rel="stylesheet" href="../_stylesheets/management_decoder.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/filter_tool.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/preset_test.css?v=20260923-2">
+    
+      <link rel="stylesheet" href="../_stylesheets/esp32_partition_catalog.css?v=20261001-1">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#esp32-legacy-partition-migration-over-usb-wi-fi-or-lora" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MeshCore Docs" class="md-header__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Esp32 wifi partition migration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MeshCore Docs" class="md-nav__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    MeshCore Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware and tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware and tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chile_repeater_builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chile repeater builder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firmware_picker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware picker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preset_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preset test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filter_tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../telemetry_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started and features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started and features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../role_feature_switches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role feature switches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_radio_full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion radio full
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_usb_switcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion usb switcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_offline_queue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion offline queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../halo_keymind_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Halo keymind settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware updates and partitions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware updates and partitions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrading_1.17.1.8_to_1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading 1.17.1.8 to 1.17.1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota user guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_easy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota easy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_wizard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lora_ota_automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lora ota automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_station_g2_to_ikoka_stick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota station g2 to ikoka stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_bootloader_update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 bootloader update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_qspi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 qspi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_meshtower_v2_sdcard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota meshtower v2 sdcard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../esp32_partition_catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 partition catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bridge-wi-fi-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bridge Wi-Fi credentials
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ordinary-full-releases-and-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ordinary Full releases and installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#waveshare-esp32-s3-lr1121-observer-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Waveshare ESP32-S3 LR1121 observer migration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repeatable-esp32-build-recipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeatable ESP32 build recipe
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#independent-usb-firmware-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Independent USB firmware set
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-bridge-preserves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the bridge preserves
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eligible-source-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eligible source layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrate-a-seeed-xiao-esp32-s3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migrate a Seeed XIAO ESP32-S3
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lora-only-migration-of-a-listed-role" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoRa-only migration of a listed role
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heltec-v4-v43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Heltec V4 / V4.3
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heltec_v4_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heltec v4 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../host_cli_service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host cli service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio, networking, and power
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Radio, networking, and power
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio presets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fleet_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../room_services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../carrier_wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../espnow_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Espnow bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../split_radio_repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split radio repeater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rs232_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rs232 bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../udp_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Udp bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../WiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WiFi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flood_filtering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flood filtering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gps_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gps tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_lost_reply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion lost reply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensor_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor tracker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nrf52_power_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nrf52 power management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI and protocol reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI and protocol reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_build_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli build matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_command_availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli command availability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal_chat_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal chat cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kiss_modem_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packet_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packet format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../payloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats_binary_frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats binary frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../number_allocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number allocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qr_codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qr codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.18.0.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current - 1.18.0.1 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Previous releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Previous releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.9 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.8 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Older releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bridge-wi-fi-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bridge Wi-Fi credentials
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ordinary-full-releases-and-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ordinary Full releases and installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#waveshare-esp32-s3-lr1121-observer-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Waveshare ESP32-S3 LR1121 observer migration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repeatable-esp32-build-recipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeatable ESP32 build recipe
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#independent-usb-firmware-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Independent USB firmware set
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-bridge-preserves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the bridge preserves
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eligible-source-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eligible source layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrate-a-seeed-xiao-esp32-s3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migrate a Seeed XIAO ESP32-S3
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lora-only-migration-of-a-listed-role" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoRa-only migration of a listed role
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heltec-v4-v43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Heltec V4 / V4.3
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/HenryDelMal/MeshCore_cl/edit/keymindCascade/docs/esp32_wifi_partition_migration.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<!-- meshcore-hosted-doc-link:start -->
+<p class="meshcore-hosted-doc-link"><a href="https://mikecarper.github.io/MeshCore/esp32_wifi_partition_migration/">View this page on MeshCore Docs</a>.</p>
+<!-- meshcore-hosted-doc-link:end -->
+
+<h1 id="esp32-legacy-partition-migration-over-usb-wi-fi-or-lora">ESP32 legacy-partition migration over USB, Wi-Fi or LoRa</h1>
+<p>For <strong><a href="../releases/1.18.0.1/">1.18.0.1 USA Cascade</a></strong>, select the exact board
+and role in the <a href="../firmware_picker/">firmware picker</a>. Published migration
+packages are in the <a href="https://github.com/mikecarper/MeshCore/releases/tag/utility-v1.18.0.1-halo-keymind-cascade-dev-03214a16">update utilities release</a>.
+Follow the selected package's README; a normal app update does not need a
+partition migration when the installed layout already matches.</p>
+<p>The partition-migration bridge lets a supported ESP32 node move from a small
+dual-OTA layout to a verified larger dual-OTA layout without cable flashing or
+a full-chip erase. It fits a legacy 1.25 MiB slot. The Wi-Fi version exposes an
+updater for the Full image after migration. The older identity-only LoRa
+handoff preserves a verified old OTA receiver so it can fetch the Full image
+into the expanded inactive slot. On 8/16 MiB flash that bridge restores identity
+before handing off; its 4 MiB route keeps identity staged until the Full image's
+first boot. Configuration-preserving Partition Expanders instead receive the
+Full image themselves after restoring identity and supported settings.</p>
+<p>The distinct USB version performs verified identity/configuration restoration
+before the host writes the final app. It keeps application USB CDC disabled
+during flash operations and prevents Arduino startup from automatically
+erasing damaged/full NVS. S3/C3 return to ROM download automatically once
+restoration settles; original ESP32 reports matching-MAC settled UART status
+before the host uses DTR/RTS. Neither route needs physical BOOT access, but
+classic boards require their working USB-UART automatic-reset circuit.</p>
+<p>The host must verify the same physical USB device and original chip MAC, the
+exact target table, CRC-valid NVS restored/no-pending markers, and current OTA
+metadata before flashing the unchanged final app. USB reappearance, a timer,
+or settled status alone is not recovery proof. An interrupted migration retains
+its pending host record and device-side restoration markers for a safe retry.</p>
+<p>It has explicit, byte-for-byte generated target plans for the 4 MiB MeshCore
+dual-OTA Full table and Arduino ESP32 <code>default_8MB.csv</code> and
+<code>default_16MB.csv</code>. It does not guess a table for other flash sizes. Adding a
+flash size later means adding one reviewed target plan and its generated
+table-prefix test; the bridge core is otherwise shared.</p>
+<table>
+<thead>
+<tr>
+<th>Flash size</th>
+<th>Target table</th>
+<th>app0 / app1 size</th>
+<th>Typical board</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4 MiB</td>
+<td><code>variants/dual_ota_full_4MB.csv</code></td>
+<td>0x1F0000 / 0x1F0000</td>
+<td>ThinkNode M2/M5, LilyGo T3S3, Nibble, Heltec CT62, Waveshare LR1121 observers</td>
+</tr>
+<tr>
+<td>8 MiB</td>
+<td><code>default_8MB.csv</code></td>
+<td>0x330000 / 0x330000</td>
+<td>Seeed XIAO ESP32-S3, Heltec V3</td>
+</tr>
+<tr>
+<td>16 MiB</td>
+<td><code>default_16MB.csv</code></td>
+<td>0x640000 / 0x640000</td>
+<td>Heltec V4 / V4.3, Station G2</td>
+</tr>
+</tbody>
+</table>
+<p>These are the supported migration plans. The 8/16 MiB tables retain more
+filesystem storage and a coredump partition; their application slots are not
+the absolute maximum permitted by the physical flash capacity.</p>
+<h2 id="bridge-wi-fi-credentials">Bridge Wi-Fi credentials</h2>
+<p>Join <code>MeshCore-Migrate</code> using the admin password saved on the old node. This
+applies to the Wi-Fi bridge and the recovery AP of LoRa bridges and Partition
+Expanders. The firmware stores at most 15 password characters; the bridge can
+use a saved password of <strong>8 to 15 printable ASCII characters</strong> for WPA2.</p>
+<p>If the saved password is shorter than 8 characters, contains other characters,
+or cannot be read, the bridge uses the published fallback <code>meshcore-migrate</code>.
+Missing saved preferences, including a node still using an unsaved built-in
+default, also cause fallback. Anyone nearby who knows that published password
+can then join and upload firmware when the updater is enabled. A saved default
+or other public admin password is also usable, so choose a strong, nonpublic
+password before migration. On the old node, use <code>password &lt;new password&gt;</code> and
+verify that it remains valid after a normal reboot before uploading the bridge.</p>
+<p>The Wi-Fi bridge and configuration-preserving Partition Expanders restore the
+saved password before starting their AP in the expanded layout. The older
+identity-only LoRa handoff does not restore saved settings, so its Wi-Fi
+recovery AP after the table change normally uses the fallback. Follow the exact
+route in the package README. If a device remembers <code>MeshCore-Migrate</code> from an
+earlier bridge, forget that saved network or update its password before joining.
+Bridge packages built before this credential change use <code>meshcore-migrate</code>.</p>
+<h2 id="ordinary-full-releases-and-installation">Ordinary Full releases and installation</h2>
+<p>Ordinary ESP32 node releases use Full for each exact board and firmware role.
+The existing RAM and application-size guards still apply: a failed Full
+qualification fails that release target rather than publishing a smaller
+ordinary image. Direct <code>--standard</code> builds and reduced identities remain
+compatibility/development tools outside the ordinary release selection.</p>
+<p>The complete local-release recipe reuses the exact qualified ordinary Full
+application in each matching migration ZIP; it does not rebuild that application
+separately. The same source commit and version can still produce different ELF
+timestamps and image hashes, so publication rechecks the complete application
+bytes, not just its board/version name. Migration-only legacy identities remain
+separate. When packaging already-built firmware directly, pass
+<code>--release-build-dir &lt;staged-firmware-tree&gt;</code> to the migration packager to bind
+matching packages to those published applications.</p>
+<p>An app-only update cannot change the installed partition table. If a device
+already has the required layout, use the matching Full application through a
+supported updater. If its layout needs expansion, use a verified migration
+ZIP for its exact entry in <code>--list-boards</code> and an updater supported by the old
+image. Otherwise, install the exact board/role's Full <code>-merged.bin</code> through
+USB/serial using that board's flashing procedure; the merged image contains
+the bootloader, partition table, and application. Never upload a merged image
+through an app-only browser or LoRa updater.</p>
+<p>The new Full defaults outside the migration catalog, including ESP32-C6
+boards and other boards introduced with <code>min_spiffs.csv</code>, have no reviewed wireless
+expansion package in this recipe. If their Full app fits the unchanged live
+layout and update identity, an ordinary app update can suffice. A table change
+requires USB/serial until a matching migration package is reviewed. A Full
+image fitting physical flash does not by itself prove it can be installed
+through an old updater. Full Companion images with a single app slot likewise
+need USB/serial for local firmware replacement; their host-backed LoRa sending
+role does not provide a second local update slot.</p>
+<h2 id="waveshare-esp32-s3-lr1121-observer-migration">Waveshare ESP32-S3 LR1121 observer migration</h2>
+<p>Only the Waveshare <strong>repeater observer</strong> and <strong>room-server observer</strong> select the
+larger 4 MiB table. Ordinary repeater, room, Companion and KISS recipes retain
+<code>min_spiffs.csv</code>. The two exact migration selections are:</p>
+<pre><code class="language-bash">sh scripts/build_esp32_partition_migration.sh \
+  --board waveshare-s3-lr1121-observer-repeater \
+  --board waveshare-s3-lr1121-observer-room-server \
+  --version v1.18.0.1-halo-keymind-cascade-dev --radio-preset usa-cascade-fixed --profile cascade --dry-run
+</code></pre>
+<p>Remove <code>--dry-run</code> only to build and verify the packages from a clean commit;
+this command does not flash hardware. Each observer role has its own exact-target
+Partition Expander. Both its Wi-Fi application and first-stage LoRa package use
+that same configuration-preserving bridge, not the older identity-only LoRa
+handoff. It accepts a reviewed source layout, stages and verifies identity and
+supported configuration before destructive writes, and refuses unknown layouts
+or saved data that cannot be preserved safely. The final table has two
+1984 KiB application slots and only <strong>64 KiB SPIFFS</strong>.</p>
+<p>The bridge can migrate from either existing OTA slot. After reboot it must
+verify the new table, private key and saved configuration before enabling the
+LoRa receiver. It uses the saved primary radio profile and fetches only the
+exact observer role's Full image. The node name, ACL, radio 1/radio 2 and saved
+GPS preferences remain part of the configuration handoff; temporary sessions
+are not converted into permanent preferences. Already-expanded boards use the
+existing verified-image/no-handoff safety checks rather than migrating again.</p>
+<p>The recipes reuse the real LR1121 board implementation, including its 1.8 V
+TCXO and HP-PA/RF-switch wiring. The first-stage image must pass the legacy
+1.25 MiB size limit and both final-image and mOTA staging guards. A failed guard
+must fail the package, not produce a reduced image. These are build/host-test
+contracts, <strong>not physical qualification</strong>: test both A/B placements, restored
+settings and interruptions on a sacrificial Waveshare before remote deployment.
+The ESP32's single partition-table-sector erase/write is still not atomic;
+power loss in that window can require cable recovery.</p>
+<h2 id="repeatable-esp32-build-recipe">Repeatable ESP32 build recipe</h2>
+<p>From a clean commit, run the shell menu in WSL/Linux:</p>
+<pre><code class="language-bash">sh scripts/build_esp32_partition_migration.sh
+</code></pre>
+<p>Choose one exact board/role, or <strong>all listed board/role pairs</strong>. The menu
+also offers all repeaters, all room servers, or all sensors separately. It asks
+for the firmware version, radio preset, and profile, then builds Full application
+images first, the available bridge(s) for each selected board, and verifies each
+ZIP. Only one PlatformIO process runs at a time; <code>build.sh</code> can clean the
+shared <code>.pio/build</code> tree between Full targets. The same menu can be run
+non-interactively:</p>
+<pre><code class="language-bash">sh scripts/build_esp32_partition_migration.sh --board heltec-v4 \
+  --version v1.18.0.1-halo-keymind-cascade-dev \
+  --radio-preset usa-cascade-fixed --profile cascade
+sh scripts/build_esp32_partition_migration.sh --all \
+  --version v1.18.0.1-halo-keymind-cascade-dev \
+  --radio-preset usa-cascade-fixed --profile cascade
+sh scripts/build_esp32_partition_migration.sh --role sensor \
+  --version v1.18.0.1-halo-keymind-cascade-dev \
+  --radio-preset usa-cascade-fixed --profile cascade
+</code></pre>
+<p><code>--all</code> creates one verified ZIP per listed board/role pair and a release
+ZIP containing all of them, their hashes, and a manifest. This is a <strong>local
+release bundle</strong>, not an upload to GitHub Releases. It is not an archive of
+old firmware binaries. <code>--list-boards</code> shows the configured choices.
+The release fails instead of publishing a partial bundle if one board package
+is absent or fails verification.</p>
+<p>The underlying Python recipe remains available:</p>
+<pre><code class="language-bash">python3 -B scripts/build_esp32_partition_migration.py \
+  --version v1.18.0.1-halo-keymind-cascade-dev \
+  --radio-preset usa-cascade-fixed --profile cascade
+</code></pre>
+<p>The default builds all configured board/role recipes. Add <code>--board heltec-v4</code>
+or <code>--board xiao-s3-wio</code> to build one; repeat <code>--board</code> for a selected set.
+Use <code>--dry-run</code> to inspect the command order without building. The resulting
+ZIPs appear under <code>.releases/esp32-expanded-&lt;commit&gt;/packages/</code>. The recipe
+requires a clean checkout so each ZIP identifies the firmware commit it was
+built from. It creates files only; it does not flash a device or erase flash.</p>
+<h2 id="independent-usb-firmware-set">Independent USB firmware set</h2>
+<p>The USB intermediate firmware has six distinct chip/flash-capacity builds:</p>
+<table>
+<thead>
+<tr>
+<th>Chip</th>
+<th>Flash capacities</th>
+<th>USB completion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Original ESP32</td>
+<td>4, 8 MiB</td>
+<td>Settled UART status, then host DTR/RTS</td>
+</tr>
+<tr>
+<td>ESP32-C3</td>
+<td>4 MiB</td>
+<td>Automatic ROM return</td>
+</tr>
+<tr>
+<td>ESP32-S3</td>
+<td>4, 8, 16 MiB</td>
+<td>Automatic ROM return</td>
+</tr>
+</tbody>
+</table>
+<p>To build only this complete set, without rebuilding or relabeling any Full
+firmware release, run serially in WSL/Linux:</p>
+<pre><code class="language-bash">python3 -B scripts/build_esp32_partition_migration.py --usb-only
+</code></pre>
+<p>This creates <code>meshcore-usb-partition-bridges.zip</code> under
+<code>.releases/esp32-usb-bridges-&lt;commit&gt;/</code>. Its manifest records each binary's chip,
+capacity, bytes and SHA-256, plus the utility source commit, dirty-tree state
+and runtime/configuration source hashes. All six are mandatory, and both the
+USB migration and NVS no-autoerase guard markers are verified. Existing Wi-Fi
+and LoRa artifacts remain unchanged. Exact new board/role migration packages
+also include their matching <code>usb-bridge.bin</code>.</p>
+<p>A host can pair this standalone set with an older, exact Full migration ZIP;
+the Full image retains its original release/source identity. Meshfirmware
+downloads a versioned, checksum-pinned published USB set when a qualified
+older package has no USB bridge. It does not use an untested <code>latest</code> bridge,
+and an ordinary update that fits does not download migration utilities.
+For an offline or explicitly selected set, use <code>MESHFIRMWARE_USB_MIGRATION_SET</code>,
+or place the ZIP beside the flasher at <code>tools/meshcore-usb-partition-bridges.zip</code>.
+The original Full
+package must still match the selected final image and prove the target layout.
+No app-only upload or manual partition-table write substitutes for that proof.</p>
+<p>The catalog covers canonical ESP32 repeater, room-server, and sensor roles on
+4, 8, and 16 MiB chip-family plans, including historical 1.25 MiB candidates
+now built with expanded tables. This includes ESP32-S3, original ESP32, and
+ESP32-C3 boards with an evidenced old default layout. <code>--list-boards</code> is the
+authoritative list of exact targets; specialty ESP-NOW/observer aliases are
+separate identities and are not packaged under their old IDs. With Wi-Fi OTA
+they can migrate to the same physical board's canonical role image. The Wi-Fi
+bridge verifies and restores its supported saved settings; other settings may
+need to be recreated. The LoRa route still requires an exact old target ID. The
+catalog omits boards with no evidenced legacy default-layout build, such as
+boards introduced with <code>min_spiffs.csv</code> or another non-1.25 MiB layout. Some
+listed boards use larger slots today but had historical default-layout builds.
+A listed package is usable only when the installed old image supports the
+selected updater and the bridge verifies its live source table. Menu
+inclusion does <strong>not</strong> override either check.</p>
+<p>Every listed board/role has Wi-Fi and LoRa bridge recipes. Heltec V4 and XIAO
+S3 WIO repeaters retain their board-specific bridge names; the other entries
+use matching original-ESP32, ESP32-S3, or ESP32-C3 chip-family bridges. The older
+identity-only LoRa handoff requires a verified same-target old receiver, and
+its 4 MiB route requires the slot-B-only sequence below. Configuration-preserving
+Partition Expanders use the route described in their package README instead.
+A 4 MiB Full build offers 1,984 KiB per slot.
+The packager verifies both the Full application's slot fit and its mOTA
+staging overhead. It supports at most 4096 blocks of 2 KiB for the Full
+transfer, and records the seeder proof-scratch requirement in the manifest.
+Older 4 KiB-scratch seeders are limited to 1024 blocks. A package fails if
+its required Full LoRa transfer cannot fit the supported staging/block limits.</p>
+<p>Other ESP32 boards need a reviewed source updater, chip/flash-size bridge,
+verified Full image, and board entry before they can be added. The LoRa route
+also needs an exact old OTA target ID and a non-overlapping receiver handoff.
+Matching flash capacity alone is not enough to claim a package is safe.</p>
+<h2 id="what-the-bridge-preserves">What the bridge preserves</h2>
+<p>Before it touches the partition table, the bridge reads the historical
+<code>/identity/_main.id</code> SPIFFS file. It requires all 96 bytes (32-byte public key
+followed by its 64-byte private key), stages them in an NVS namespace that is
+unchanged by the source and target layouts, then changes the table. The Wi-Fi
+bridge and 8/16 MiB LoRa bridge restore the staged value into expanded SPIFFS,
+read it back byte-for-byte, and only then clear the NVS staging record. On the
+4 MiB identity-only LoRa handoff, the Full application's first boot performs
+this restoration.</p>
+<p>The Wi-Fi bridge also stages and verifies its supported saved configuration:
+node name and preferences, radio profiles, ACL and login replay state, region
+keys, and selected network/OTA, filtering, display, and telemetry settings.
+It refuses migration if the saved files cannot fit or verify in NVS. The older
+LoRa handoff route preserves only the private identity, so saved settings may
+reset. The board/role-specific Partition Expander routes preserve their
+supported configuration and automatically fetch the exact-target Full image;
+follow the package README for those routes.</p>
+<p>The old SPIFFS image is deliberately not raw-copied into an expanded partition:
+SPIFFS is not safe to resize that way. Files outside the supported preservation
+set, including logs and temporary radio sessions, are not preserved.</p>
+<p>Migration does erase the 4 KiB partition-table sector and the destination app
+sectors. Expanded SPIFFS can be reformatted. It never issues a full-chip erase.</p>
+<h2 id="eligible-source-layout">Eligible source layout</h2>
+<p>The bridge only accepts a source table that has all of the following:</p>
+<ul>
+<li>NVS at <code>0x9000</code>, size <code>0x5000</code>, and OTA metadata at <code>0xE000</code>, size <code>0x2000</code>.</li>
+<li>Two distinct, non-empty OTA application slots and a non-empty SPIFFS
+  partition, all inside the physical flash size.</li>
+<li>A known exact 4, 8, or 16 MiB physical flash capacity and a source table
+  different from that capacity's target table.</li>
+</ul>
+<p>This means the source app-slot and SPIFFS sizes can vary; the bridge validates
+the live geometry instead of carrying board-name rules. It also ensures it is
+running from one source OTA slot. If it arrived in B, it CRC-copies itself to
+the future A address, selects A in OTA metadata, writes the table, and
+restarts. The Wi-Fi route therefore works whether the browser OTA updater
+placed the bridge in legacy A or B. Single-app source layouts cannot use this
+route.</p>
+<p>Keep power stable while the bridge is replacing the 4 KiB table sector. A loss
+of power before that point leaves the old table and source intact. After that
+small critical write, the selected A copy of the bridge is the recovery path.
+The stock ESP32 bootloader reads one partition-table sector; rewriting that
+sector is <strong>not atomic</strong>. A power loss during its erase/write window can leave
+an unreadable table and require cable recovery. This recipe must not be called
+power-loss-proof on a device whose USB/serial flash port is inaccessible.</p>
+<h2 id="migrate-a-seeed-xiao-esp32-s3">Migrate a Seeed XIAO ESP32-S3</h2>
+<p>Use <code>--board xiao-s3-wio</code> with the recipe above. Its Wi-Fi bridge is a
+legacy-slot application image; its Full image keeps the old repeater's exact
+LoRa OTA target ID. Upload <code>wifi-bridge.bin</code> from the ZIP through the legacy
+node's existing Wi-Fi browser updater.
+Then join <code>MeshCore-Migrate</code> using the node's saved admin password, following
+the <a href="#bridge-wi-fi-credentials">shared credential and fallback rules</a>, and wait
+for <strong>Expanded layout ready</strong>. Upload <code>full-application.bin</code> at <code>/update</code>.
+Do not upload an <code>-merged.bin</code>: merged images include
+bootloader and table offsets for cable flashing, not browser OTA.</p>
+<p><code>xiao_s3_partition_legacy_seed</code> is a disposable-hardware test image only. It
+models the legacy table and an identity file; it is not a deployable repeater.</p>
+<h2 id="lora-only-migration-of-a-listed-role">LoRa-only migration of a listed role</h2>
+<p>This section describes the older identity-only LoRa handoff. A package whose
+LoRa first stage is a configuration-preserving Partition Expander, including
+the Waveshare observer packages, uses its package README's self-hosted route.</p>
+<p>The exact old board/role must already support MeshCore LoRa mOTA and have a valid
+EndF image identity. The LoRa bridge checks the old app's target ID and body
+hash before any partition-table write; an unsupported or damaged receiver is
+refused. Keep a capable seeder on the old receiver's compiled default radio
+profile before starting: this route may reset saved radio settings. Verify
+that the seeder lists the Full image and has the manifest's required proof
+scratch before installing the first-stage bridge.</p>
+<p>On 8/16 MiB flash the bridge can run from either legacy A or B. It copies
+legacy B to the future B address, boots the bridge once to restore the private
+key in expanded SPIFFS, then boots the preserved old receiver. That receiver
+can fetch the Full image into its now-expanded inactive slot.</p>
+<p>On 4 MiB flash the expanded app1 overlaps old app1, so that copy cannot be
+used. A verified old same-target receiver must remain in old A and the bridge
+must be installed in old B; a bridge in A refuses migration. If the old node
+is running B, first install and boot a working same-target old receiver in A,
+then install the bridge in B. After expansion the old receiver in A may use a
+temporary identity. The original key stays staged in NVS until the Full image
+restores it on first boot. Complete the second update before treating that
+device as the migrated node.</p>
+<p>The board-specific LoRa bridges are <code>heltec_v4_partition_migrator_lora_repeater</code>
+and <code>xiao_s3_partition_migrator_lora_repeater</code>; the other listed roles use their
+configured chip-family LoRa bridges. Build the final application with
+<code>bash build.sh build-firmware &lt;target&gt; --full-exact</code> so its mOTA target ID
+still matches the old role. The repeatable recipe already uses this selector.
+<code>scripts/package_esp32_partition_migration.py</code>
+checks the images, partition tables, hashes and mOTA containers and creates
+one Wi-Fi/LoRa migration ZIP for each selected exact board/role. The ZIP README gives
+the exact <code>ota ls</code>, <code>ota pull &lt;id&gt; flash</code>, <code>ota install</code> sequence.</p>
+<p>An old image without LoRa mOTA cannot use the LoRa-only route. Use its working
+Wi-Fi updater with a listed package, or USB/serial if no supported updater or
+package is available.</p>
+<h2 id="heltec-v4-v43">Heltec V4 / V4.3</h2>
+<p>Build <code>heltec_v4_partition_migrator</code>, upload it through the legacy Wi-Fi
+updater, then upload the Full V4 app-only image after the bridge reports ready.
+The 16 MiB target table creates two 6.25 MiB OTA slots. See the
+<a href="../heltec_v4_wifi_partition_migration/">V4 build notes</a> for its build command.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.action.edit", "content.code.copy", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../_javascript/release_features.js?v=20261024-1"></script>
+      
+        <script src="../_javascript/hosted_doc_links.js?v=20261007-1"></script>
+      
+        <script src="../_javascript/notification_builder.js?v=20261006-channel9"></script>
+      
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      
+        <script src="../_javascript/firmware_picker.js?v=20261024-included-bootloader"></script>
+      
+        <script src="../_javascript/telemetry_decoder.js?v=20261022-noise-history"></script>
+      
+        <script src="../_javascript/management_decoder.js"></script>
+      
+        <script src="../_javascript/filter_tool.js?v=20261030-compact-defaults"></script>
+      
+        <script src="../_javascript/preset_test.js?v=20260923-2"></script>
+      
+        <script src="../_javascript/esp32_partition_catalog.js?v=20261001-1"></script>
+      
+    
+  </body>
+</html>

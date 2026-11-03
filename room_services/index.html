@@ -1,0 +1,3542 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the open source MeshCore firmware">
+      
+      
+      
+        <link rel="canonical" href="https://HenryDelMal.github.io/MeshCore_cl/room_services/">
+      
+      
+        <link rel="prev" href="../fleet_management/">
+      
+      
+        <link rel="next" href="../carrier_wave/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Room services - MeshCore Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../_stylesheets/notification_builder.css?v=20261006-channel9">
+    
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/firmware_picker.css?v=20261013-pick-first-1">
+    
+      <link rel="stylesheet" href="../_stylesheets/telemetry_decoder.css?v=20261022-noise-history">
+    
+      <link rel="stylesheet" href="../_stylesheets/management_decoder.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/filter_tool.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/preset_test.css?v=20260923-2">
+    
+      <link rel="stylesheet" href="../_stylesheets/esp32_partition_catalog.css?v=20261001-1">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#room-history-personal-mailboxes-and-information-board" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MeshCore Docs" class="md-header__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Room services
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MeshCore Docs" class="md-nav__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    MeshCore Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware and tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware and tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chile_repeater_builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chile repeater builder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firmware_picker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware picker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preset_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preset test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filter_tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../telemetry_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started and features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started and features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../role_feature_switches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role feature switches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_radio_full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion radio full
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_usb_switcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion usb switcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_offline_queue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion offline queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../halo_keymind_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Halo keymind settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware updates and partitions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware updates and partitions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrading_1.17.1.8_to_1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading 1.17.1.8 to 1.17.1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota user guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_easy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota easy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_wizard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lora_ota_automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lora ota automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_station_g2_to_ikoka_stick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota station g2 to ikoka stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_bootloader_update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 bootloader update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_qspi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 qspi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_meshtower_v2_sdcard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota meshtower v2 sdcard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../esp32_partition_catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 partition catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../esp32_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heltec_v4_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heltec v4 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../host_cli_service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host cli service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio, networking, and power
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Radio, networking, and power
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio presets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fleet_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#personal-mailboxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Personal mailboxes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Personal mailboxes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mail-commands-for-regular-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mail commands for regular users
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sleeping-tracker-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sleeping tracker example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wi-fi-mailbox-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wi-Fi mailbox management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lora-mailbox-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoRa mailbox protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-persistent-chat-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional persistent chat history
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saved-acl-roles-and-moderation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saved ACL roles and moderation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-own-return-routes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your own return routes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-where-chat-catch-up-starts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose where chat catch-up starts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#administrator-controls-for-any-radio-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Administrator controls for any radio user
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-wi-fi-chat-on-esp32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Wi-Fi chat on ESP32
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Local Wi-Fi chat on ESP32">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#wi-fi-room-administration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wi-Fi room administration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#information-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Information board
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Information board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lora-board-read-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoRa board read protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#regression-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regression coverage
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../carrier_wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../espnow_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Espnow bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../split_radio_repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split radio repeater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rs232_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rs232 bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../udp_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Udp bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../WiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WiFi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flood_filtering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flood filtering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gps_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gps tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_lost_reply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion lost reply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensor_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor tracker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nrf52_power_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nrf52 power management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI and protocol reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI and protocol reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_build_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli build matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_command_availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli command availability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal_chat_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal chat cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kiss_modem_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packet_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packet format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../payloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats_binary_frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats binary frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../number_allocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number allocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qr_codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qr codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.18.0.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current - 1.18.0.1 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Previous releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Previous releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.9 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.8 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Older releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#personal-mailboxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Personal mailboxes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Personal mailboxes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mail-commands-for-regular-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mail commands for regular users
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sleeping-tracker-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sleeping tracker example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wi-fi-mailbox-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wi-Fi mailbox management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lora-mailbox-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoRa mailbox protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-persistent-chat-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional persistent chat history
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saved-acl-roles-and-moderation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saved ACL roles and moderation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-own-return-routes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your own return routes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-where-chat-catch-up-starts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose where chat catch-up starts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#administrator-controls-for-any-radio-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Administrator controls for any radio user
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-wi-fi-chat-on-esp32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Wi-Fi chat on ESP32
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Local Wi-Fi chat on ESP32">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#wi-fi-room-administration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wi-Fi room administration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#information-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Information board
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Information board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lora-board-read-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoRa board read protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#regression-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regression coverage
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/HenryDelMal/MeshCore_cl/edit/keymindCascade/docs/room_services.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<!-- meshcore-hosted-doc-link:start -->
+<p class="meshcore-hosted-doc-link"><a href="https://mikecarper.github.io/MeshCore/room_services/">View this page on MeshCore Docs</a>.</p>
+<!-- meshcore-hosted-doc-link:end -->
+
+<h1 id="room-history-personal-mailboxes-and-information-board">Room history, personal mailboxes, and information board</h1>
+<p>Room Server firmware keeps one room per radio. Existing app login, chat,
+catch-up, and Access Control formats remain supported. The information board
+and local Wi-Fi chat use the browser page below; the stock mobile app does not
+have an information-board screen.</p>
+<h2 id="personal-mailboxes">Personal mailboxes</h2>
+<p>The single room also provides personal mailboxes. Each mailbox belongs to a
+complete public-key identity, independently of the public chat backlog. Regular
+room readers and writers can choose their own access policy and delivery mode;
+administrator permission is not required.</p>
+<table>
+<thead>
+<tr>
+<th>Access</th>
+<th>Who may leave mail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Closed (default)</td>
+<td>The owner only</td>
+</tr>
+<tr>
+<td>Public</td>
+<td>Any authenticated room writer or administrator</td>
+</tr>
+<tr>
+<td>Private</td>
+<td>Up to eight selected full public-key identities, plus the owner</td>
+</tr>
+</tbody>
+</table>
+<p>Read-only users can manage and read their own mailbox but cannot send mail.
+Room bans still apply to both senders and recipients. A private allow list does
+not grant room login or writing permission; approved senders must also have
+room writer access. Reading, acknowledging and deleting mail always use the
+authenticated owner's identity, never a name or shortened key supplied in a
+request. Changing access does not delete already accepted mail.</p>
+<p>Mailboxes start closed and are created only when the owner saves a policy.
+There are at most 32 mailbox owners, 16 queued messages across the radio, four
+queued messages per owner, and eight selected senders per mailbox. Messages
+contain 1-512 UTF-8 bytes. A full queue rejects new mail without replacing old
+mail. Available filesystem space can impose a smaller limit.</p>
+<p>The server stores mail separately from public chat. Mail is encrypted on each
+LoRa connection, but is plaintext in the server's filesystem: the room operator
+is trusted. This is not end-to-end encryption between sender and recipient.
+Other ordinary users cannot list or read your inbox. Mail bodies are not
+included in public chat, notices, or the Wi-Fi administrator dashboard. Wi-Fi
+room access uses local HTTP, so use a trusted Wi-Fi network.</p>
+<h3 id="mail-commands-for-regular-users">Mail commands for regular users</h3>
+<p>Use an encrypted CLI request to the room, or send the same command as a direct
+message prefixed with <code>!mail</code> from a normal Companion app. These direct messages
+are reserved mailbox commands and never become public room posts:</p>
+<pre><code class="language-text">!mail mode private
+!mail allow &lt;complete-64-hex-sender-public-key&gt;
+!mail deny &lt;complete-64-hex-sender-public-key&gt;
+!mail mode public
+!mail mode closed
+!mail delivery mailbox
+!mail delivery chat
+!mail settings
+!mail settings 1
+!mail send &lt;complete-64-hex-recipient-public-key&gt; dog lost
+!mail check
+!mail inbox
+!mail list 1
+!mail read &lt;message-id&gt;
+!mail read &lt;message-id&gt; &lt;next-offset&gt;
+!mail ack &lt;message-id&gt;
+!mail delete &lt;message-id&gt;
+</code></pre>
+<p>In a CLI-capable client, use <code>mail ...</code> without <code>!</code>. These commands affect only
+the requesting identity. CLI list/settings replies use entry cursors; continue
+at the returned <code>next=</code> while it is below <code>total=</code> or <code>allowed=</code>. List entries
+show the immutable message ID, byte length and sender key; a short route may
+show a sender prefix. Reads return readable text with <code>id</code>, <code>off</code>, <code>next</code> and
+<code>total</code>; continue at <code>next</code> until it equals <code>total</code>. Text chunks end on a UTF-8
+character boundary. The route and command framing limit LoRa submissions to
+less than the 512-byte storage limit; the browser can submit a full 512 bytes.</p>
+<p>Reading never removes a message. <code>ack</code> confirms receipt and durably removes it;
+<code>delete</code> deliberately discards it. Both retain a bounded retry receipt. Exact
+sender/request/body retries return the original ID, including after receipt or
+reboot; conflicting reuse of that request ID is rejected. Each owner retains
+up to eight submission receipts. Queued receipts stay retained; the oldest
+retired receipt is evicted when needed. A very old retry after its retired
+receipt has been evicted can enqueue again.</p>
+<p><code>mail delivery mailbox</code> suppresses automatic public chat and topic delivery to
+that identity, including retries and public backlog counts. It does not prevent
+explicit public-board reads, change routes or erase chat. Returning to <code>chat</code>
+resumes from the existing catch-up cursor. A copy already transmitted or queued
+can still arrive while switching modes. Unreadable saved mailbox policy blocks
+automatic chat rather than silently enabling it.</p>
+<h3 id="sleeping-tracker-example">Sleeping tracker example</h3>
+<p>A dog tracker can keep its mailbox private, approve its owner's sender identity,
+and select mailbox-only delivery. The owner leaves <code>dog lost</code> while the tracker
+is asleep. At its next scheduled check-in, the tracker authenticates to the
+room, checks its inbox, retrieves that message in resumable chunks and confirms
+receipt only after handling it. Lost replies and another sleep cycle do not
+remove unread mail. Chat history and topics are not downloaded automatically.</p>
+<p>Room Server provides the room-side queue and polling protocol. A tracker still
+needs client firmware that schedules check-ins and interprets authenticated
+commands. Ordinary mailbox text is never executed as a CLI command, and does
+not itself enable a tracker, wake it remotely or change its GPS reporting rate.
+For a reachable owner's Companion, the optional
+<a href="../companion_lost_reply/">lost-status auto responder</a> can also answer a private
+<code>Am I lost?</code> question with a saved <code>Yes</code> or <code>No</code>.</p>
+<p>The opt-in <a href="../sensor_tracker/">Sensor dog tracker</a> currently checks a reachable
+owner's Companion through tagged encrypted requests. It does not yet log in
+to a Room Server or automatically poll these mailboxes.</p>
+<h3 id="wi-fi-mailbox-management">Wi-Fi mailbox management</h3>
+<p>Open <code>/room</code>, join with your room credentials, and open <strong>Personal mailbox</strong>.
+The page shows your complete browser mailbox address, public/private/closed
+access, selected senders and mailbox-only delivery. It provides sending, paged
+inbox metadata, selective body downloads, resumable reads, explicit receipt
+confirmation and deletion. Unsaved drafts survive failed requests. The page
+honors saved mailbox-only mode before its initial chat download; <strong>Refresh
+chat</strong> remains an explicit choice.</p>
+<p>The browser has its own identity derived from its secret token and the server
+identity. It cannot claim your radio's mailbox using a shared room password.
+Mail sent to a radio key is retrieved by that radio; mail sent to the browser
+address is retrieved using that browser token. Keep that token to retain access
+to the same mailbox. Disconnecting clears downloaded private content from the
+page's memory; the queued server mail remains.</p>
+<p>Administrators have a <strong>Mailboxes</strong> panel with paged owner metadata, queued
+counts, access policy, selected senders, blocking, and confirmed deletion or
+purge. Enter a full owner address to provision a radio's mailbox before it
+checks in. Policy changes compare the loaded revision, including creation revision
+zero; concurrent changes require a refresh. The dashboard does not download
+other users' message bodies. Inbox and administrator index pages use snapshot
+revisions to reject mixed pages after a concurrent change.</p>
+<h3 id="lora-mailbox-protocol">LoRa mailbox protocol</h3>
+<p>Authenticated room users send encrypted <code>PAYLOAD_TYPE_REQ</code> requests. The usual
+four-byte request tag precedes each payload and is echoed before the response.
+All multi-byte integers are little-endian. Subtype <code>0x0b</code> is separate from chat
+catch-up and board subtype <code>0x0a</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Payload after tag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Settings/check</td>
+<td><code>0b 00</code> + expected revision <code>u32</code> + allow-list cursor <code>u8</code></td>
+</tr>
+<tr>
+<td>Inbox index</td>
+<td><code>0b 01</code> + expected revision <code>u32</code> + entry cursor <code>u8</code></td>
+</tr>
+<tr>
+<td>Read</td>
+<td><code>0b 02</code> + immutable message ID <code>u32</code> + offset <code>u16</code></td>
+</tr>
+<tr>
+<td>Send</td>
+<td><code>0b 03</code> + full recipient key (32 bytes) + body length <code>u16</code> + complete body</td>
+</tr>
+<tr>
+<td>Confirm receipt</td>
+<td><code>0b 04</code> + message ID <code>u32</code></td>
+</tr>
+<tr>
+<td>Delete</td>
+<td><code>0b 05</code> + message ID <code>u32</code></td>
+</tr>
+<tr>
+<td>Allow sender</td>
+<td><code>0b 06</code> + expected revision <code>u32</code> + full sender key (32 bytes)</td>
+</tr>
+<tr>
+<td>Deny sender</td>
+<td><code>0b 07</code> + expected revision <code>u32</code> + full sender key (32 bytes)</td>
+</tr>
+<tr>
+<td>Access</td>
+<td><code>0b 08</code> + expected revision <code>u32</code> + mode <code>u8</code> (closed=0, public=1, private=2)</td>
+</tr>
+<tr>
+<td>Delivery</td>
+<td><code>0b 09</code> + expected revision <code>u32</code> + mailbox-only <code>u8</code> (0 or 1)</td>
+</tr>
+</tbody>
+</table>
+<p>Start index/settings at revision zero and cursor zero, then use the returned
+revision on subsequent pages. <code>next=255</code> means complete. Sends are single
+requests, without fragmented uploads; the complete body must fit the encrypted
+request route. Read responses contain raw bytes in chunks of at most 128, reduced
+as needed by the reply route. Continue by offset plus copied byte count. Reads
+never acknowledge receipt implicitly. Logical requests allow only zero trailing
+encryption padding.</p>
+<p>Responses begin with subtype, operation and status. Statuses are: <code>0</code> success,
+<code>1</code> invalid, <code>2</code> storage unavailable, <code>3</code> write failure, <code>4</code> not found, <code>5</code> stale
+revision, <code>6</code> forbidden, <code>7</code> full, <code>8</code> successful duplicate, <code>9</code> conflicting
+request ID. Full response layouts are documented in
+<a href="https://github.com/mikecarper/MeshCore/blob/keymindCascade/src/helpers/RoomMailProtocol.h">RoomMailProtocol.h</a>.
+Mutations require space for their complete confirmation before writing.</p>
+<h2 id="optional-persistent-chat-history">Optional persistent chat history</h2>
+<p>History uses RAM by default. From a local console or authenticated remote
+administrator session:</p>
+<pre><code class="language-text">get room.history
+set room.history on
+set room.history off
+room.history.clear
+</code></pre>
+<p>Enabling persistence first saves the current RAM ring. The newest <strong>32 posts</strong>
+then survive reboot. Disabling retains the archive and stops disk writes; the
+next enable replaces it with the current RAM ring. Clearing removes disk and
+RAM posts, leaving the topic and information board alone.</p>
+<p>Accepted posts append 192-byte records. At 64 records the journal compacts to
+the newest 32. Its maximum size is 12,300 bytes; compaction temporarily also
+needs a verified snapshot of about 6.2 KB. This is bounded recent history,
+and its filesystem records are not encrypted at rest.</p>
+<p>A post is saved before the server sends its ACK or advances the live ring,
+retry cache, or sender replay timestamp. Full storage and unsuccessful writes
+retain the previous chat and withhold the ACK. A recoverable incomplete or
+corrupt final append keeps its verified earlier records. Corruption before
+later complete records preserves the entire journal and blocks replacement.
+Unreadable, unsupported, or corrupt primary metadata is also preserved until
+storage is repaired.</p>
+<p>A reboot after storage completes but before the sender receives the ACK can
+recover a valid post without confirming it to the sender. Exactly-once delivery
+across that crash boundary is not guaranteed.</p>
+<p>Catch-up timestamps stay increasing across restored history and backward clock
+corrections without setting the radio's RTC from archived posts. New posts use
+a six-second monotonic delivery delay; restored posts can be delivered
+immediately. Set the clock correctly for useful displayed dates.</p>
+<p>The Companion also withholds a room-message ACK when its receive queue cannot
+retain the message. Rejected delivery does not advance catch-up, schedule
+receipt persistence, or emit a new-message notification.</p>
+<h2 id="saved-acl-roles-and-moderation">Saved ACL roles and moderation</h2>
+<p>An operator's nonzero <code>setperm</code> assignment survives reboot and is protected
+from automatic room-client eviction. Assigned read-only and read/write users
+appear in Access Control alongside administrators. Automatic guest-password
+read/write sessions remain transient; password-created administrators remain
+retained. The existing permission byte is unchanged.</p>
+<p>Guest-password logins do not allocate new durable login replay records, so
+guest churn cannot fill the bounded replay store. Existing records remain
+authoritative and are advanced, including guest-password records created by
+older firmware. This change does not reclaim space in an already full
+128-identity replay store. After reboot or transient client eviction, an
+identity without such a record can have captured guest login and message
+traffic accepted again. Assign an explicit read/write role with <code>setperm &lt;key&gt; 2</code>
+when durable login replay protection is required.
+Room-post deduplication and per-sender post replay timestamps remain in RAM:
+captured old posts can also be accepted after a legitimate newer login restores
+a lost session.</p>
+<p>ACL updates use the existing delayed settings save. Allow at least five seconds
+after <code>setperm</code> before removing power so the assignment reaches storage.</p>
+<pre><code class="language-text">setperm &lt;complete-64-hex-public-key&gt; 1
+setperm &lt;complete-64-hex-public-key&gt; 2
+setperm &lt;complete-64-hex-public-key&gt; 3
+setperm &lt;complete-64-hex-public-key&gt; 0
+room.ban &lt;complete-64-hex-public-key&gt;
+room.unban &lt;complete-64-hex-public-key&gt;
+get room.bans
+get room.bans 2
+set room.post.rate 12
+set room.poll.rate 60
+get room.post.rate
+get room.poll.rate
+</code></pre>
+<p>Roles are <code>1</code> read-only, <code>2</code> read/write, and <code>3</code> administrator; <code>0</code> removes
+the assignment. Guest-password login cannot demote an explicit administrator
+or upgrade an explicit read-only user. Empty passwords are not enabled
+credentials; public passwordless read-only login still requires its existing
+setting.</p>
+<p>The persistent ban list accepts up to 32 complete identities, never names or
+prefixes. It excludes new logins and existing sessions, including posts,
+requests, path updates, ACKs, and pushes. It leaves existing posts and ACL
+assignments intact. Use another authorized administrator or a local console
+to undo a ban on your own identity.</p>
+<p>Rates are per identity per shared monotonic minute. <code>0</code> disables a limit
+(the default); the maximum is 65,535. The post limit covers new chat posts.
+The poll limit covers room requests, including keep-alive, status, telemetry,
+ACL and board reads, and authenticated browser operations.
+Login does not reset counts. Exact accepted retries are not charged again.
+Old keep-alive retries cannot rewind catch-up or cancel a newer pending push.
+Rejected posts do not enter the retry cache.</p>
+<p>Changing to a different identity creates a different user. These controls
+complement forwarding and airtime policies.</p>
+<h2 id="your-own-return-routes">Your own return routes</h2>
+<p>Room readers, writers and administrators can use a private CLI request to
+inspect or change the room's route back to their own radio:</p>
+<pre><code class="language-text">get outpath
+get outpath path
+set outpath A1B2C3,D4E5F6
+set outpath path
+set outpath direct
+set outpath clear
+set outpath flood
+get altpath
+set altpath 71CE82,BA09F0
+set altpath direct
+set altpath clear
+</code></pre>
+<p>Each hop is 2, 4 or 6 hexadecimal characters; all hops in a path use the same
+width. <code>direct</code> means zero repeaters. <code>clear</code> enables normal discovery again.
+<code>outpath flood</code> forces flood replies until you change that selection. The
+first command word is case-insensitive, and an optional Companion CLI prefix
+is preserved in the reply.</p>
+<p>These commands always affect the authenticated requesting identity. They
+cannot select another user's public key, change room settings, grant roles,
+read passwords or run other administrative commands. Active public read-only
+sessions can manage their own routes too. Bans still block access, and management
+roles alone do not grant room-user command access.</p>
+<p>Commands require encrypted CLI message framing. Typing them as ordinary room
+chat posts sends chat text instead. Use a CLI-capable client; this feature does
+not grant administrator status or add a non-admin command screen to the mobile
+app. No new protocol message type is required.</p>
+<p><code>get outpath path</code> reports the reciprocal route observed after the most recent
+flood login. It can return <code>&gt; path pending</code> during its one-minute observation
+window. The read does not change the selected route; ordinary room discovery
+still learns a live route automatically. A route explicitly selected while
+waiting is protected from the delayed login PATH. <code>set outpath path</code> selects
+the observed route, or leaves the selection unchanged if none is available.</p>
+<p>When the primary and alternate routes are valid and different, chat, topic
+updates and CLI/data replies send one encrypted copy along each route. The
+primary owns ACK tracking, catch-up and retries; the alternate has no separate
+retry loop. Identical routes send one copy. A missing packet for the alternate
+does not prevent primary delivery. A flood primary does not send an alternate
+copy; <code>altpath flood</code> also disables that secondary copy, so prefer
+<code>set altpath clear</code> when removing it. Keep-alive and post ACKs retain their
+existing primary-route behavior.</p>
+<p>Routes are saved for already-retained ACL entries, including explicit readers
+and writers and password-created administrators. Ordinary guest-password and
+public-reader sessions keep route selections only for the current session;
+changing a route never makes their permissions permanent. Failed saves restore
+the previous route and report an error. Repeating an unchanged selection or an
+exact request retry does not cause another settings write.</p>
+<h2 id="choose-where-chat-catch-up-starts">Choose where chat catch-up starts</h2>
+<p>Room readers, writers and administrators can skip older unread messages for
+their own radio using the same encrypted CLI request framing as route commands:</p>
+<pre><code class="language-text">get room.catchup
+room.catchup keep 20
+room.catchup keep 0
+room.catchup before 2026-10-10
+room.catchup before 2026-10-10T18:30:00Z
+room.catchup before 1791655200
+</code></pre>
+<p><code>keep 20</code> leaves the newest 20 unread retained messages to deliver and skips
+the older backlog. <code>keep 0</code> skips all currently retained unread chat. Own posts
+do not count toward unread messages. A date skips unread messages strictly
+older than that cutoff; date-only values mean midnight UTC. A numeric cutoff
+is a Unix timestamp in seconds. A count larger than the backlog is a no-op.</p>
+<p>Skipping advances only the requesting user's delivery cursor. It never deletes
+room history, rewinds a cursor or suppresses another user's delivery. A future
+date advances only through actual retained messages; new messages remain
+deliverable. Pending delivery and retries for a skipped post are cancelled;
+an outstanding topic remains pending. Delayed ACKs, routine keep-alives and
+normal reconnects cannot restore the skipped backlog. A copy already queued
+or transmitted can still arrive; skipping stops subsequent catch-up delivery.</p>
+<p>Saved ACL users persist an advanced catch-up cursor through the existing
+filtered contacts store. Failed saves restore delivery state and report an
+error. Transient sessions retain changes only for the current session. History
+retention remains 32 posts; this command cannot recover older discarded chat.</p>
+<h2 id="administrator-controls-for-any-radio-user">Administrator controls for any radio user</h2>
+<p>From a local console or authenticated administrator CLI session, use a user's
+complete 64-character public key to edit either route or their catch-up position:</p>
+<pre><code class="language-text">room.user &lt;complete-64-hex-public-key&gt; outpath A1B2C3,D4E5F6
+room.user &lt;complete-64-hex-public-key&gt; altpath 71CE82,BA09F0
+room.user &lt;complete-64-hex-public-key&gt; altpath clear
+room.user &lt;complete-64-hex-public-key&gt; keep 20
+room.user &lt;complete-64-hex-public-key&gt; before 2026-10-10T18:30:00Z
+</code></pre>
+<p>Names and shortened keys cannot select a user. Administrators can change any
+existing radio user's routes without changing that user's role. Route and
+catch-up persistence follows the same rules as the user's own commands.
+The browser dashboard below provides activity, delivery and route details for
+all radio users; these views require administrator credentials.</p>
+<h2 id="local-wi-fi-chat-on-esp32">Local Wi-Fi chat on ESP32</h2>
+<p>ESP32 Room Server images with WebConfig have an offline browser room page.
+It is <strong>disabled by default</strong> and uses the existing WebConfig listener:</p>
+<pre><code class="language-text">set room.web on
+start webconfig
+</code></pre>
+<p>Open <code>http://&lt;reported-radio-IP&gt;/room</code>. Without a usable router, use
+<code>start webconfig ap</code>, connect the phone to its access point, and append
+<code>/room</code> to the reported address. Existing setup AP time limits and Wi-Fi/OTA
+ownership rules apply. Starting OTA shuts down this listener. Compact images
+and boards without WebConfig retain LoRa chat and CLI access.</p>
+<p>Enter the guest or administrator room password, or leave it empty for
+explicitly enabled public read-only access. Readers cannot post or edit
+notices; only administrators can publish or delete them. Each operation
+rechecks credentials and bans. Use private Wi-Fi: the local page uses HTTP,
+and network access alone does not grant administrator permission.</p>
+<p>Room-browser password checks share one budget across all browsers and tokens.
+Five newly counted wrong passwords exhaust a 30-second window measured from its
+first counted failure. Until that window ends, every request with a nonempty
+password is refused, including correct guest/admin passwords and polls from an
+already connected admin tab. Correct passwords do not refund failures, and
+refused requests do not extend the window. The last four wrong passwords are
+remembered; repeats among those four do not count again. A wrong nonempty
+password still counts when read-only access admits it as a guest. An empty
+password never consumes this budget and remains usable
+for explicitly enabled public read-only access.</p>
+<p>This limit belongs to <code>/api/room</code>. The WebConfig admin login at <code>/api/login</code>
+has its own address limits and shared budget for the same admin password;
+neither endpoint clears or bypasses the other's limit. The room page does not
+require a WebConfig session, and this browser limit does not change radio
+logins. If password requests are blocked, wait for the window to end or use
+the local console to manage the node.</p>
+<p>The browser generates a secret token and its own moderation identity. It
+does not import a radio private key or inherit a claimed radio key's ACL role.
+The Access and history panel shows the complete browser identity for banning.
+Posts share the LoRa chat history and include the display name; combined name
+and text must fit 151 UTF-8 bytes.</p>
+<p>Passwords stay in page memory. The token, sequence and display name are saved
+locally; use one active room tab per browser identity. Interrupted submissions
+retry the same sequence and body, then poll the owned result. Retry floors
+are bounded to twenty minutes and the current boot. The page stops retrying
+after twenty seconds and preserves an unconfirmed draft. After a restart or
+uncertain result, refresh and check before submitting again.</p>
+<p>Authentication, storage and radio work run on the mesh loop. HTTP callbacks
+only admit a bounded request and return its owned result. No arbitrary CLI
+operation is exposed. Disable room access with <code>set room.web off</code>; stop the
+portal with <code>stop webconfig</code>.</p>
+<h3 id="wi-fi-room-administration">Wi-Fi room administration</h3>
+<p>Connect to <code>/room</code> with the room administrator password and open <strong>Room
+administration</strong>, or visit <code>http://&lt;reported-radio-IP&gt;/room#admin-panel</code>.
+This management area offers:</p>
+<ul>
+<li>Radio users in pages of two, with saved roles, time since activity, unread
+  retained posts, current delivery and failure counts.</li>
+<li>A selected user's primary, alternate and observed routes, catch-up cursor,
+  pending chat or topic, and remaining ACK wait. <strong>Heard this boot</strong> records
+  authenticated activity; it does not prove that a radio is currently reachable.</li>
+<li>Editing primary and alternate routes, keeping the newest N unread messages,
+  or skipping chat older than a chosen date. Browser date inputs use local time
+  and send the corresponding Unix timestamp.</li>
+<li>Assigning or removing saved access, blocking and unblocking full identities,
+  editing the topic, enabling persistent history, and changing post/poll limits.</li>
+<li>Personal mailbox owner lists, policies, sender permissions and confirmed
+  message deletion or purge. Private mail bodies are not downloaded here.</li>
+<li>Optional refresh every 15 seconds. Unsaved route edits remain in place while
+  live status refreshes.</li>
+</ul>
+<p>The dashboard rechecks administrator credentials for each operation and
+rejects a write from an earlier boot. Route, catch-up, access, topic and history
+edits include the loaded value; a changed value requires a refresh instead of
+silently overwriting someone else's change. Each setting saves independently.
+Access changes use the existing delayed ACL save; the page reminds you to leave
+power on for at least five seconds. Removing a saved assignment does not ban
+guest-password access; use <strong>Block</strong> to deny that identity altogether.</p>
+<p>Readers and writers cannot retrieve these radio-user activity/delivery views
+or management operations. Losing administrator access clears cached management
+data from the page. User names, messages and routes are rendered as text.</p>
+<p><strong>Choose chat shown in this browser</strong> filters the local display to the newest
+N retained messages or a chosen start date. It changes only the browser view;
+it does not move a radio user's cursor or delete posts. The administrator's
+selected-user catch-up controls do change that radio user's delivery position.</p>
+<h2 id="information-board">Information board</h2>
+<p>Eight persistent article slots have titles up to 63 UTF-8 bytes and bodies up
+to 2,048 bytes. Index revisions and article versions survive reboot. Bodies
+use two bounded file banks per slot, streamed verification, and atomic index
+publication.</p>
+<p>Available filesystem space determines how much fits. Small internal nRF52
+filesystems cannot hold every article at maximum size alongside persistent
+history and settings. Leave space for the history snapshot and article/index
+replacement; a full filesystem rejects the change and retains existing data.</p>
+<p>In <code>/room</code>, refresh the notice index and select an article to download.
+Unselected bodies are not pushed or downloaded. Chunks are at most 128 bytes;
+completed chunks remain available within the page after a lost connection.
+A new article version starts a new transfer. The administrator editor checks
+the version of the loaded article before saving to prevent lost edits.</p>
+<p>Small notices also support administrator/local CLI management:</p>
+<pre><code class="language-text">room.board.put 1 Trail conditions|Bridge closed until Saturday.
+get room.board
+get room.board 1
+get room.board.read 1 &lt;version&gt; 0
+room.board.del 1 &lt;version&gt;
+</code></pre>
+<p>Index arguments are zero-based entry cursors; follow the returned <code>next=</code>.
+Long titles can reduce a reply to one entry. Put uses <code>TITLE|BODY</code> and still
+obeys the command transport's total length limit; use the browser for a full
+2 KB article. Read replies contain bounded Base64 and ID, version, offset,
+total length and byte count. Continue at offset plus count. Deletion requires
+a current nonzero version; reusing a deleted slot assigns a newer version.</p>
+<h3 id="lora-board-read-protocol">LoRa board read protocol</h3>
+<p>Logged-in readers, including read-only guests, can use encrypted
+<code>PAYLOAD_TYPE_REQ</code> requests to the existing single room. The usual four-byte
+tag precedes these payloads and is echoed before responses. Multi-byte
+integers are little-endian.</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Payload after tag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Index</td>
+<td><code>0a 00</code> + expected revision <code>u32</code> + entry cursor <code>u8</code></td>
+</tr>
+<tr>
+<td>Article</td>
+<td><code>0a 01</code> + article ID <code>u8</code> + expected version <code>u32</code> + offset <code>u16</code></td>
+</tr>
+</tbody>
+</table>
+<p>First index page: revision <code>0</code>, cursor <code>0</code>. Subsequent pages require the
+returned revision. Response: subtype, operation, status, revision <code>u32</code>,
+total count, start cursor, next cursor, then up to two complete entries.
+Each entry is ID <code>u8</code>, version <code>u32</code>, body length <code>u16</code>, title length <code>u8</code>
+and title bytes. Continue while the next cursor is less than the total count;
+the index is complete when the next cursor equals the total count. An empty
+board returns total count <code>0</code> and next cursor <code>0</code>.</p>
+<p>Article response: subtype, operation, status, ID <code>u8</code>, version <code>u32</code>,
+offset <code>u16</code>, total body length <code>u16</code>, chunk length <code>u8</code>, then raw bytes.
+The route's encrypted reply capacity may reduce the chunk. Continue at offset
+plus length; offset equal to total returns successful EOF. Never combine
+different versions.</p>
+<p>Statuses: <code>0</code> success, <code>1</code> invalid, <code>2</code> storage unavailable, <code>3</code> write
+failure, <code>4</code> not found, <code>5</code> stale version. A capacity too small for a full
+header may return only subtype, operation, and invalid status. On stale
+revision/version, reload the index and restart the affected transfer.</p>
+<h2 id="regression-coverage">Regression coverage</h2>
+<p>Production handlers and stores are tested across ESP32, nRF52, STM32, Pico
+and generic filesystem APIs, including full storage, corruption, interrupted
+publication, queue rejection, ACL reboot/eviction, quotas, clock correction
+and allocation failure. ARM checks verify the new counters fit the existing
+client union.</p>
+<p>The pinned official app JavaScript consumes real firmware room frames and
+login responses. Chromium executes the bundled browser page with real backend
+response fixtures, testing untrusted text, lost replies, draft preservation,
+selective reads, resume and UTF-8 limits. These browser fixtures do not claim
+a physical LoRa/Wi-Fi transfer.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.action.edit", "content.code.copy", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../_javascript/release_features.js?v=20261024-1"></script>
+      
+        <script src="../_javascript/hosted_doc_links.js?v=20261007-1"></script>
+      
+        <script src="../_javascript/notification_builder.js?v=20261006-channel9"></script>
+      
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      
+        <script src="../_javascript/firmware_picker.js?v=20261024-included-bootloader"></script>
+      
+        <script src="../_javascript/telemetry_decoder.js?v=20261022-noise-history"></script>
+      
+        <script src="../_javascript/management_decoder.js"></script>
+      
+        <script src="../_javascript/filter_tool.js?v=20261030-compact-defaults"></script>
+      
+        <script src="../_javascript/preset_test.js?v=20260923-2"></script>
+      
+        <script src="../_javascript/esp32_partition_catalog.js?v=20261001-1"></script>
+      
+    
+  </body>
+</html>

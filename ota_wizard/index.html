@@ -1,0 +1,3275 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the open source MeshCore firmware">
+      
+      
+      
+        <link rel="canonical" href="https://HenryDelMal.github.io/MeshCore_cl/ota_wizard/">
+      
+      
+        <link rel="prev" href="../ota_easy/">
+      
+      
+        <link rel="next" href="../lora_ota_automation/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Ota wizard - MeshCore Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../_stylesheets/notification_builder.css?v=20261006-channel9">
+    
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/firmware_picker.css?v=20261013-pick-first-1">
+    
+      <link rel="stylesheet" href="../_stylesheets/telemetry_decoder.css?v=20261022-noise-history">
+    
+      <link rel="stylesheet" href="../_stylesheets/management_decoder.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/filter_tool.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/preset_test.css?v=20260923-2">
+    
+      <link rel="stylesheet" href="../_stylesheets/esp32_partition_catalog.css?v=20261001-1">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#guided-lora-updates" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MeshCore Docs" class="md-header__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Ota wizard
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MeshCore Docs" class="md-nav__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    MeshCore Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware and tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware and tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chile_repeater_builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chile repeater builder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firmware_picker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware picker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preset_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preset test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filter_tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../telemetry_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started and features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started and features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../role_feature_switches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role feature switches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_radio_full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion radio full
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_usb_switcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion usb switcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_offline_queue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion offline queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../halo_keymind_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Halo keymind settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware updates and partitions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware updates and partitions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrading_1.17.1.8_to_1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading 1.17.1.8 to 1.17.1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota user guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_easy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota easy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connect-a-source-radio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect a source radio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connect a source radio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-a-known-repeater-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use a known repeater key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-radio2-for-the-transfer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use radio2 for the transfer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Use radio2 for the transfer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keep-control-traffic-low" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keep control traffic low
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-through-lora-relays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update through LoRa relays
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-firmware-from-github-releases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose firmware from GitHub releases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#differential-or-full-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Differential or full updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prepare-on-a-computer-send-from-a-pi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prepare on a computer, send from a Pi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-the-connection-is-interrupted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If the connection is interrupted
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lora_ota_automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lora ota automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_station_g2_to_ikoka_stick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota station g2 to ikoka stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_bootloader_update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 bootloader update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_qspi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 qspi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_meshtower_v2_sdcard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota meshtower v2 sdcard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../esp32_partition_catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 partition catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../esp32_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heltec_v4_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heltec v4 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../host_cli_service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host cli service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio, networking, and power
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Radio, networking, and power
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio presets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fleet_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../room_services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../carrier_wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../espnow_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Espnow bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../split_radio_repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split radio repeater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rs232_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rs232 bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../udp_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Udp bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../WiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WiFi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flood_filtering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flood filtering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gps_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gps tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_lost_reply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion lost reply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensor_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor tracker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nrf52_power_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nrf52 power management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI and protocol reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI and protocol reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_build_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli build matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_command_availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli command availability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal_chat_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal chat cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kiss_modem_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packet_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packet format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../payloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats_binary_frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats binary frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../number_allocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number allocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qr_codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qr codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.18.0.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current - 1.18.0.1 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Previous releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Previous releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.9 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.8 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Older releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connect-a-source-radio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect a source radio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connect a source radio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-a-known-repeater-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use a known repeater key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-radio2-for-the-transfer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use radio2 for the transfer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Use radio2 for the transfer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keep-control-traffic-low" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keep control traffic low
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-through-lora-relays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update through LoRa relays
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-firmware-from-github-releases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose firmware from GitHub releases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#differential-or-full-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Differential or full updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prepare-on-a-computer-send-from-a-pi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prepare on a computer, send from a Pi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-the-connection-is-interrupted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If the connection is interrupted
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/HenryDelMal/MeshCore_cl/edit/keymindCascade/docs/ota_wizard.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<!-- meshcore-hosted-doc-link:start -->
+<p class="meshcore-hosted-doc-link"><a href="https://mikecarper.github.io/MeshCore/ota_wizard/">View this page on MeshCore Docs</a>.</p>
+<!-- meshcore-hosted-doc-link:end -->
+
+<h1 id="guided-lora-updates">Guided LoRa updates</h1>
+<p>Run one Python command to update a Repeater or Room Server.
+The wizard identifies the board, chooses compatible firmware, prepares the
+transfer, installs it, checks the result, and restores the original radio,
+RX power-saving, and OTA settings. On supported nRF52 boards it also checks
+for a newer compatible signed bootloader and includes that update in the plan.
+Direct LoRa is the default. The optional <strong>LoRa relays</strong> link sends both
+administration and firmware through an ordered route of repeaters.</p>
+<h2 id="connect-a-source-radio">Connect a source radio</h2>
+<p>Use either connection:</p>
+<table>
+<thead>
+<tr>
+<th>Computer connection</th>
+<th>Source radio</th>
+<th>Destination</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Raspberry Pi â†’ USB</td>
+<td>ESP32 Repeater with OTA and <code>ota.peer</code> support</td>
+<td>Repeater or Room Server</td>
+</tr>
+<tr>
+<td>Computer or Pi â†’ USB</td>
+<td>Full Companion with USB OTA source and direct admin support</td>
+<td>Repeater or Room Server</td>
+</tr>
+</tbody>
+</table>
+<p>A <strong>Station G2 Repeater connected to a Pi</strong> can manage and serve an update to
+an <strong>Ikoka Stick Repeater</strong> through that single USB connection. It does not
+need a second local radio or the phone app. Install a source firmware build
+containing <code>ota.peer</code> first; older Repeater firmware cannot manage the remote
+node through USB. Check with <code>ota.peer status</code> in its USB console.</p>
+<p>For slow replies during manual USB administration, <code>ota.peer timeout 180</code>
+raises the source's request timeout from 30 to 180 seconds. This RAM-only setting
+survives closing the admin session and resets on reboot; keep the controller's
+timeout longer than the source's.</p>
+<p>If the destination already grants this repeater's public key the required ACL
+role, <code>ota.peer acl PUBLIC_KEY</code> opens a USB admin session without a password
+login. It sends an authenticated direct return path and verifies the
+destination's full public key before accepting <code>ota.peer cmd PUBLIC_KEY get tx</code>.
+The destination still enforces its ACL permissions for every command.</p>
+<p>For a single command using an existing ACL grant, use
+<code>ota.peer cmd.acl PUBLIC_KEY get tx</code>. It sends only the encrypted zero-hop CLI
+request, without login, return-path changes or an identity-proof exchange.
+The reply is correlated to that request; this does not open an authenticated
+admin session. The destination still checks the source's ACL role.
+It requires the destination's saved return route to be direct.</p>
+<p>For manual USB administration on a configured secondary MeshCore profile, use
+<code>ota.peer radio radio2</code> before discovery or login; <code>ota.peer radio radio</code> selects
+the primary profile. <code>ota.peer radio</code> reports the choice. The secondary profile
+must be enabled for RX and TX. This RAM-only choice survives <code>ota.peer close</code>
+and resets to primary on reboot. Changing the choice clears authentication and
+discovered peers; changing the selected profile's configuration cancels a pending
+request and clears authentication. Admin traffic stays on the selected profile.</p>
+<p>The Full Companion source also needs a current build containing the wizard's
+version 2 direct admin support. An older Full Companion may serve OTA files but cannot
+provide this guarded admin connection; the wizard will ask for a source
+firmware upgrade instead of proceeding with that connection.
+Check <code>get ota.direct</code> from its USB console for <code>v=2</code>. Update replies use a
+separate mailbox; the wizard does not consume ordinary queued messages or change
+saved contact routes. Some Full Companion boards borrow queue space for OTA and
+retain up to 128 unread messages during an update. If more are waiting, sync them
+with an app first; the wizard refuses to discard them to make room.</p>
+<p>For a direct update, start with the source's primary frequency, bandwidth and
+spreading factor matching the destination's saved primary profile, with a direct link between
+them. The saved coding rates may differ. The destination needs working LoRa OTA support
+and either its admin password or an admin ACL entry for the source radio.
+A stock nRF52 bootloader may need a matching local
+installation before it can accept remote updates.</p>
+<p>By default, the wizard sends discovery, admin commands, and OTA traffic directly with no
+relay hops. An older destination may put its first login reply in a flood
+envelope; the wizard accepts it only if it arrives with zero hops, establishes
+a direct return route, then requires a fresh direct identity check.</p>
+<p>Close other apps using the USB port before starting.</p>
+<h3 id="use-a-known-repeater-key">Use a known repeater key</h3>
+<p>With a USB Repeater source, <code>--target PUBLIC_KEY</code> selects a known repeater
+without waiting for a discovery response. Supply its complete 64-character
+public key. The legacy <code>--target-type repeater</code> flag is still accepted.
+The source must advertise <code>known_repeater=1</code> in its <code>ota.peer capabilities</code>
+reply; update its firmware first if that capability is missing.</p>
+<p>For an existing admin ACL grant, replace <code>PUBLIC_KEY</code> with the destination
+repeater's full key:</p>
+<pre><code class="language-bash">python3 tools/lora_ota/ota_wizard.py --mode repeater --port /dev/ttyACM0 \
+  --target PUBLIC_KEY --auth acl --check
+</code></pre>
+<p>Password authentication sends a zero-hop login and verifies the exact public
+key before updating. ACL authentication uses the source's existing permission
+without a password login or a fresh identity-proof exchange. It requires a
+known full repeater key and a saved direct return route on the destination.
+The default direct link does not fall back to relays. Select <strong>LoRa relays</strong>
+explicitly for a routed update. Keep the same source radio connected when
+recovering an interrupted update.</p>
+<p>After an install or during recovery, the wizard rebuilds the authenticated
+direct return route and checks the full public key once. This uses the existing
+ACL grant without a password login. Learned return routes can disappear on
+reboot; ordinary ACL commands still use the single-command path above.</p>
+<p>In <strong>Settings</strong>, set <strong>Authentication</strong> to <strong>ACL</strong> for this setup. Use
+<strong>Password</strong> when the source has no admin ACL grant; an empty password is
+not an ACL-mode selector.</p>
+<p><strong>Auto</strong> uses ACL for a USB Repeater with a supplied or reused full repeater
+key when no password environment variable is set. Discovery and Full
+Companion connections use password authentication. Explicit <strong>ACL</strong> ignores
+the password environment variable and does not fall back to a login.</p>
+<h2 id="start">Start</h2>
+<p>From the MeshCore checkout, run:</p>
+<pre><code class="language-bash">python3 tools/lora_ota/ota_wizard.py
+</code></pre>
+<p>On Windows, use <code>py</code> in place of <code>python3</code>. No command-line options are needed.
+The menu provides these actions:</p>
+<ol>
+<li><strong>Update a nearby radio</strong> â€” the default.</li>
+<li><strong>Check radios / save a preparation request</strong> â€” inspect without installing.</li>
+<li><strong>Prepare an update bundle on this computer</strong> â€” no radios needed.</li>
+<li><strong>Recover an interrupted update</strong> â€” restore saved settings.</li>
+<li><strong>Settings</strong> â€” change transfer, bootloader, connection, or build preferences.</li>
+<li><strong>Exit</strong>.</li>
+</ol>
+<p>The first live connection installs USB and verification dependencies in a
+private Python environment if needed. On Raspberry Pi OS, install
+<code>python3-venv</code> if Python reports that it is missing.
+Preparing a signed input file can also install signature-verification support
+on first use, without installing the USB software.</p>
+<p>For an update, the wizard selects the USB radio and destination automatically
+when there is only one of each. Otherwise, choose from the displayed lists.
+With a USB Repeater, enter or reuse a known full repeater key to skip discovery.
+Choose firmware, review the plan, then press Enter to start. If password
+authentication is needed, enter it once. Password entry is hidden and
+passwords are never saved. After an action, the menu is shown again.</p>
+<h2 id="use-radio2-for-the-transfer">Use radio2 for the transfer</h2>
+<p>With <strong>Link</strong> set to <strong>Direct</strong> and a USB Repeater source, set <strong>Source transfer
+radio</strong> to <strong>radio2</strong> in <strong>Settings</strong>. Optionally set <strong>Transfer channel</strong> to <code>FREQ,BW,SF,CR</code>, using
+MHz, kHz, spreading factor and coding-rate denominator. Choose values allowed
+in your region and supported by both boards. Without an override, the wizard
+uses the destination's saved primary settings.</p>
+<p>The wizard starts administration on the shared primary profile, creates a
+temporary RXTX secondary profile on the source, then moves the destination
+to a matching temporary primary profile. It accepts the destination's <code>OK</code>
+acknowledgement before switching subsequent administration to radio2. The
+source's primary radio settings and repeating state stay in place. Source
+RX power saving is temporarily disabled for scanning and restored afterward.</p>
+<p>The source secondary profile must be unused, with no configured profile,
+temporary lease or schedule, and cross-profile forwarding off. Existing
+temporary schedules on the destination also block setup. This lets recovery
+clear the wizard's own lease without replacing another operator's profile.
+The wizard restores the destination to its original primary profile before
+removing the source lease. Full Companion sources use their primary profile.</p>
+<p>For manual administration of an already configured secondary profile, use
+<code>ota.peer radio radio2</code>; the guided wizard's ownership checks are stricter.</p>
+<h3 id="keep-control-traffic-low">Keep control traffic low</h3>
+<p>A successful temporary-profile acknowledgement is sufficient; there is no
+need to follow it with repeated <code>get tempradio</code> queries. Retry a necessary
+read or idempotent setting at most three times. Use <code>get tx</code> as a connectivity
+probe only if all three attempts fail.</p>
+<p>Do not blindly repeat a relative temporary lease, download, install or cancel
+after losing its reply. Check the selected profile and owned package state
+first. A lost acknowledgement can mean that the command already took effect.</p>
+<h2 id="update-through-lora-relays">Update through LoRa relays</h2>
+<p>In <strong>Settings</strong>, select <strong>Link → LoRa relays</strong>. Enter the complete relay public
+keys under <strong>Relay keys</strong>, separated by commas, in order from the source to the
+destination. One to eight relays are supported. The hop limit is raised to the
+number of relays when needed. Then choose <strong>Check radios</strong> or <strong>Update</strong>, and
+enter the destination's complete public key.</p>
+<pre><code class="language-text">USB Repeater --&gt; relay 1 --&gt; relay 2 --&gt; destination
+              LoRa administration and firmware
+</code></pre>
+<p>This mode requires a USB Repeater source with <code>routed_path=1</code> in
+<code>ota.peer capabilities</code>. Each relay and the destination must grant that source
+an admin ACL role. Password login, Full Companion sources and source radio2
+are supported by the default direct mode; relay mode selects the USB
+Repeater's primary radio and ACL authentication.</p>
+<p>Start with every participant on the same primary frequency, bandwidth,
+spreading factor and coding rate. This mode keeps that channel; a different
+<strong>Transfer channel</strong> is rejected. The wizard checks the relay identities and
+settings, opens temporary OTA windows, disables RX power saving, enables
+relay repeating, and sets a positive OTA hop limit. The temporary preamble
+defaults to 128 symbols. Saved radio, RXPS, OTA and relay repeating settings
+are restored afterward, including when recovering an interrupted update.
+Existing temporary profiles, schedules or downloads stop setup before
+settings are changed.</p>
+<p>Relays must already forward administration along the selected route so the
+initial checks can reach every node. Their ACL and filter rules must also
+permit OTA forwarding; the wizard does not change those rules.
+Keep all participants powered until installation and recovery finish. The
+normal <strong>Direct</strong> link continues to use zero-hop OTA.</p>
+<p>For manual USB administration, <code>ota.peer path ABCDEF,123456</code> selects ordered
+relay prefixes; <code>ota.peer path off</code> restores direct operation. Prefixes must
+all use the same width of one, two or three bytes. The wizard uses three-byte
+prefixes derived from the supplied full keys and checks for collisions.</p>
+<h2 id="choose-firmware-from-github-releases">Choose firmware from GitHub releases</h2>
+<p>The firmware menu offers:</p>
+<ul>
+<li><strong>Latest compatible GitHub release (recommended):</strong> downloads the published
+  stable file for the detected board and role.</li>
+<li><strong>Choose another GitHub release:</strong> lists compatible releases, including
+  clearly labelled previews, so you can choose a version.</li>
+<li><strong>Local firmware file or prepared bundle:</strong> accepts an application DFU ZIP,
+  BIN, HEX, full mOTA, or a bundle prepared on another computer.</li>
+<li><strong>Build custom Full firmware from source:</strong> offered on a computer with the
+  firmware build tools and Bash. It is not offered by default on a Pi.</li>
+</ul>
+<p>You do not need to copy release URLs or manually download published files.
+The wizard checks the board and role, searches release files for an exact
+running base when preparing a differential update, and checks for a compatible
+signed bootloader on supported nRF52 destinations. Firmware that is already
+installed or older is left in place.</p>
+<p>The final plan shows the package sizes, firmware version, and any bootloader
+or trusted update signer being installed. After reboot, the wizard checks the
+running firmware hash and version, or the bootloader identity and version,
+before reporting success.</p>
+<h2 id="differential-or-full-updates">Differential or full updates</h2>
+<p><strong>Automatic</strong> is the default transfer setting. It uses a differential package
+when a compatible builder and the <strong>exact running firmware</strong> are available
+and the package is smaller. A file with the same version label but a different
+body hash is not a usable base. Published bases are found through GitHub
+releases; a local base can be selected when the running image was custom.
+Unsigned full <code>.mota</code> files can also supply the new image for a differential
+update. Signed packages retain their signatures; prepared bundles retain their
+chosen transfer format.</p>
+<p>On a computer, the differential builder can be prepared automatically with a
+compatible Rust toolchain. On a Pi without a builder, a full update is made by
+Python without compiling. The destination must support full updates, such as
+an Ikoka Stick with working QSPI storage.</p>
+<p>To force a full application transfer, open <strong>Settings</strong>, choose <strong>Full</strong> for
+the transfer method, then start the update. Settings also lets you turn the
+bootloader check off for an application-only update, choose a USB port or
+source type, or set a builder path, custom source folder/version, or cache folder.</p>
+<p>An internal-flash nRF52 destination that requires differential installation
+cannot use the full fallback. Use the computer-to-Pi workflow below.</p>
+<h2 id="prepare-on-a-computer-send-from-a-pi">Prepare on a computer, send from a Pi</h2>
+<p>All steps use the same menu; no command-line options are needed.</p>
+<ol>
+<li>On the Pi, choose <strong>Check radios / save a preparation request</strong>. Connect to
+   the source and select the destination as prompted. Copy the JSON file
+   shown after <strong>Preparation request:</strong> to the computer. It contains public
+   board information and the exact running hash, without the password.</li>
+<li>On the computer, choose <strong>Prepare an update bundle on this computer</strong>.
+   Select the saved request or enter its file path. Choose firmware from
+   GitHub releases, or select a local custom image. The wizard searches for
+   the exact base and offers a local base file if needed. Accept the proposed
+   output filename or choose another one.</li>
+<li>Copy the resulting <code>.ota.zip</code> file to the Pi. Choose <strong>Update a nearby
+   radio</strong>, then <strong>Local firmware file or prepared bundle</strong>, and select that
+   ZIP.</li>
+</ol>
+<p>The preparation step does not open a radio. When the builder and input files
+are already present, local preparation also works without network access.
+For a full bundle on a destination that supports it, choose <strong>Full</strong> in
+<strong>Settings</strong> before preparation; this needs neither a differential compiler
+nor USB dependencies.</p>
+<p>The live destination is checked again before installation. A changed base
+hash or a different board stops a differential update.</p>
+<h2 id="if-the-connection-is-interrupted">If the connection is interrupted</h2>
+<p>Keep the same source radio connected and run the wizard again. Choose
+<strong>Recover an interrupted update</strong>, then select the saved session by its
+public-key prefix and progress state. The wizard checks the complete source
+and destination keys before restoring settings. A normal update also restores an unfinished
+session for the selected destination before proceeding.
+Recovery reuses the recorded authentication and profile options, rather than
+the current menu settings. Relay sessions also retain the ordered relay keys, link type, hop limit,
+channel and preamble. Recovery needs the same source and LoRa relay route.</p>
+<p>Keep the recovery record until restoration is complete. A lost install reply
+is followed by a running-image check; the wizard does not blindly repeat an
+install command. A cancelled download is cleared only when its package ID
+matches this update. Automatic installation is restored only after installation
+or receive-slot clearance is confirmed; an uncertain result leaves it off and
+keeps the recovery record.</p>
+<p>Temporary radio windows use the existing primary settings unless a transfer
+profile was chosen. Existing temporary schedules block an update before
+settings are changed, including on older firmware.
+The window covers both bootloader and firmware transfers, including reboot
+and setup time. Remote progress checks normally run every 45 seconds.</p>
+<p>The cache is normally <code>~/.cache/meshcore/ota</code> on Linux,
+<code>~/Library/Caches/MeshCore/ota</code> on macOS, or <code>%LOCALAPPDATA%\MeshCore\ota</code> on
+Windows. It contains firmware, public preparation records, selected board
+keys, and restoration settings. Trusted signer keys added for an update remain
+installed on the destination.</p>
+<details>
+<summary>Optional command-line use for automation</summary>
+<p>Interactive users can use the menus for every step. Existing command-line
+options remain available for scripts:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--check</code></td>
+<td>Inspect without downloading or installing firmware</td>
+</tr>
+<tr>
+<td><code>--port /dev/ttyUSB0</code></td>
+<td>Choose a port; Windows example: <code>--port COM5</code></td>
+</tr>
+<tr>
+<td><code>--mode repeater</code> or <code>--mode companion</code></td>
+<td>Select the source type</td>
+</tr>
+<tr>
+<td><code>--target PUBLIC_KEY</code></td>
+<td>Choose the full destination key; a USB Repeater source skips discovery</td>
+</tr>
+<tr>
+<td><code>--target-type repeater</code></td>
+<td>Legacy flag for known-repeater selection with a USB Repeater source</td>
+</tr>
+<tr>
+<td><code>--auth auto</code>, <code>--auth acl</code> or <code>--auth password</code></td>
+<td>Select authentication; ACL uses the USB Repeater's existing grant</td>
+</tr>
+<tr>
+<td><code>--source-radio radio</code> or <code>--source-radio radio2</code></td>
+<td>Choose the source transfer profile; radio2 requires a USB Repeater</td>
+</tr>
+<tr>
+<td><code>--transfer-radio FREQ,BW,SF,CR</code></td>
+<td>Direct link's temporary profile; relay mode accepts only the existing shared profile</td>
+</tr>
+<tr>
+<td><code>--link direct</code> or <code>--link lora-relay</code></td>
+<td>Choose zero-hop LoRa or an ordered LoRa relay route</td>
+</tr>
+<tr>
+<td><code>--relay PUBLIC_KEY</code></td>
+<td>Full relay key; repeat in order from source to destination, up to eight</td>
+</tr>
+<tr>
+<td><code>--ota-hops 1</code></td>
+<td>Relay link's LoRa hop limit, 1-8; at least the relay count</td>
+</tr>
+<tr>
+<td><code>--transfer-preamble 128</code></td>
+<td>Relay link's temporary preamble in symbols</td>
+</tr>
+<tr>
+<td><code>--firmware FILE</code></td>
+<td>Use a local firmware image or prepared bundle</td>
+</tr>
+<tr>
+<td><code>--base FILE</code></td>
+<td>Supply the exact running image for differential preparation</td>
+</tr>
+<tr>
+<td><code>--full</code></td>
+<td>Force a full transfer where supported</td>
+</tr>
+<tr>
+<td><code>--build</code></td>
+<td>Build custom Full firmware from source</td>
+</tr>
+<tr>
+<td><code>--no-bootloader</code></td>
+<td>Update application firmware only</td>
+</tr>
+<tr>
+<td><code>--prepare-only --request DEVICE.json --firmware FILE --output update.ota.zip</code></td>
+<td>Prepare without radios</td>
+</tr>
+<tr>
+<td><code>--recover --target PUBLIC_KEY</code></td>
+<td>Restore settings and exit</td>
+</tr>
+<tr>
+<td><code>--yes</code></td>
+<td>Accept the displayed plan; credentials and required choices must still be supplied</td>
+</tr>
+</tbody>
+</table>
+<p>For unattended password authentication, provide <code>MESHCORE_ADMIN_PASSWORD</code> in
+the process environment and pass the port, source type, and target key. With
+an existing ACL grant, use <code>--auth acl</code> and the full known repeater key.
+Passwords are excluded from preferences, recovery records, and the custom
+build environment.</p>
+</details>
+<p>For individual commands and a manual board example, see
+<a href="../ota_station_g2_to_ikoka_stick/">Station G2 to Ikoka Stick</a>. For routed updates
+with a Companion controller and explicit multi-node setup, use the
+<a href="../lora_ota_automation/">scripted LoRa OTA guide</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.action.edit", "content.code.copy", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../_javascript/release_features.js?v=20261024-1"></script>
+      
+        <script src="../_javascript/hosted_doc_links.js?v=20261007-1"></script>
+      
+        <script src="../_javascript/notification_builder.js?v=20261006-channel9"></script>
+      
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      
+        <script src="../_javascript/firmware_picker.js?v=20261024-included-bootloader"></script>
+      
+        <script src="../_javascript/telemetry_decoder.js?v=20261022-noise-history"></script>
+      
+        <script src="../_javascript/management_decoder.js"></script>
+      
+        <script src="../_javascript/filter_tool.js?v=20261030-compact-defaults"></script>
+      
+        <script src="../_javascript/preset_test.js?v=20260923-2"></script>
+      
+        <script src="../_javascript/esp32_partition_catalog.js?v=20261001-1"></script>
+      
+    
+  </body>
+</html>

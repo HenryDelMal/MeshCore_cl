@@ -1,0 +1,3504 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the open source MeshCore firmware">
+      
+      
+      
+        <link rel="canonical" href="https://HenryDelMal.github.io/MeshCore_cl/fleet_management/">
+      
+      
+        <link rel="prev" href="../radio_presets/">
+      
+      
+        <link rel="next" href="../room_services/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Private fleet management - MeshCore Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../_stylesheets/notification_builder.css?v=20261006-channel9">
+    
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/firmware_picker.css?v=20261013-pick-first-1">
+    
+      <link rel="stylesheet" href="../_stylesheets/telemetry_decoder.css?v=20261022-noise-history">
+    
+      <link rel="stylesheet" href="../_stylesheets/management_decoder.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/filter_tool.css">
+    
+      <link rel="stylesheet" href="../_stylesheets/preset_test.css?v=20260923-2">
+    
+      <link rel="stylesheet" href="../_stylesheets/esp32_partition_catalog.css?v=20261001-1">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#private-fleet-management" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MeshCore Docs" class="md-header__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Private fleet management
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MeshCore Docs" class="md-nav__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    MeshCore Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware and tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware and tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chile_repeater_builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chile repeater builder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firmware_picker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware picker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preset_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preset test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filter_tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../telemetry_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started and features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started and features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../role_feature_switches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role feature switches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_radio_full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion radio full
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full_companion_usb_switcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion usb switcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_offline_queue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion offline queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../halo_keymind_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Halo keymind settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware updates and partitions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware updates and partitions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrading_1.17.1.8_to_1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading 1.17.1.8 to 1.17.1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota user guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_easy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota easy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_wizard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lora_ota_automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lora ota automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_station_g2_to_ikoka_stick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota station g2 to ikoka stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_bootloader_update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 bootloader update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_nrf52_qspi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 qspi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_meshtower_v2_sdcard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota meshtower v2 sdcard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../esp32_partition_catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 partition catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../esp32_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heltec_v4_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heltec v4 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../host_cli_service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host cli service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio, networking, and power
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Radio, networking, and power
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radio_presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio presets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#read-only-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read-only receivers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enroll-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enroll nodes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#send-commands-from-the-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Send commands from the app
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Send commands from the app">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#target-existing-regions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target existing regions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-a-gps-center-and-radius" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target a GPS center and radius
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported controls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supported controls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hardware-and-role-conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware and role conditions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware and role conditions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sd-backed-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SD-backed receivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#packet-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet budget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-packet-delivery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two-packet delivery
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schedule-radio-changes-and-set-clocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule radio changes and set clocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filtering-and-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filtering and recovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-for-packet-abuse-containment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ideas for packet-abuse containment
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../room_services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../carrier_wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../espnow_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Espnow bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../split_radio_repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split radio repeater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rs232_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rs232 bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../udp_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Udp bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../WiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WiFi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flood_filtering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flood filtering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gps_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gps tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_lost_reply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion lost reply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensor_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor tracker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nrf52_power_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nrf52 power management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI and protocol reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI and protocol reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_build_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli build matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli_command_availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli command availability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal_chat_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal chat cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../companion_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kiss_modem_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packet_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packet format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../payloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../management_reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats_binary_frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats binary frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../number_allocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number allocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qr_codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qr codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.18.0.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current - 1.18.0.1 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Previous releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Previous releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.9 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/1.17.1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.8 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Older releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#read-only-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read-only receivers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enroll-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enroll nodes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#send-commands-from-the-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Send commands from the app
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Send commands from the app">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#target-existing-regions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target existing regions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-a-gps-center-and-radius" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target a GPS center and radius
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported controls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supported controls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hardware-and-role-conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware and role conditions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware and role conditions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sd-backed-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SD-backed receivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#packet-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet budget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-packet-delivery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two-packet delivery
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schedule-radio-changes-and-set-clocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule radio changes and set clocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filtering-and-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filtering and recovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-for-packet-abuse-containment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ideas for packet-abuse containment
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/HenryDelMal/MeshCore_cl/edit/keymindCascade/docs/fleet_management.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<!-- meshcore-hosted-doc-link:start -->
+<p class="meshcore-hosted-doc-link"><a href="https://mikecarper.github.io/MeshCore/fleet_management/">View this page on MeshCore Docs</a>.</p>
+<!-- meshcore-hosted-doc-link:end -->
+
+<h1 id="private-fleet-management">Private fleet management</h1>
+<p>Fleet control lets one publisher send filtering, radio schedules, secondary-radio
+changes, and clock commands to
+all enrolled infrastructure nodes, regions, a geographic radius, one node, or a list of targets over a
+private LoRa channel.
+It is disabled until configured. It is supported on repeaters and room servers;
+fixed-size STM32 images omit it because of their flash limit.
+Both the publishing Companion and receivers need firmware built with fleet-control
+support; the existing app can use its local Command Line screen.</p>
+<h2 id="read-only-receivers">Read-only receivers</h2>
+<p>Commands use two separate credentials:</p>
+<ul>
+<li>A random <strong>128-bit channel key</strong> encrypts the traffic. Receivers need this key
+  to read the private channel.</li>
+<li>The publisher's <strong>Ed25519 public key</strong> verifies commands. Only the publisher
+  holds the corresponding private key and can authorize changes.</li>
+</ul>
+<p>Giving a repeater the channel key and publisher public key does <strong>not</strong> give it
+the publisher's signing key. An ordinary channel message, a copied display name,
+or possession of the channel key cannot authorize a fleet command. Each command
+signature also binds the channel, target, sequence, expiry, and exact command.</p>
+<p>This makes management commands read-only for receivers. It does not turn ordinary
+MeshCore chat into a signed, read-only announcement channel: stock apps do not
+verify signatures on ordinary channel text. Fleet acknowledgements are convenient
+channel text, not authenticated inventory evidence. Use existing individually
+authenticated administration for sensitive confirmation.</p>
+<h2 id="enroll-nodes">Enroll nodes</h2>
+<p>Use an existing authenticated admin connection or the local console. Generate a
+random private channel key; for example, <code>openssl rand -hex 16</code>. Do not use Public
+or a predictable hashtag key. Add that same key as a private channel on the
+publishing Companion, and note its channel index.</p>
+<p>Get the publishing Companion's full public identity key from its device information
+or existing identity command. On every managed repeater or room server, run:</p>
+<pre><code class="language-text">set fleet.controller &lt;publisher-public-key-64-hex&gt;
+set fleet.channel &lt;private-channel-key-32-hex&gt;
+get fleet.channel
+get fleet.controller
+get fleet.stats
+</code></pre>
+<p><code>get fleet.channel</code> reports enrollment, storage health, a channel hash, and the
+last accepted sequence. It does not reveal the channel key. <code>set fleet.channel
+off</code> disables reception; <code>set fleet.controller off</code> revokes the publisher. Key
+changes use the existing individually authenticated admin path, never fleet
+commands.</p>
+<p>If a settings save reports <code>unconfirmed; restart required</code>, the durable result
+is unknown. Fleet reception and further fleet settings writes are disabled, and
+<code>get fleet.channel</code> reports <code>store=error</code>. Enrollment shown in RAM is not active
+authority while held. Restart to load and validate the public file, then check
+enrollment before retrying. A <code>not saved; retry later</code> error occurred before
+publication or after a confirmed rollback, and does not impose this hold. On
+ESP32/RP2040, rename return values alone are not sufficient: the transaction
+checks both names before accepting the move or rollback. Fleet also checks the
+exact public settings image before acknowledging new authority. A Fleet hold
+does not stop the node's normal radio, USB, or individually authenticated admin
+services; it prevents uncertain credentials or replay state from granting remote
+Fleet control.</p>
+<p><code>get fleet.stats</code> includes <code>parts</code>, the number of fragments currently buffered
+across the two bounded, incomplete two-packet command slots.</p>
+<p>Nodes need a clock set to current UTC. Commands expire after ten minutes and may
+be at most one minute ahead of a receiver's clock. A bad clock fails closed;
+correct it through the normal administration path.</p>
+<h2 id="send-commands-from-the-app">Send commands from the app</h2>
+<p>On the publishing Companion, use the existing local Command Line screen. The
+Companion signs with its own identity. No publisher private key is copied to a
+repeater, and no app protocol change is required.</p>
+<p>Examples use private channel index <code>3</code>:</p>
+<pre><code class="language-text">fleet send 3 get radio2
+fleet send 3 set radio2 mediamesh
+fleet send 3 set tempradio2 910.5,500,8,5,rxtx,120
+fleet send 3 set radio2.cross auto
+fleet send 3 set flood.rule.4 type=grp_txt hops=6+ drop
+fleet send 3 del flood.rule.4
+</code></pre>
+<p>Targets are optional: omitting the target sends to <strong>all enrolled nodes</strong> on the
+private fleet channel. Explicit <code>all</code> still works, for example
+<code>fleet send 3 all get radio2</code>.</p>
+<p>To address particular nodes, insert <strong>8 or 12 hexadecimal characters from the
+start of a node's public key</strong>, or its <strong>complete 64-character public key</strong>, before
+the command. Separate multiple targets with semicolons, without spaces. Lengths can
+be mixed:</p>
+<pre><code class="language-text">fleet send 3 1257aee5 get radio2
+fleet send 3 1257aee5a754;9abc0123 get radio2
+fleet send 3 1257aee5;9abc01234567 set radio2.cross auto
+</code></pre>
+<p>These are example public-key prefixes; substitute your nodes' actual keys.
+<strong>A prefix addresses every enrolled node whose public key starts with it.</strong>
+Use all 64 characters when you need one exact identity, especially in a large
+fleet. Names and short LoRa path IDs are not accepted as target identities.
+<code>all</code> must appear alone. A node that matches several entries still executes the
+command only once, and the signature protects the entire list.</p>
+<h3 id="target-existing-regions">Target existing regions</h3>
+<p>Fleet commands read each receiver's <strong>existing region map</strong>. Two selectors are
+available, and they can be mixed with public-key targets:</p>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Which receivers execute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sea</code> or <code>region:sea</code></td>
+<td>Receivers with an exact <code>sea</code> entry in their configured region list</td>
+</tr>
+<tr>
+<td><code>home:sea</code></td>
+<td>Receivers whose home region is <code>sea</code>, or whose home has <code>sea</code> as a parent or ancestor</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">fleet send 3 sea get radio2
+fleet send 3 sea;pdx clock sync
+fleet send 3 region:sea set radio2.cross auto
+fleet send 3 home:sea get tempradio2
+fleet send 3 home:sea;home:pdx clock sync
+fleet send 3 sea;home:pdx;1257aee5 get radio2
+</code></pre>
+<p>The semicolon-separated list is an <strong>OR</strong>: a receiver that matches any entry executes
+once, even if it matches several entries. Names match exactly and are case
+sensitive; <code>sea</code> does not match <code>seattle</code>. One leading <code>#</code> is an alias, as in the
+existing region commands. <code>$</code> remains significant for private region names.
+Names may contain up to 30 printable ASCII bytes using region-name characters.
+Use <code>region:</code> or <code>home:</code> explicitly for names with 8 or 12 characters, names
+made entirely of hexadecimal characters, or reserved command words such as
+<code>get</code>, <code>set</code>, <code>del</code>, <code>time</code> and <code>clock</code>. Bare <code>all</code> still means the entire fleet;
+<code>region:all</code> selects a region actually named <code>all</code>.</p>
+<p>Inspect the existing configuration with <code>region</code> and <code>region home</code>. To choose a
+home from regions already defined on that receiver, use:</p>
+<pre><code class="language-text">region home sea
+region save
+</code></pre>
+<p>List matching includes a configured region even when forwarding for it is
+denied. Home matching follows the selected home's ancestry; a wildcard or unset
+home matches no named home target. The default transmit scope and the incoming
+packet's scope do not determine target membership. Region selection is checked
+against the live map when the complete command is received.</p>
+<p>Targets select which nodes execute. Delivery still follows the Companion's
+channel scope and the intervening forwarding rules. Unknown names match no
+receivers and never become a whole-fleet request.</p>
+<h3 id="target-a-gps-center-and-radius">Target a GPS center and radius</h3>
+<p>Use <code>gps:latitude,longitude:radius-km</code> to select receivers within a circle. For
+example, this selects nodes within <strong>25 km</strong> of the given Seattle coordinates:</p>
+<pre><code class="language-text">fleet send 3 gps:47.6062,-122.3321:25 get radio2
+fleet send 3 gps:47.6062,-122.3321:25 set radio2.cross auto
+fleet send 3 sea;home:pdx;gps:47.6062,-122.3321:25;1257aee5 clock sync
+</code></pre>
+<p>GPS, region, home and key selectors can share the same semicolon-separated list.
+They use the same OR rule: any matching entry selects the node, and the command
+executes once. The center, radius and complete target list are signed.
+The comma is only for the coordinate pair; <code>;</code> is the only target-list separator.</p>
+<p>Coordinates use ordinary decimal degrees, with latitude from -90 to 90 and
+longitude from -180 to 180, and at most six decimal places. Radius is in
+kilometers, from <strong>0.001 to 20050</strong>, with at most three decimal places. For
+example, <code>0.5</code> means 500 meters. Scientific notation, excess decimal places,
+missing fields and out-of-range values are rejected without sending. Distance
+uses the great-circle calculation, including across the date line and near the
+poles; a node on the radius boundary is included.</p>
+<p>Each receiver prefers its configured <code>lat</code> and <code>lon</code>. A stationary radio can
+have a fixed position even without GPS hardware; configure it through its
+normal administration connection:</p>
+<pre><code class="language-text">set lat 47.6062
+set lon -122.3321
+get lat
+get lon
+</code></pre>
+<p>When both configured coordinates are zero, the receiver can use an existing
+valid GPS cache no older than 12 hours. Matching never wakes GPS, takes a UART
+or requests telemetry. A missing, expired, invalid or default <code>(0,0)</code> position
+matches no GPS selector; it can still match another entry in the list. Invalid
+nonzero configured coordinates are rejected rather than falling back to GPS.
+For a stationary radio that lets GPS sleep for longer than 12 hours, configure
+its fixed coordinates.</p>
+<p>Private fleet matching uses this position even when location is hidden from
+public adverts. It reads the position when the complete command arrives,
+including after the second fragment of a two-packet command, so a moving node
+is selected using its position at completion.</p>
+<p>On air, full keys use a 128-bit SHA-256 digest; prefixes use their original
+public-key bytes. Whole-fleet commands use the compact FMC2 format with no target
+records, whether the CLI target is omitted or explicitly <code>all</code>. This reduces the
+header from 29 to 14 bytes. A single complete key uses the smaller fixed-target
+FMC1 format. Region, home and GPS selectors use separate signed record types in FMC2.
+Separate fleets use separate channel keys.</p>
+<p>Only local commands on the publishing Companion can originate fleet sends. A
+remote CLI command cannot turn that Companion into a multicast signing proxy.
+An <code>OK</code> means the Companion queued the command, not that every receiver applied
+it. Wait for acknowledgements and confirm the result on important nodes.</p>
+<p>Use at most one new command per second. The publishing Companion remembers its
+last queued sequence for the current boot; its clock supplies the next sequence.
+Each receiving node reserves the Unix-second sequence in durable storage
+<strong>before</strong> dispatch. That receiver never executes the same sequence twice,
+including after reboot or a lost reply. Retry an uncertain command with a fresh
+sequence; the operation should be chosen to be idempotent.</p>
+<h2 id="supported-controls">Supported controls</h2>
+<h3 id="hardware-and-role-conditions">Hardware and role conditions</h3>
+<p>Use <code>get hardware</code> on a node to find its hardware name, role and short ID:</p>
+<pre><code class="language-text">&gt; hw=heltec_tower_v2 role=repeater id=536D28C9
+</code></pre>
+<p>Prefix a command with <code>@board/role</code> to run it only on matching hardware:</p>
+<pre><code class="language-text">@Heltec_tower_v2/r ota pull A1B2C3D4 flash
+@#536D28C9/r ota pull A1B2C3D4 flash
+</code></pre>
+<p>The second line is the shorter spelling of the first. <code>/r</code> selects repeaters,
+<code>/s</code> room servers, <code>/c</code> Companions and <code>/n</code> sensors. Omit <code>/role</code> to match any
+role on that board; <code>@*/r</code> selects any repeater. Hardware names ignore case and
+accept underscores for spaces. Use the reported name or ID: board names can
+differ between builds with different storage or radio hardware.</p>
+<p>These prefixes work in ordinary authenticated admin CLI queues as well as signed
+fleet commands. A mismatched node replies <code>OK - skipped (hardware/role)</code> and
+does not run the inner command, so an app can continue its template queue.
+Sensor and Companion guards work in their ordinary CLI; signed fleet reception
+remains limited to repeaters and room servers.
+For example, after the existing fleet enrollment:</p>
+<pre><code class="language-text">fleet send 3 get hardware
+fleet send 3 @Heltec_tower_v2/r get radio2
+fleet send 3 @#536D28C9/r ota pull A1B2C3D4 flash
+fleet send 3 @*/s get radio2
+</code></pre>
+<p>Fleet OTA pulls require a specific hardware name or short ID, <code>/r</code> or <code>/s</code>,
+the exact eight-hex-digit manifest ID from <code>ota ls</code>, and the <code>flash</code> destination.
+The normal <a href="../lora_ota_automation/">LoRa OTA setup</a>, temporary-radio requirement,
+image compatibility checks and signer policy still apply. Explicit installation,
+rescue and bootloader commands are not added to fleet control. An existing
+autoinstall setting retains its normal effect.</p>
+<h4 id="sd-backed-receivers">SD-backed receivers</h4>
+<p>The same <code>flash</code> destination selects the receiver's configured OTA store,
+including microSD on the SD-enabled MeshTower V2 and adaptive RAK4631/RAK15002
+receiver builds. It does not force internal-flash staging. Use the hardware
+identity reported by <code>get hardware</code>, not the SD module's name:</p>
+<pre><code class="language-text">fleet send 3 @Heltec_tower_v2/r ota pull A1B2C3D4 flash
+fleet send 3 @RAK4631/r ota pull 11223344 flash
+</code></pre>
+<p>Each ID must identify that board's update. SD installation requires a usable
+card, the matching SD-capable bootloader and a signed package from a trusted
+signer. Check <code>ota self</code> and <code>ota storage</code> through individual admin CLI before
+starting. An SD socket or an archive-only firmware build does not enable
+installation; SD Companions and the legacy RAK15002 seeder remain sources only.
+SD partial downloads remain on the card for resume. Keep the card inserted
+through download and installation; the receiver does not move an active
+transfer to internal storage if the card is removed. See
+<a href="../ota_meshtower_v2_sdcard/#automatic-storage-selection">MeshTower SD storage selection</a>
+and <a href="../ota_nrf52_qspi/">RAK4631 storage options</a>.</p>
+<p>The prefix is covered by the existing command signature and consumes the normal
+command-byte budget; no extra packet format is needed. Its short ID is a
+32-bit FNV-1a hash of the hardware name after lowercasing and replacing spaces
+with underscores. It is a selector, not an authentication or compatibility key.
+Ordinary unguarded commands retain their existing behavior. Older firmware
+rejects guarded commands; both endpoints need this support for signed fleet use.
+Fixed-size STM32 builds omit hardware guards with fleet control. Run password,
+private-key backup, replay-recovery and interactive <code>region load</code> commands
+without a guard so their existing special handling remains in charge.</p>
+<h3 id="packet-budget">Packet budget</h3>
+<p>The Companion automatically uses <strong>one or two LoRa packets</strong>, depending on the
+signed command's size. Whole-fleet commands fit <strong>87 ASCII bytes</strong> in one packet
+or <strong>230 bytes</strong> across two. Targets consume some of that allowance:</p>
+<table>
+<thead>
+<tr>
+<th>Targets</th>
+<th style="text-align: right;">One packet: command bytes</th>
+<th style="text-align: right;">Two packets: command bytes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Omitted or <code>all</code></td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">230</td>
+</tr>
+<tr>
+<td>One 8-character public-key prefix</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">225</td>
+</tr>
+<tr>
+<td>One 12-character public-key prefix</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">223</td>
+</tr>
+<tr>
+<td>One complete 64-character public key</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">215</td>
+</tr>
+<tr>
+<td>One three-character region or home name, such as <code>sea</code></td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">225</td>
+</tr>
+<tr>
+<td>Two three-character region or home names, such as <code>sea;pdx</code></td>
+<td style="text-align: right;">77</td>
+<td style="text-align: right;">220</td>
+</tr>
+<tr>
+<td>One GPS center and radius</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: right;">217</td>
+</tr>
+<tr>
+<td>Two 8-character public-key prefixes</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: right;">220</td>
+</tr>
+<tr>
+<td>Two complete public keys</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">196</td>
+</tr>
+</tbody>
+</table>
+<p>Each prefix in a list uses 5 or 7 bytes; each complete key in a list uses 17.
+Each region or home selector uses two bytes plus its canonical name length.
+Each GPS selector uses 13 bytes: its type, latitude and longitude in millionths
+of a degree, and radius in meters.
+A single complete key uses the smaller fixed-target format with a 29-byte header,
+so its limits come from packet space. Lists are capped at 17 entries and 86 bytes
+of encoded target records; for example, at most six GPS selectors fit. Requests
+exceeding their target-specific budget are rejected before signing or sending,
+with no partial target list.</p>
+<p>The existing app/console input limit also applies. The app's normal 176-byte
+command frame fits <strong>161 command bytes</strong> after <code>fleet send 3</code>; a correlated
+request uses three more bytes, and explicit targets reduce the space further.
+The shorter USB rescue console has an 80-byte input buffer. The 230-byte limit
+is the fleet protocol's capacity, rather than a promise that every console can
+enter that much text. Oversized or invalid lists are rejected as a whole,
+without sending or truncating any targets.</p>
+<h3 id="two-packet-delivery">Two-packet delivery</h3>
+<p>Longer commands keep <strong>one 64-byte signature over the entire command</strong>, including
+its channel, targets, sequence and expiry. The signed envelope is split into two
+<code>FMP1</code> fragments. Each fragment has an 11-byte collection header and up to 154
+envelope bytes, within the existing 165-byte group-data limit. Together they can
+carry a 308-byte signed envelope. No third packet is used.</p>
+<p>The Companion reserves both packets before sending. If either cannot be queued,
+it cancels the queued part and any radio copy, reports an error, and leaves the
+sequence available for a retry. Successful queueing still does not guarantee
+delivery over LoRa.</p>
+<p>A receiver accepts either arrival order and identical duplicates. It executes
+and acknowledges <strong>only after both parts arrive and the complete signature,
+target, clock and replay checks pass</strong>. Missing or altered parts cannot execute
+a partial command. Two bounded assemblies are kept for up to five minutes
+from their respective first parts; duplicates do not extend those deadlines.
+Unverified fragment sequences cannot grant priority over another transfer. A
+third transfer replaces the oldest collection. A complete, valid signed command
+clears the partial collections, and durable replay checks remain authoritative.
+Reboot or changing enrollment discards the partial transfers.</p>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Fleet commands</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Saved second profile</td>
+<td><code>get radio2</code>, <code>set radio2 &lt;tuple|mediamesh|mediamesh-range|off&gt;</code></td>
+</tr>
+<tr>
+<td>Temporary second profile</td>
+<td><code>get tempradio2</code>, <code>set tempradio2 &lt;tuple|off&gt;</code></td>
+</tr>
+<tr>
+<td>Scheduled primary profile</td>
+<td><code>get/set/del radioat</code>, <code>get/set/del tempradioat</code></td>
+</tr>
+<tr>
+<td>Scheduled second profile</td>
+<td><code>get/set/del radioat2</code>, <code>get/set/del tempradioat2</code></td>
+</tr>
+<tr>
+<td>UTC clock</td>
+<td><code>clock</code>, <code>clock sync</code>, <code>time &lt;epoch-seconds&gt;</code></td>
+</tr>
+<tr>
+<td>Hardware identity</td>
+<td><code>get hardware</code></td>
+</tr>
+<tr>
+<td>OTA download</td>
+<td><code>@board/r ota pull &lt;manifest-id-8-hex&gt; flash</code> (<code>/s</code> for rooms)</td>
+</tr>
+<tr>
+<td>OTA progress</td>
+<td><code>ota status</code>, <code>ota stats</code>, <code>ota self</code></td>
+</tr>
+<tr>
+<td>Profile diagnostics</td>
+<td><code>get radio2.status</code>, <code>get radio2.timing</code></td>
+</tr>
+<tr>
+<td>Crossover</td>
+<td><code>get radio2.cross</code>, <code>set radio2.cross &lt;auto|on|off&gt;</code></td>
+</tr>
+<tr>
+<td>Repeater guest login</td>
+<td><code>get guest</code>, <code>set guest on|off</code></td>
+</tr>
+<tr>
+<td>Repeater guest sessions</td>
+<td><code>get guests [page]</code></td>
+</tr>
+<tr>
+<td>Repeater login attempts</td>
+<td><code>get logins [page]</code></td>
+</tr>
+<tr>
+<td>Filter rules</td>
+<td><code>get/set/del flood.filter[.n]</code>, <code>flood.rule[.n]</code></td>
+</tr>
+<tr>
+<td>Path blacklist</td>
+<td><code>get/set/del flood.filter.blacklist[.n]</code></td>
+</tr>
+<tr>
+<td>Channel moderation</td>
+<td><code>get/set/del flood.moderation[.n]</code></td>
+</tr>
+<tr>
+<td>Scope policy</td>
+<td><code>get/set/del flood.channel.scope[.n]</code>, <code>flood.channel.scope.require[.n]</code></td>
+</tr>
+<tr>
+<td>Group-data forwarding</td>
+<td><code>get/set flood.channel.data</code>, <code>flood.channel.data.hops</code></td>
+</tr>
+<tr>
+<td>Flood hop limits</td>
+<td><code>get/set flood.max</code>, <code>flood.max.unscoped</code>, <code>flood.max.advert</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each role still checks whether it supports the requested setting. Immediate
+primary radio changes, identity export, passwords, ACL edits, filesystem operations, firmware
+installation, reboot, and unrestricted CLI are outside fleet capability.</p>
+<p>Repeater guest login defaults to off. <code>set guest off</code> saves that choice and
+clears existing guest sessions immediately. Enabling it uses the existing
+guest password; this switch does not change any password or assigned ACL role.</p>
+<p><code>get logins [page]</code> returns recent repeater login attempts, two per page, showing
+only 12-character public-key prefixes, latest UTC epoch times, results, and
+attempt counts. The 16 most recently attempted full keys are kept in RAM;
+repeated attempts update the existing key's record. Results distinguish accepted
+logins, wrong passwords, disabled guests, replay/state rejection, and unavailable
+ACL capacity. The history clears on reboot and survives <code>set guest off</code>.
+It contains no passwords or shared secrets and is not an online-user list.
+Anonymous owner, region, and clock requests and packets that fail authentication
+are excluded. Ordinary channel messages cannot read this list.</p>
+<p><code>set radio2 mediamesh</code> saves 911.150 MHz, 250 kHz, SF7, CR 4/5, <code>rxtx</code>,
+with automatic scan-aware preamble. <code>mediamesh-range</code> uses 125 kHz instead.
+These presets preserve the primary profile and crossing policy; new
+configurations default to radio2 off and <code>radio2.cross off</code>.</p>
+<h2 id="schedule-radio-changes-and-set-clocks">Schedule radio changes and set clocks</h2>
+<p>Use the normal schedule syntax, with UTC epoch seconds or <code>+N</code> whole minutes.
+Primary schedules are supported by repeaters; a role without a primary scheduler
+replies that the command is unsupported. Second-profile schedules use <code>rx</code> or
+<code>rxtx</code> after the coding rate:</p>
+<pre><code class="language-text">fleet send 3 clock
+fleet send 3 clock sync
+fleet send 3 set radioat 910.5,500,8,5,+5
+fleet send 3 set tempradioat 910.5,500,8,5,+5,+15
+fleet send 3 set radioat2 910.5,500,8,5,rxtx,+5
+fleet send 3 set tempradioat2 910.5,500,8,5,rxtx,+5,+15
+fleet send 3 1257aee5 get tempradioat2 1
+fleet send 3 1257aee5 del tempradioat2 all
+</code></pre>
+<p>Both relative endpoints use the receiver's clock at command acceptance. For a
+coordinated fleet switch, use the same absolute UTC start/end timestamps on all
+nodes. An optional final preamble value or <code>auto</code> uses the existing radio syntax.
+Schedule capacity, radio-range validation, and overlap checks remain unchanged;
+pending schedules still do not survive reboot.</p>
+<p><code>clock sync</code> advances a receiver to the publishing Companion's signed timestamp
+plus one second. <code>time &lt;epoch-seconds&gt;</code> sets an explicit UTC timestamp. Both use
+the existing forward-only clock rule. Initial setup or a clock far out of sync
+still requires local or individually authenticated clock correction: fleet clock
+commands retain the signature, expiry, replay, and maximum-clock-lead checks.</p>
+<p>Radio mutations and schedule edits keep the old state until their exact acknowledgement
+packets drain, with at least one successful physical transmission. Queue failure,
+failed transmissions, or an acknowledgement timeout cancels the staged mutation.
+Temporary-radio leases and scheduled windows retain their original monotonic end time; waiting for an
+acknowledgement does not lengthen them.</p>
+<p>Exact single-node acknowledgements use 0.5-1.5 seconds of random delay; prefix,
+multiple-target, region, GPS and whole-fleet replies use 0.5-10 seconds, including
+radio mutations. Queuing, airtime and forwarding can add delivery time.
+This reduces simultaneous responses but is not a reliable
+delivery protocol for an arbitrarily large fleet. Use individual requests for
+confirmation and divide very large fleets into separately keyed channels.</p>
+<h2 id="filtering-and-recovery">Filtering and recovery</h2>
+<p>Local fleet reception happens before a node's forwarding decision, so that node
+can still process an authenticated command when a filter or <code>repeat off</code> blocks
+forwarding. <strong>Intermediate nodes can still block delivery to downstream nodes.</strong>
+Management traffic has no automatic exemption from forwarding filters. Preserve
+an appropriate group-data/channel forwarding rule and an existing direct-admin
+recovery path before changing network-wide filters. Primary-radio schedules can
+move nodes off the normal network; use a temporary window or a planned recovery
+path for experiments. A forwarding policy can also partition the fleet.</p>
+<p>The receiver is allocated lazily when fleet settings are present or queried, with
+one bounded mailbox and two 308-byte fragment assemblies, plus bounded metadata.
+Cryptographic work and storage writes occur after the receive stack unwinds.
+Signature-validation attempts are bounded after private-channel MAC verification,
+complete framing, replay, target, time and command checks. Keyless matching-hash
+junk, already-used requests, other nodes' requests and incomplete fragments do not
+spend that signature budget. A corrupt or unreadable fleet store denies commands
+rather than discarding its replay state.</p>
+<h2 id="ideas-for-packet-abuse-containment">Ideas for packet-abuse containment</h2>
+<p>A packet-count chart can show a burst, but cannot establish intent, an authenticated
+source, or the airtime consumed. A large Trace spike deserves investigation;
+MeshCore already rejects flood-form Trace and Control packets. Valid direct Trace
+requests need different treatment from flood forwarding rules.</p>
+<p>Useful next additions, rather than features already implemented here:</p>
+<ul>
+<li><strong>Temporary containment with automatic rollback:</strong> deploy a drop/rate policy
+  for a bounded period and restore the previous policy unless confirmed.</li>
+<li><strong>Direct-request rate limits:</strong> separately bound Trace, anonymous requests,
+  discovery, login, and expensive response generation without breaking legitimate
+  management, ACKs, or ongoing OTA exchanges.</li>
+<li><strong>Policy preview and revisions:</strong> validate complete rule bundles, detect board
+  limitations, apply atomically, and report the active revision before rollout.</li>
+<li><strong>Better evidence:</strong> report per-type receive/drop counts, airtime, queue pressure,
+  invalid signatures, duplicate rate, and radio recoveries. Truncated path IDs
+  remain observations, not authenticated attacker identities.</li>
+<li><strong>Authenticated inventory:</strong> stagger signed status replies with firmware version,
+  uptime/reset reason, battery, memory/storage headroom, and radio errors.</li>
+<li><strong>Maintenance windows:</strong> coordinated secondary-profile experiments and OTA
+  readiness checks, keeping existing firmware-signing policy intact.</li>
+<li><strong>Per-controller roles and revocation:</strong> multiple public verification keys with
+  separate filter-only/radio permissions and independent replay state.</li>
+</ul>
+<p>Start with observation, then a narrow temporary rule, then verify neighboring
+nodes still communicate. Software filtering can reduce forwarding and response
+amplification; it cannot recover airtime already occupied by an RF transmitter.</p>
+<p>See <a href="../flood_filtering/">flood filtering</a>, <a href="../radio_profiles/">radio profiles</a>, and
+<a href="../cli_commands/#acl">ACL administration</a>.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.action.edit", "content.code.copy", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../_javascript/release_features.js?v=20261024-1"></script>
+      
+        <script src="../_javascript/hosted_doc_links.js?v=20261007-1"></script>
+      
+        <script src="../_javascript/notification_builder.js?v=20261006-channel9"></script>
+      
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      
+        <script src="../_javascript/firmware_picker.js?v=20261024-included-bootloader"></script>
+      
+        <script src="../_javascript/telemetry_decoder.js?v=20261022-noise-history"></script>
+      
+        <script src="../_javascript/management_decoder.js"></script>
+      
+        <script src="../_javascript/filter_tool.js?v=20261030-compact-defaults"></script>
+      
+        <script src="../_javascript/preset_test.js?v=20260923-2"></script>
+      
+        <script src="../_javascript/esp32_partition_catalog.js?v=20261001-1"></script>
+      
+    
+  </body>
+</html>

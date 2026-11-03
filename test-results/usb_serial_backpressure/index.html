@@ -1,0 +1,3064 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the open source MeshCore firmware">
+      
+      
+      
+        <link rel="canonical" href="https://HenryDelMal.github.io/MeshCore_cl/test-results/usb_serial_backpressure/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Usb serial backpressure - MeshCore Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../_stylesheets/notification_builder.css?v=20261006-channel9">
+    
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/firmware_picker.css?v=20261013-pick-first-1">
+    
+      <link rel="stylesheet" href="../../_stylesheets/telemetry_decoder.css?v=20261022-noise-history">
+    
+      <link rel="stylesheet" href="../../_stylesheets/management_decoder.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/filter_tool.css">
+    
+      <link rel="stylesheet" href="../../_stylesheets/preset_test.css?v=20260923-2">
+    
+      <link rel="stylesheet" href="../../_stylesheets/esp32_partition_catalog.css?v=20261001-1">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#native-usb-backpressure-and-radio-liveness" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="MeshCore Docs" class="md-header__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Usb serial backpressure
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="MeshCore Docs" class="md-nav__button md-logo" aria-label="MeshCore Docs" data-md-component="logo">
+      
+  <img src="../../_assets/meshcore.svg" alt="logo">
+
+    </a>
+    MeshCore Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/HenryDelMal/MeshCore_cl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    HenryDelMal/MeshCore_cl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware and tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware and tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chile_repeater_builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chile repeater builder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../firmware_picker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware picker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preset_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preset test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../filter_tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filter tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../telemetry_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../management_decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started and features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started and features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../role_feature_switches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role feature switches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_companion_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_radio_full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion radio full
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../full_companion_usb_switcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full companion usb switcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_offline_queue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion offline queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../halo_keymind_settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Halo keymind settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware updates and partitions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware updates and partitions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../upgrading_1.17.1.8_to_1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading 1.17.1.8 to 1.17.1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota user guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_easy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota easy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_wizard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lora_ota_automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lora ota automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_station_g2_to_ikoka_stick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota station g2 to ikoka stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_nrf52_bootloader_update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 bootloader update
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_nrf52_qspi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota nrf52 qspi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_meshtower_v2_sdcard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota meshtower v2 sdcard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../esp32_partition_catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 partition catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../esp32_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esp32 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heltec_v4_wifi_partition_migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heltec v4 wifi partition migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../host_cli_service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host cli service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio, networking, and power
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Radio, networking, and power
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../radio_profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../radio_presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radio presets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fleet_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private fleet management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../room_services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Room services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../carrier_wave/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier wave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../espnow_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Espnow bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../split_radio_repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split radio repeater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rs232_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rs232 bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../udp_bridge_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Udp bridge setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WiFi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flood_filtering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flood filtering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gps_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gps tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_lost_reply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion lost reply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensor tracker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nrf52_power_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nrf52 power management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI and protocol reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI and protocol reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_build_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli build matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli_command_availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cli command availability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../terminal_chat_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal chat cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../companion_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Companion protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kiss_modem_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiss modem protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packet_format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packet format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../payloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota_protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ota protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../management_reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats_binary_frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats binary frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../number_allocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number allocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qr_codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qr codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.18.0.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current - 1.18.0.1 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Previous releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Previous releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.17.1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.9 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/1.17.1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.17.1.8 USA Cascade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Older releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#firmware-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Firmware behavior
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#regression-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regression checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usb-logging-ownership-and-session-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        USB logging ownership and session recovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-qualification-2026-10-03" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local qualification (2026-10-03)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#esp32-hwcdc-migration-and-upstream-findings-2026-10-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ESP32 HWCDC migration and upstream findings (2026-10-04)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#physical-g2-http-ota-and-usb-transition-2026-10-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Physical G2 HTTP OTA and USB transition (2026-10-05)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/HenryDelMal/MeshCore_cl/edit/keymindCascade/docs/test-results/usb_serial_backpressure.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<!-- meshcore-hosted-doc-link:start -->
+<p class="meshcore-hosted-doc-link"><a href="https://mikecarper.github.io/MeshCore/test-results/usb_serial_backpressure/">View this page on MeshCore Docs</a>.</p>
+<!-- meshcore-hosted-doc-link:end -->
+
+<h1 id="native-usb-backpressure-and-radio-liveness">Native USB backpressure and radio liveness</h1>
+<p>The native USB defaults for eight ESP32-S3 board families now use hardware
+USB Serial/JTAG (HWCDC). The TinyUSB behavior below remains available to
+explicitly selected TinyUSB builds. UART and non-ESP32 transports retain their
+existing backend.</p>
+<p>ESP32-S2/S3 builds using native TinyUSB CDC (<code>ARDUINO_USB_MODE=0</code> and
+CDC-on-boot) must not wait for a computer to read USB output. In the bundled
+Arduino-ESP32 2.0.17 core, <code>USBCDC::write()</code> can wait indefinitely for transmit
+space; its configured timeout bounds a mutex, not that wait. This can stop the
+same loop that services LoRa, even while the USB connection still appears open.</p>
+<h2 id="firmware-behavior">Firmware behavior</h2>
+<ul>
+<li>Native CDC output uses a single FIFO attempt, not Arduino's wait-for-space
+  write or flush. TinyUSB's internal short mutex operations still apply; this
+  is a no-host-progress-wait guarantee, not a lock-free driver replacement.</li>
+<li>Functional text and diagnostics share one ordered 4 KiB queue. Diagnostics
+  leave 3 KiB reserved for commands. A diagnostic backlog alone does not prevent
+  command input. A stalled host may lose diagnostic records; radio work continues.</li>
+<li>A connected terminal that exceeds its bounded output capacity gets an explicit
+  dropped-byte notice when transmission resumes. Large local file dumps and
+  recent-repeater listings advance between radio service passes instead.</li>
+<li>File dumps stop at their initial file size and emit <code>-&gt; EOF</code> only after the
+  final accepted record. Corrupt stored lines exceeding 640 bytes are omitted
+  with a visible notice. Recent-repeater output is a live, bounded-cursor view;
+  incoming packets can change its ordering while it is being printed.</li>
+<li>Disconnects discard pending old-session text and reset the role's partial
+  command/listing state. Binary/mOTA transitions suppress pending text notices.
+  Bytes already transmitted cannot be recalled.</li>
+<li>Companion frames retain and retry short writes. An mOTA request is admitted
+  only when its complete, at-most-11-byte record fits.</li>
+<li>nRF52, UART, and USB-Serial-JTAG behavior is not changed by this native-CDC path.</li>
+</ul>
+<p>Host software must also keep reading independently of command writes. A serial
+relay should start its reader before the first command, use finite write and
+response deadlines, avoid discarding received packet logs, and cancel I/O during
+shutdown. A response timeout must not allow a late reply to satisfy another
+command: the CLI has no transaction identifiers. Updating firmware alone does
+not correct an indefinite host-side serial write.</p>
+<h2 id="regression-checks">Regression checks</h2>
+<p>Run only one PlatformIO process in the checkout at a time.</p>
+<pre><code class="language-sh">python test/test_esp32_tinyusb_nonblocking.py
+python test/test_esp32_usb_session_fix.py
+python test/test_esp32_tinyusb_role_hygiene.py
+python test/test_esp32_tinyusb_cooperative_output.py
+python test/test_esp32_usb_serial_hygiene.py
+python test/test_nrf52_usb_logging_contract.py
+python test/test_nrf52_usb_lifecycle.py
+python test/test_common_cli_logging_transaction.py
+python test/test_companion_usb_logging_reply.py
+python test/test_usb_diagnostic_logging.py
+pio test -e native -f test_nrf52_debug_output -f test_serial_packet_log -f test_serial_mode_switch -f test_mesh_tables
+</code></pre>
+<p>The first test compiles the real USB facade against a simulated 64-byte FIFO,
+including stopped readers, reconnects, protocol transitions, and other-platform
+fallbacks. Host simulations cannot establish that every real USB driver or
+endpoint failure has recovered.</p>
+<p>A Full Station G2 validation build with USA Cascadia radio settings and the Cascade
+profile can be made using the normal build entry point. The portable <code>standard</code>
+recipe preserves the deployed partition layout but omits LoRa OTA; it still has
+the browser firmware uploader. The <code>auto</code>/<code>full</code> recipe instead enables the
+expanded feature set and partition layout: its merged image is <strong>not</strong> an
+app-only update for a device with the legacy layout.</p>
+<pre><code class="language-sh">MESHDEBUG_OVERRIDE=on PACKET_LOGGING_OVERRIDE=on \
+  bash build.sh build-firmware Station_G2_repeater --build-profile full \
+  --radio-preset usa-cascadia --profile cascade
+</code></pre>
+<p>Before installing on hardware, preserve the device identity, preferences, and
+existing partition layout. Then verify USB command responses and repeated LoRa
+logins with the relay running, paused, and stopped, including a host that leaves
+USB open without reading. Check LoRa recovery separately from USB OUT recovery;
+fixing transmit backpressure does not prove an unrelated OUT endpoint fault is
+resolved. Do not erase or repartition the radio as part of this test.</p>
+<h2 id="usb-logging-ownership-and-session-recovery">USB logging ownership and session recovery</h2>
+<p>On a single-port Companion, enabling USB logging parks framed USB traffic
+before opening the diagnostic gate. A TCP/browser terminal retains its CLI
+ownership; USB is log-only during that session. Disabling logging restores USB
+traffic without accepting bytes typed during the log-only interval. A dedicated
+nRF52 logging port does not park the separate Companion port.</p>
+<p>A framed USB logging command retains its original requester and queues its
+acknowledgement before changing ownership. The handoff advances without waiting
+for the host: live logging stays unchanged while the complete USB reply is
+backpressured. Disconnect/reset cancels that session's pending handoff; an
+already-saved preference can still take effect at the next boot. BLE/WiFi replies
+are never used as a fallback for a refused USB acknowledgement.</p>
+<p>On native ESP32 TinyUSB, build-local framework hooks capture DTR and USB session
+boundaries synchronously in the USB owner task, before Arduino's delayed events.
+They purge old input at the boundary and reject late input while DTR is low,
+without deleting a new host's first query during main-loop cleanup. An armed
+old IN packet (or a racing writer) triggers immediate soft-disconnect, a minimum
+20 ms detached interval, and quarantine until fresh enumeration. Shared SDK
+files are not modified; a changed native-CDC descriptor fails the build closed
+until the hook is reviewed. This path is specific to the pinned Arduino-ESP32
+2.0.17 native CDC implementation; hardware Serial/JTAG and UART are unchanged.</p>
+<p>Disabling diagnostics is not itself a protocol change and does not discard
+functional replies from the shared ESP32 text queue. Actual Binary/mOTA changes
+use the explicit terminal-output barrier. Touch and invalid-Ethernet-hostname
+diagnostics also honor the runtime logging gate and bounded USB stream.</p>
+<p>Ethernet and enabled MQTT diagnostics honor the runtime logging gate and use
+the bounded USB facade. Infrastructure logging setters commit preferences
+before changing live output; failed saves leave previous settings unchanged.
+A successful save with a failed MQTT runtime change reports those two outcomes
+separately.</p>
+<p>ESP32 native-USB repeater and room ACL listings retain short-write suffixes and
+advance one row per service pass, using their existing output buffer. Reconnect
+cancels the old listing. The listing is a bounded live view, not an immutable
+snapshot of clients changed during output.</p>
+<p>Stored dumps make progress even when HWCDC falls back to 256/512-byte TX rings.
+Recent-repeater headers/rows and EOF retain every unwritten suffix; a short
+write never causes their accepted prefix to be retried.</p>
+<p>nRF52 FIFO cleanup also checks for an already-armed IN packet. If one exists
+at a session boundary (including a pending zero-length packet), both USB ports
+briefly detach and re-enumerate: a FIFO clear alone cannot recall endpoint RAM.
+Reattachment waits for the local unplug event and a 20 ms minimum interval,
+without blocking the mesh loop. Dedicated CDC descriptors are added while
+detached even if the host has not yet completed enumeration. These recovery
+paths have native regression coverage; real host/board timing still requires
+hardware qualification.</p>
+<p>The nRF52 callback only drops the pull-up and closes producer gates. The
+application loop sends the stack's unplug event afterward, so a full owner-task
+event queue cannot make its consumer wait on itself. The detach interval starts
+when that application-side stack detach actually occurs. A regression models a
+full finite event queue as well as the separate armed endpoint packet.</p>
+<h2 id="local-qualification-2026-10-03">Local qualification (2026-10-03)</h2>
+<p>These are the upstream USB-session qualification results before the subsequent
+USB watchdog, GPS preference, and repeater trace merge. The byte counts below
+describe those earlier binaries, not the current merged source.</p>
+<ul>
+<li>All 112 USB Python regression methods passed, plus nine logging-transaction,
+  Bluetooth-control, and WiFi-status methods. The native facade includes a
+  threaded close-versus-writer race and an unmount-with-reset-endpoints check.</li>
+<li><code>Xiao_S3_companion_radio_usb</code> built successfully with its default hardware
+  Serial/JTAG transport: 880,709 flash bytes and 73,244 static RAM bytes.</li>
+<li>A native-TinyUSB Xiao S3 USB Companion qualification build passed with debug
+  and packet logging enabled: 928,133 flash bytes and 89,312 static RAM bytes.
+  Its linked ELF contains the synchronous session hooks and endpoint query.</li>
+<li>A RAK4631 Full Companion qualification build with two CDCs, debug/packet
+  logging, and USB/BLE mOTA sources passed: 678,092 flash bytes and 154,428
+  static RAM bytes. The runtime RAM and Bluetooth DFU safety checks also passed.</li>
+</ul>
+<p>The two custom qualification builds used the lab profile
+<code>909.5 MHz / 500 kHz / SF5 / CR5</code>. No board was flashed, and no physical
+disconnect/reconnect or hardware endpoint recovery was claimed by these checks.</p>
+<h2 id="esp32-hwcdc-migration-and-upstream-findings-2026-10-04">ESP32 HWCDC migration and upstream findings (2026-10-04)</h2>
+<p>The board defaults change 78 native-TinyUSB recipes across Heltec E213, E290,
+T190, Wireless Tracker V1.1 and V2, Station G2 and G3, and T-Beam 1W. Two G2
+recipes already used HWCDC. All 80 recipes in these families select
+<code>ARDUINO_USB_MODE=1</code> and <code>ARDUINO_USB_CDC_ON_BOOT=1</code>; upload touch and waiting
+for a replacement upload port are explicitly disabled. Their framework stays
+on PlatformIO Espressif32 6.11.0 / Arduino-ESP32 2.0.17. Existing ESP32 UART
+recipes and all non-ESP32 recipes are unchanged.</p>
+<p>HWCDC output uses the existing bounded facade, early RX/TX allocation, shared
+writer exclusion, and fresh capacity check inside that exclusion. The pinned
+SDK receives a build-local TX suffix/interrupt backport from upstream
+<a href="https://github.com/espressif/arduino-esp32/pull/12606">Arduino-ESP32 #12606</a>.
+KISS now prepares buffers before starting the USB driver and uses this facade.
+Its debug/logging gates stay closed so diagnostics cannot split a binary frame.
+A USB bus reset drops partial host commands and old queued frame suffixes while
+preserving radio transmission state and settings. Radio work continues while
+USB cleanup retries.</p>
+<p>On S3, the pinned HWCDC initialization also restores RTC PHY ownership to the
+hardware Serial/JTAG peripheral. A software restart after running TinyUSB can
+otherwise retain ownership by the OTG controller, including an OTA update to an
+HWCDC image. When that retained state is detected, initialization first briefly
+detaches the old OTG pads so the host can enumerate the changed device. Ordinary
+HWCDC startup does not incur that extra interval.</p>
+<p>HWCDC does not expose the same DTR session boundary as TinyUSB. Closing a host
+port while leaving USB connected is not proof of a new firmware session; a
+partial command may survive that close. Bus reset/unplug cleanup and protocol
+client leases must be tested separately. Hosts should rediscover the port after
+the backend change: the USB product and <code>/dev/serial/by-id</code> path can change.
+Espressif confirms that hardware CDC descriptors are fixed in silicon, so
+firmware cannot preserve a custom TinyUSB product name.
+<a href="https://github.com/espressif/arduino-esp32/issues/11394#issuecomment-3778833461">Arduino-ESP32 maintainer comment</a>,
+<a href="https://github.com/espressif/esp-idf/issues/18516#issuecomment-4316973953">ESP-IDF maintainer comment</a>.</p>
+<p>Upstream reports checked for this transition:</p>
+<table>
+<thead>
+<tr>
+<th>Report</th>
+<th>Documented behavior</th>
+<th>Relevance and mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/espressif/esp-idf/issues/9826">ESP-IDF #9826</a></td>
+<td>S3 retains TinyUSB PHY ownership across software/watchdog restart, preventing USB Serial/JTAG operation.</td>
+<td>Pinned HWCDC initialization restores the official S3 hardware PHY route and detaches the former OTG connection first. Initialization fixtures seed retained RTC state; the controlled physical G2 OTA transition below also passed.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/espressif/arduino-esp32/issues/12782">Arduino-ESP32 #12782</a></td>
+<td>Open report of HWCDC failing to reconnect after about two minutes idle on C3/C6/C61/S3, latest master / IDF 5.5.4.</td>
+<td>Reported SDK differs from our pinned Arduino 2.0.17 / IDF 4.4. Synthetic tests cover idle lease expiry and reply admission, not physical enumeration on that SDK.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/espressif/esp-idf/issues/18996">ESP-IDF #18996</a></td>
+<td>Open report of S3 USB Serial/JTAG failing after repeated software resets from macOS, on IDF 6.0.2; includes XIAO S3.</td>
+<td>Not qualified by Linux port reopen tests and not reproduced on our pinned SDK. CPU reset and host-port reopen are distinct cases.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/espressif/esp-idf/issues/13287">ESP-IDF #13287</a></td>
+<td>S3 may remain in ROM after upload when download mode was entered with physical BOOT/RESET.</td>
+<td>Our older esptool does not offer the newer <code>watchdog-reset</code> option. Press RESET after a manual BOOT-mode upload if the application does not start.</td>
+</tr>
+</tbody>
+</table>
+<p>Espressif's <a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-guides/usb-serial-jtag-console.html">USB Serial/JTAG guide</a>
+describes the fixed CDC/JTAG peripheral and its light/deep sleep limitations.
+This migration uses only its serial role; it does not provide TinyUSB composite
+interfaces such as MSC, HID, or a second CDC.</p>
+<p>Additional regression commands (only one PlatformIO process at a time):</p>
+<pre><code class="language-sh">python3 -B test/test_esp32_hwcdc_recipes.py -v
+python3 -B test/test_hwcdc_tx_backport.py -v
+python3 -B test/test_hwcdc_write_capacity.py -v
+python3 -B test/test_hwcdc_role_transport.py -v
+pio test -e native_kiss_modem
+</code></pre>
+<p>The recipe check resolves all 821 tracked environments using PlatformIO's real
+inheritance and SCons flag/unflag processing. It checks all 500 ESP32 selectors,
+including all 78 migrated recipes, and the 321 non-ESP32 recipes. The transport
+test compiles production Companion framing, KISS output methods, setup/loop,
+and the bounded facade with the patched SDK against simulated USB registers and
+RTOS queues under ASan/UBSan. It covers withheld readers, stale capacity,
+partial frames, queue limits, session reset, idle leases, and cleanup retries.
+The role fixture injects a confirmed session boundary; separate SDK tests
+execute the bus-reset callback and the S3 retained-PHY initialization. The
+setup/loop fixture uses stub transport functions to check ordering and continued
+radio service rather than real peripheral recovery.
+Native KISS tests also exercise the full modem's radio lifecycle during reset.
+These tests do not establish physical USB timing or host compatibility for
+boards that were not connected to the lab.</p>
+<h2 id="physical-g2-http-ota-and-usb-transition-2026-10-05">Physical G2 HTTP OTA and USB transition (2026-10-05)</h2>
+<p>The latest OTA qualification used commit <code>95913c5301318fb738fb8f50e314a57a2dd9eb07</code>,
+including the uploader fix from <code>d2983762</code> and the station ownership fix.
+A current-source build explicitly selected TinyUSB; the target selected the
+normal HWCDC backend. Both ran on the physical Station G2 with the same existing
+partition table and two <code>0x640000</code> application slots. The independent audit
+checked packaged application hashes against metadata and matching preserved
+ELFs, the USB SDK transforms, and linked RAM requirements. Both ELFs contain
+the production 30-second admitted-upload timeout, queued-response guards and
+specific write-failure text; neither links the removed raw <code>Update.printError</code>
+calls. This is a controlled same-source transition, not released stock 1.17.1
+migration evidence.</p>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th style="text-align: right;">App bytes</th>
+<th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TinyUSB observer, <code>95913c53</code></td>
+<td style="text-align: right;">1,978,200</td>
+<td><code>cf72b3ce872fb0887273022255fe5826070b5b40f5aa8057f50e90e7c92d4b72</code></td>
+</tr>
+<tr>
+<td>Normal HWCDC observer, <code>95913c53</code></td>
+<td style="text-align: right;">1,950,824</td>
+<td><code>aeeadb1f165164c5b01d5855918e20bb0dc37bedcb9f0a8b88f52faa4c435486</code></td>
+</tr>
+</tbody>
+</table>
+<p>The AP upload used the actual multipart <code>/update</code> handler and an app-only
+image. Its HTTP identity endpoint was matched to the node read over USB before
+the POST. USB topology was sampled every 20 ms without serial reads or writes
+across the upload/restart boundary. After 65,536 wire body bytes, Linux's
+<code>SIOCOUTQ</code> on that same HTTP socket fell from 59,987 outstanding bytes to zero
+in 0.554 seconds. Only then did the host pause body sends for 4.510 seconds;
+there were no serial operations during that pause. TCP acknowledgement was
+observed; the firmware's application receive timestamp was not directly
+instrumented.</p>
+<table>
+<thead>
+<tr>
+<th>Measured gate</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>App-only multipart upload with the intentional body pause</td>
+<td>HTTP 200, 22.559 seconds</td>
+</tr>
+<tr>
+<td>Firmware-owned software restart and USB backend change</td>
+<td>TinyUSB device 120 disappeared; a transient TinyUSB device 121 preceded hardware CDC device 122 on the same physical topology</td>
+</tr>
+<tr>
+<td>First plain website <code>time &lt;epoch&gt;</code> after HWCDC discovery</td>
+<td>Clock-set acknowledgement in 2,997.319 ms; strict deadline 5,000 ms</td>
+</tr>
+<tr>
+<td>Extra post-restart settling, serial commands during upload, external recovery</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Identity and saved runtime settings</td>
+<td>Preserved against the original preflight</td>
+</tr>
+<tr>
+<td>Admin access</td>
+<td>Exactly the original and recovery Admin ACL entries remained</td>
+</tr>
+<tr>
+<td>Core diagnostics after the upgrade</td>
+<td>Error flags 0, uptime 4 seconds</td>
+</tr>
+<tr>
+<td>Pi WiFi rollback</td>
+<td>Original connection restored and temporary AP profile deleted; runner completed in 35.598 seconds</td>
+</tr>
+</tbody>
+</table>
+<p>The final <code>95913c53</code> hardware CDC application passed two quiet 180-second trials
+with power saving enabled. There were no serial reads, writes or keepalives
+during either interval. With the handle open, the first core reply took
+18.551 ms and uptime advanced from 43 to 223 seconds. With the handle closed,
+the first plain website clock request after reopening was acknowledged in
+14.728 ms and uptime advanced from 224 to 404 seconds. No CPU restart occurred.
+The preexisting radio CAD warning <code>0x02</code> remained unchanged throughout these
+trials; this was not a zero-error radio test. Original power saving off, other
+saved settings and both Admin ACL entries were restored and verified.</p>
+<p>After those trials, a single plain <code>start ota</code> command used the connected
+station's advertised LAN address. The actual <code>/update</code> page returned HTTP 200
+in 1.365 seconds and <code>/update/identity</code> returned HTTP 200 in 0.084 seconds with
+the exact G2 identity. The command reported WiFi on and WebConfig stopped.
+Stopping OTA and restoring the original WebConfig were verified; no firmware
+was uploaded in this endpoint probe. Uptime continued from 533 to 535 seconds,
+the station remained connected at -80 dBm, and identity, original settings,
+both Admins and power saving off were retained. These HTTP measurements use a
+separate diagnostic bound; the first USB website request still uses 5 seconds.</p>
+<p>Final restoration also verified the Pi's original WiFi connection, no temporary
+OTA profiles or return timers, and active <code>mctomqtt</code>, <code>ModemManager</code> and
+<code>mesh-logger</code> services. Each service reported exit status 0 and no restarts.
+This verifies service health; MQTT packet delivery was not measured in this run.</p>
+<p>Baseline preparation also used app-only HTTP OTA: hardware CDC <code>d2983762</code>
+installed TinyUSB <code>95913c53</code> in 19.083 seconds, and its first plain clock
+acknowledgement took 3,163.722 ms. Original identity, settings and both Admins
+were verified before and after this reverse transition; no rescue action was
+used. Its Pi WiFi rollback completed in 31.958 seconds.</p>
+<p>The first query used the stock website's plain clock command immediately after
+opening the discovered hardware CDC port. Later queries were tagged to keep
+unrelated diagnostics from satisfying a response. Neither a longer command
+deadline nor an arbitrary startup delay was added.</p>
+<p>The uploader fix addresses a separate bounded-gap problem: the pinned HTTP
+listener gives ordinary clients a 3-second receive timeout, which remained in
+effect while an admitted multipart upload was receiving its body. OTA now
+extends only that admitted request to 30 seconds after MD5 validation. Normal,
+unauthorized, malformed-MD5 and concurrent requests retain ordinary admission
+behavior. <code>send()</code> queues a response before it reaches the wire, so both the
+upload and completion callbacks preserve an already queued error. Begin/end
+errors and short writes return HTTP errors without calling raw USB prints
+from the shared AsyncTCP task.</p>
+<p>Three ASan/UBSan uploader tests passed, together with eight OTA startup tests
+and fifteen WiFi lifecycle tests. The uploader fixture executes production
+callbacks and the pinned AsyncTCP inactivity condition. A 4-second body pause
+survives, an abandoned owner remains open at 29.999 seconds and aborts at
+30 seconds, ownership is released without reboot, and a later upload completes.
+Negative controls fail when the timeout extension or queued-response guards
+are removed, or when raw USB error prints are restored.</p>
+<p>Historical results remain distinct:</p>
+<ul>
+<li>The earlier same-source <code>d2983762</code> forward transition also passed its
+  4.510-second upload pause: HTTP 200 in 23.211 seconds and the first website
+  clock acknowledgement in 2,976.119 ms.</li>
+<li>Earlier legacy-firmware WebConfig/WiFi handoff attempts failed before upload
+  and required USB restoration; they did not establish an OTA transition.</li>
+<li>An earlier controlled <code>e971beab</code> LAN attempt reset its upload socket after
+  1,277,952 of 1,950,796 wire bytes, with weak LAN signal. USB stayed on TinyUSB,
+  uptime continued, and an AP retry later passed. The cause of that LAN failure
+  is unproven; neither a socket reset nor radio CAD error flag <code>0x02</code> establishes
+  a CPU crash.</li>
+<li>Same-backend setup attempt 1 installed the fixed TinyUSB application over
+  HTTP, but the first product-matching USB rediscovery preceded the firmware's
+  delayed restart. Its version gate correctly failed while the old application
+  still answered. A later read-only version check confirmed <code>d2983762</code> without
+  rescue, and the measured forward transition verified that source version
+  before uploading. This setup report remains failed and is not counted as
+  migration or startup-latency evidence.</li>
+</ul>
+<p>The earlier <code>d2983762</code> hardware CDC application passed two quiet 180-second trials
+with power saving enabled. There were no serial reads, writes or keepalives
+during either interval. With the handle open, the first core reply took
+17.353 ms and uptime advanced 180 seconds. With the handle closed, the first
+plain website clock request after reopening was acknowledged in 8.905 ms and
+uptime advanced 181 seconds. Original power saving off, other saved settings
+and both Admin ACL entries were restored and verified.</p>
+<p>A normal <code>start ota</code> probe while the station was disconnected correctly
+reported its fallback AP address; a Pi still on its original LAN could not
+reach that separate AP. This does not qualify the LAN endpoint. Source review
+then identified a missing WebConfig retry owner when MQTT is compiled in but
+has no running worker. The infrastructure fix refreshes ownership from actual
+MQTT worker state on the mesh loop. Constructor credential loading, browser
+credential writes and the 64-hex password capability use a separate immutable
+storage choice, so taking over reconnects cannot truncate or reroute saved
+credentials. An active external worker retains its connection; a stopped
+worker releases it for a fresh portal attempt. Six ASan/UBSan tests exercise
+production role startup, connection fallback, retry, worker handoff and
+credential paths, including the existing manual Companion startup behavior.
+The <code>95913c53</code> OTA transition, quiet power-saving trials and normal LAN endpoint
+checks passed as reported above. The current GitHub unit workflow has not yet
+completed. Release 1.17.1.9 remains held and unpublished. These results qualify
+this G2, Linux host and pinned framework; they do not establish physical
+compatibility for every affected board or host operating system.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../_javascript/release_features.js?v=20261024-1"></script>
+      
+        <script src="../../_javascript/hosted_doc_links.js?v=20261007-1"></script>
+      
+        <script src="../../_javascript/notification_builder.js?v=20261006-channel9"></script>
+      
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      
+        <script src="../../_javascript/firmware_picker.js?v=20261024-included-bootloader"></script>
+      
+        <script src="../../_javascript/telemetry_decoder.js?v=20261022-noise-history"></script>
+      
+        <script src="../../_javascript/management_decoder.js"></script>
+      
+        <script src="../../_javascript/filter_tool.js?v=20261030-compact-defaults"></script>
+      
+        <script src="../../_javascript/preset_test.js?v=20260923-2"></script>
+      
+        <script src="../../_javascript/esp32_partition_catalog.js?v=20261001-1"></script>
+      
+    
+  </body>
+</html>
