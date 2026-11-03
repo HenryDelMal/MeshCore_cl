@@ -28,6 +28,7 @@ jobs:
       - name: Build repeater
         env:
           TARGET: ${{ inputs.board }}
+          MESHCORE_NRF52_SINGLE_SENSOR_PROFILE: reduced
         run: |
           set -euo pipefail
           case "$TARGET" in

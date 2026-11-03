@@ -5341,6 +5341,21 @@ run_nrf52_sensor_ota_pair() {
   local NRF52_OTA_SENSOR_PROFILE=""
   local full_status=0 reduced_status=0
 
+  # The Chile repeater builder intentionally ships the compact image only.
+  # Keep the general release policy below unchanged for other workflows.
+  if [ "${MESHCORE_NRF52_SINGLE_SENSOR_PROFILE:-}" = "reduced" ]; then
+    NRF52_OTA_SENSOR_PROFILE="reduced"
+    FIRMWARE_FILENAME_INFIX="reduced-ota"
+    if build_firmware_one_profile "$target"; then
+      echo "Built reduced-sensor LoRa OTA profile only: ${target}."
+      return 0
+    fi
+    return $?
+  elif [ -n "${MESHCORE_NRF52_SINGLE_SENSOR_PROFILE:-}" ]; then
+    echo "Invalid MESHCORE_NRF52_SINGLE_SENSOR_PROFILE (only 'reduced' is supported)." >&2
+    return 1
+  fi
+
   echo "Required nRF52 OTA pair: ${target}; exact target identity and storage/layout retained."
   NRF52_OTA_SENSOR_PROFILE="full"
   FIRMWARE_FILENAME_INFIX="full-ota"
