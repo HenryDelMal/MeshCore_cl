@@ -3343,6 +3343,14 @@ requires_esp32_portable_size_ceiling() {
 
   requires_esp32_portable_app_slot "$env_name" || return 1
 
+  # The Chile USB installer flashes the merged image, including the target's
+  # larger partition table. Keep the actual-partition size validation, but do
+  # not reject this one repeater for older layouts with the generic 1.25 MiB
+  # app slot. Its freshly installed layout still has to pass that actual check.
+  if [ "${MESHCORE_ESP32_SKIP_PORTABLE_SIZE_CEILING_TARGET:-}" = "$env_name" ]; then
+    return 1
+  fi
+
   # Arduino 3.x pulls substantially more WiFi runtime into ESP32-C6 and RC32
   # images. These target-specific OTA siblings already use larger A/B slots:
   # C6 boards declared at least 1920 KiB slots, while RC32 has always declared

@@ -29,6 +29,7 @@ jobs:
         env:
           TARGET: ${{ inputs.board }}
           MESHCORE_NRF52_SINGLE_SENSOR_PROFILE: reduced
+          MESHCORE_ESP32_SKIP_PORTABLE_SIZE_CEILING_TARGET: Heltec_WSL3_repeater
         run: |
           set -euo pipefail
           case "$TARGET" in
