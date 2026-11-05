@@ -36,7 +36,7 @@ jobs:
             RAK_4631_repeater|Xiao_nrf52_repeater|Xiao_C3_repeater|Xiao_C6_repeater_|Xiao_S3_repeater|Xiao_S3_WIO_repeater|ProMicro_repeater|Heltec_v3_repeater|heltec_v4_repeater|Heltec_WSL3_repeater) ;;
             *) exit 1 ;;
           esac
-          bash build.sh build-firmware "$TARGET" --radio-preset chile --profile chile --build-profile standard
+          bash build.sh build-firmware "$TARGET" --radio-preset chile --profile chile --build-profile standard --firmware-version v1.18.0.1-chile
       - uses: actions/upload-artifact@v7
         with:
           name: chile-${{ inputs.board }}
