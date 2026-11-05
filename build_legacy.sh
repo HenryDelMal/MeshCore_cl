@@ -3343,13 +3343,15 @@ requires_esp32_portable_size_ceiling() {
 
   requires_esp32_portable_app_slot "$env_name" || return 1
 
-  # The Chile USB installer flashes the merged image, including the target's
-  # larger partition table. Keep the actual-partition size validation, but do
-  # not reject this one repeater for older layouts with the generic 1.25 MiB
-  # app slot. Its freshly installed layout still has to pass that actual check.
-  if [ "${MESHCORE_ESP32_SKIP_PORTABLE_SIZE_CEILING_TARGET:-}" = "$env_name" ]; then
-    return 1
-  fi
+  # The Chile installer flashes merged USB images for its listed ESP32 targets,
+  # including each target's partition table. Keep actual-partition validation,
+  # but do not reject these images for their legacy 1.25 MiB app-slot ceiling.
+  # Older layouts still need the merged USB flash before LoRa OTA can accept them.
+  case "${MESHCORE_ESP32_USB_INSTALL_TARGETS:-}" in
+    *"|${env_name}|"*)
+      return 1
+      ;;
+  esac
 
   # Arduino 3.x pulls substantially more WiFi runtime into ESP32-C6 and RC32
   # images. These target-specific OTA siblings already use larger A/B slots:
