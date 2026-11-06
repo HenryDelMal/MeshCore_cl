@@ -87,6 +87,22 @@ class MyMesh : public mesh::Mesh, public CommonCLICallbacks {
   NodePrefs _prefs;
   ClientACL  acl;
   CommonCLI _cli;
+  struct ClockSample {
+    uint8_t source[8];
+    uint32_t epoch;
+    uint64_t received_at;
+  };
+  static constexpr uint8_t CLOCK_SAMPLE_SLOTS = 16;
+  ClockSample clock_samples[CLOCK_SAMPLE_SLOTS] = {};
+  bool mesh_clock_enabled = true;
+  bool mesh_clock_complete = false;
+  bool mesh_clock_manual = false;
+  bool mesh_clock_pending = false;
+  uint8_t mesh_clock_agreeing = 0;
+
+  void observeMeshClock(const mesh::Identity& id, uint32_t timestamp);
+  void updateMeshClock();
+  bool handleMeshClockCommand(const char* command, char* reply);
   uint8_t reply_data[MAX_PACKET_PAYLOAD];
   uint8_t reply_path[MAX_PATH_SIZE];
   uint8_t reply_path_len;

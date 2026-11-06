@@ -1,5 +1,6 @@
 #include "MyMesh.h"
 #include <algorithm>
+#include <helpers/ClockSyncUtils.h>
 
 /* ------------------------------ Config -------------------------------- */
 
@@ -647,9 +648,141 @@ static bool isShare(const mesh::Packet *packet) {
   return false;
 }
 
+namespace {
+constexpr char MESH_CLOCK_DISABLED_FILE[] = "/clock_mesh_off";
+constexpr uint32_t CLOCK_SAMPLE_MAX_AGE = 2 * 60 * 60 * 1000UL;
+constexpr uint8_t CLOCK_SAMPLE_QUORUM = 9;
+constexpr uint32_t CLOCK_CONSENSUS_WINDOW = 600;
+
+uint32_t minMeshEpoch() {
+  static const uint32_t epoch = DateTime(__DATE__, "00:00:00").unixtime();
+  return epoch;
+}
+
+uint32_t maxMeshEpoch() {
+  return minMeshEpoch() + 10UL * 366UL * 24UL * 60UL * 60UL;
+}
+}
+
+void MyMesh::observeMeshClock(const mesh::Identity& id, uint32_t timestamp) {
+  if (!mesh_clock_enabled || mesh_clock_complete || mesh_clock_manual ||
+      timestamp < minMeshEpoch() || timestamp > maxMeshEpoch()) return;
+
+  const uint64_t received_at = uptime_millis + (uint32_t)(millis() - last_millis);
+  uint8_t source[8];
+  mesh::Utils::sha256(source, sizeof(source), id.pub_key, PUB_KEY_SIZE);
+  ClockSample* slot = nullptr;
+  ClockSample* oldest = &clock_samples[0];
+  for (auto& sample : clock_samples) {
+    if (sample.epoch && received_at - sample.received_at <= CLOCK_SAMPLE_MAX_AGE &&
+        memcmp(sample.source, source, sizeof(source)) == 0) {
+      if (timestamp <= sample.epoch) return;
+      slot = &sample;
+      break;
+    }
+    if (!slot && (!sample.epoch || received_at - sample.received_at > CLOCK_SAMPLE_MAX_AGE))
+      slot = &sample;
+    if (sample.received_at < oldest->received_at) oldest = &sample;
+  }
+  if (!slot) slot = oldest;
+  memcpy(slot->source, source, sizeof(source));
+  slot->epoch = timestamp;
+  slot->received_at = received_at;
+  mesh_clock_pending = true;
+}
+
+void MyMesh::updateMeshClock() {
+  if (!mesh_clock_pending || !mesh_clock_enabled || mesh_clock_complete || mesh_clock_manual)
+    return;
+  mesh_clock_pending = false;
+  LocationProvider* gps = sensors.getLocationProvider();
+  if (gps && gps->getLastValidTimeSync()) return;
+
+  uint32_t values[CLOCK_SAMPLE_SLOTS];
+  uint8_t count = 0;
+  for (const auto& sample : clock_samples) {
+    uint64_t age = uptime_millis - sample.received_at;
+    if (sample.epoch && age <= CLOCK_SAMPLE_MAX_AGE &&
+        sample.epoch <= maxMeshEpoch() - age / 1000)
+      values[count++] = sample.epoch + age / 1000;
+  }
+  const auto estimate = mesh::evaluateClockSyncConsensus(
+      values, count, CLOCK_SAMPLE_QUORUM, CLOCK_CONSENSUS_WINDOW);
+  mesh_clock_agreeing = estimate.agreeing_count;
+  if (!estimate.consensus) return;
+
+  auto* clock = getRTCClock();
+  const uint32_t previous = clock->getCurrentTime();
+  // Preserve the branch's monotonic clock rule, including advert/replay timestamps.
+  if (estimate.estimate < previous &&
+      previous - estimate.estimate > mesh::CLOCK_SYNC_DRIFT_DEFAULT_SECONDS) return;
+  mesh_clock_complete = true;
+  if (estimate.estimate <= previous ||
+      estimate.estimate - previous <= mesh::CLOCK_SYNC_DRIFT_DEFAULT_SECONDS) return;
+
+  clock->setCurrentTime(estimate.estimate);
+  for (int i = 0; i < acl.getNumClients(); i++) {
+    auto* client = acl.getClientByIdx(i);
+    if (client->last_activity && client->last_activity <= previous)
+      client->last_activity += estimate.estimate - previous;
+  }
+}
+
+bool MyMesh::handleMeshClockCommand(const char* command, char* reply) {
+  if (strcmp(command, "get clock.sync.mesh") == 0) {
+    snprintf(reply, 160, "> %s", mesh_clock_enabled ? "on" : "off");
+  } else if (strcmp(command, "get clock.sync.status") == 0) {
+    LocationProvider* gps = sensors.getLocationProvider();
+    const char* status = !mesh_clock_enabled ? "off" :
+        mesh_clock_manual ? "manual clock set" :
+        gps && gps->getLastValidTimeSync() ? "GPS clock set" :
+        mesh_clock_complete ? "synchronized" : "waiting for signed adverts";
+    snprintf(reply, 160, "> %s (agreeing: %u/%u)", status,
+             (unsigned int)mesh_clock_agreeing, (unsigned int)CLOCK_SAMPLE_QUORUM);
+  } else if (strcmp(command, "set clock.sync.mesh on") == 0 ||
+             strcmp(command, "set clock.sync.mesh off") == 0) {
+    const bool enabled = strcmp(command, "set clock.sync.mesh on") == 0;
+    if (enabled && _fs->exists(MESH_CLOCK_DISABLED_FILE)) {
+      _fs->remove(MESH_CLOCK_DISABLED_FILE);
+    } else if (!enabled && !_fs->exists(MESH_CLOCK_DISABLED_FILE)) {
+      auto file = openAppend(MESH_CLOCK_DISABLED_FILE);
+      if (file) {
+        file.write((uint8_t)1);
+        file.close();
+      }
+    }
+    if (enabled == _fs->exists(MESH_CLOCK_DISABLED_FILE)) {
+      strcpy(reply, "ERR: could not save mesh clock setting");
+      return true;
+    }
+    if (enabled != mesh_clock_enabled) {
+      mesh_clock_enabled = enabled;
+      mesh_clock_complete = false;
+      mesh_clock_pending = false;
+      mesh_clock_agreeing = 0;
+      memset(clock_samples, 0, sizeof(clock_samples));
+    }
+    strcpy(reply, "OK");
+  } else if (strcmp(command, "clock.sync.mesh now") == 0) {
+    LocationProvider* gps = sensors.getLocationProvider();
+    if (!mesh_clock_enabled || mesh_clock_manual || (gps && gps->getLastValidTimeSync())) {
+      strcpy(reply, "ERR: mesh clock sync is off or suppressed");
+    } else {
+      mesh_clock_complete = false;
+      mesh_clock_pending = true;
+      strcpy(reply, "OK - mesh clock sync queued");
+    }
+  } else {
+    return false;
+  }
+  return true;
+}
+
 void MyMesh::onAdvertRecv(mesh::Packet *packet, const mesh::Identity &id, uint32_t timestamp,
                           const uint8_t *app_data, size_t app_data_len) {
   mesh::Mesh::onAdvertRecv(packet, id, timestamp, app_data, app_data_len); // chain to super impl
+
+  if (packet->isRouteFlood() && !isShare(packet)) observeMeshClock(id, timestamp);
 
   // if this a zero hop advert (and not via 'Share'), add it to neighbours
   if (packet->getPathHashCount() == 0 && !isShare(packet)) {
@@ -965,6 +1098,7 @@ MyMesh::MyMesh(mesh::MainBoard &board, mesh::Radio &radio, mesh::MillisecondCloc
 void MyMesh::begin(FILESYSTEM *fs) {
   mesh::Mesh::begin();
   _fs = fs;
+  mesh_clock_enabled = !_fs->exists(MESH_CLOCK_DISABLED_FILE);
   // load persisted prefs
   _cli.loadPrefs(_fs);
   acl.load(_fs, self_id);
@@ -1303,8 +1437,11 @@ void MyMesh::handleCommand(uint32_t sender_timestamp, char *command, char *reply
       sendNodeDiscoverReq();
       strcpy(reply, "OK - Discover sent");
     }
-  } else{
+  } else if (!handleMeshClockCommand(command, reply)) {
     _cli.handleCommand(sender_timestamp, command, reply);  // common CLI commands
+    if ((strncmp(command, "clock sync", 10) == 0 || strncmp(command, "time ", 5) == 0) &&
+        strncmp(reply, "OK - clock set:", 15) == 0)
+      mesh_clock_manual = true;
   }
 }
 
@@ -1355,6 +1492,7 @@ void MyMesh::loop() {
   uint32_t now = millis();
   uptime_millis += now - last_millis;
   last_millis = now;
+  updateMeshClock();
 }
 
 // To check if there is pending work

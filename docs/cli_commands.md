@@ -71,6 +71,22 @@ This document provides an overview of CLI commands that can be sent to MeshCore 
 
 ---
 
+### Set the repeater clock using LoRa
+
+- `get clock.sync.mesh`
+- `get clock.sync.status`
+- `set clock.sync.mesh on` / `set clock.sync.mesh off`
+- `clock.sync.mesh now`
+
+PowerSaving-v18 repeaters enable LoRa clock sync by default. The repeater
+uses signed flood adverts from nine or more distinct sources and only moves
+the clock forward when the consensus is more than ten minutes ahead.
+Successful GPS or manual time settings take precedence. Once synchronized,
+the repeater stops collecting until it reboots or an operator requests
+another attempt. The on/off setting persists across restarts.
+
+---
+
 ### Send a flood advert
 **Usage:** 
 - `advert`
