@@ -1091,8 +1091,12 @@ MyMesh::MyMesh(mesh::MainBoard &board, mesh::Radio &radio, mesh::MillisecondCloc
 
   // RXPS defaults - Balanced profile
   _prefs.rxps.enabled = 1;
-  _prefs.rxps.level = 6;
-  _prefs.rxps.preamble = 16;
+  _prefs.rxps.level = RX_POWERSAVING_BALANCED_LEVEL;
+  _prefs.rxps.preamble = RX_POWERSAVING_PROFILE_PREAMBLE;
+
+#ifdef MESHCHILE_REPEATER_DEFAULTS
+  _prefs.path_hash_mode = 1;  // 2-byte paths
+#endif
 }
 
 void MyMesh::begin(FILESYSTEM *fs) {
