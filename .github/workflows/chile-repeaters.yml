@@ -28,7 +28,6 @@ jobs:
       - name: Build repeater
         env:
           TARGET: ${{ inputs.board }}
-          MESHCORE_NRF52_SINGLE_SENSOR_PROFILE: reduced
           MESHCORE_ESP32_USB_INSTALL_TARGETS: "|Xiao_C3_repeater|Xiao_C6_repeater_|Xiao_S3_repeater|Xiao_S3_WIO_repeater|Heltec_v3_repeater|heltec_v4_repeater|Heltec_WSL3_repeater|"
         run: |
           set -euo pipefail
@@ -36,7 +35,11 @@ jobs:
             RAK_4631_repeater|Xiao_nrf52_repeater|Xiao_C3_repeater|Xiao_C6_repeater_|Xiao_S3_repeater|Xiao_S3_WIO_repeater|ProMicro_repeater|Heltec_v3_repeater|heltec_v4_repeater|Heltec_WSL3_repeater) ;;
             *) exit 1 ;;
           esac
-          bash build.sh build-firmware "$TARGET" --radio-preset chile --profile chile --build-profile standard
+          if [[ "$TARGET" =~ ^(RAK_4631_repeater|Xiao_nrf52_repeater|ProMicro_repeater)$ ]]; then
+            bash build.sh build-firmware "$TARGET" --radio-preset chile --profile chile --build-profile standard --with-bootloader 2.4.12
+          else
+            bash build.sh build-firmware "$TARGET" --radio-preset chile --profile chile --build-profile standard
+          fi
       - uses: actions/upload-artifact@v7
         with:
           name: chile-${{ inputs.board }}
