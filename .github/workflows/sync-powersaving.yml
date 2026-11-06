@@ -1,0 +1,33 @@
+name: Sync PowerSaving-v18 from IoTThinks
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-powersaving-v18
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'HenryDelMal/MeshCore_cl'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: PowerSaving-v18
+          fetch-depth: 0
+      - name: Merge upstream PowerSaving-v18
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch --no-tags https://github.com/IoTThinks/MeshCore.git refs/heads/PowerSaving-v18
+          if ! git merge --no-edit FETCH_HEAD; then
+            echo '::error::Upstream could not be merged automatically. Resolve the merge locally and push PowerSaving-v18.'
+            exit 1
+          fi
+          git push origin HEAD:refs/heads/PowerSaving-v18
