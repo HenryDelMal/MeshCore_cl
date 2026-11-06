@@ -35,6 +35,7 @@
 #include <helpers/TxtDataHelpers.h>
 #include <helpers/RegionMap.h>
 #include <helpers/RoutingPolicy.h>
+#include "MeshClockSync.h"
 #include "RateLimiter.h"
 
 #ifdef WITH_BRIDGE
@@ -78,7 +79,7 @@ struct NeighbourInfo {
 
 #define PACKET_LOG_FILE  "/packet_log"
 
-class MyMesh : public mesh::Mesh, public CommonCLICallbacks {
+class MyMesh : public mesh::Mesh, public CommonCLICallbacks, private mesh::MeshClockSyncCallbacks {
   FILESYSTEM* _fs;
   uint32_t last_millis;
   uint64_t uptime_millis;
@@ -87,22 +88,8 @@ class MyMesh : public mesh::Mesh, public CommonCLICallbacks {
   NodePrefs _prefs;
   ClientACL  acl;
   CommonCLI _cli;
-  struct ClockSample {
-    uint8_t source[8];
-    uint32_t epoch;
-    uint64_t received_at;
-  };
-  static constexpr uint8_t CLOCK_SAMPLE_SLOTS = 16;
-  ClockSample clock_samples[CLOCK_SAMPLE_SLOTS] = {};
-  bool mesh_clock_enabled = true;
-  bool mesh_clock_complete = false;
-  bool mesh_clock_manual = false;
-  bool mesh_clock_pending = false;
-  uint8_t mesh_clock_agreeing = 0;
+  mesh::MeshClockSync clock_sync;
 
-  void observeMeshClock(const mesh::Identity& id, uint32_t timestamp);
-  void updateMeshClock();
-  bool handleMeshClockCommand(const char* command, char* reply);
   uint8_t reply_data[MAX_PACKET_PAYLOAD];
   uint8_t reply_path[MAX_PATH_SIZE];
   uint8_t reply_path_len;
@@ -184,7 +171,9 @@ protected:
   void onAnonDataRecv(mesh::Packet* packet, const uint8_t* secret, const mesh::Identity& sender, uint8_t* data, size_t len) override;
   int searchPeersByHash(const uint8_t* hash) override;
   void getPeerSharedSecret(uint8_t* dest_secret, int peer_idx) override;
-  void onAdvertRecv(mesh::Packet* packet, const mesh::Identity& id, uint32_t timestamp, const uint8_t* app_data, size_t app_data_len);
+  void onAdvertRecv(mesh::Packet* packet, const mesh::Identity& id, uint32_t timestamp, const uint8_t* app_data, size_t app_data_len) override;
+  void onGroupPacketRecv(mesh::Packet* packet) override;
+  void onMeshClockAdjusted(uint32_t old_epoch, uint32_t new_epoch) override;
   void onPeerDataRecv(mesh::Packet* packet, uint8_t type, int sender_idx, const uint8_t* secret, uint8_t* data, size_t len) override;
   bool onPeerPathRecv(mesh::Packet* packet, int sender_idx, const uint8_t* secret, uint8_t* path, uint8_t path_len, uint8_t extra_type, uint8_t* extra, uint8_t extra_len) override;
   void onControlDataRecv(mesh::Packet* packet) override;

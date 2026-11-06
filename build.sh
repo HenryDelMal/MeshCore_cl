@@ -131,6 +131,7 @@ build_firmware() {
 
   # set firmware build date
   FIRMWARE_BUILD_DATE=$(date '+%d-%b-%Y')
+  local build_epoch=$(date -u '+%s')
 
   # get FIRMWARE_VERSION, which should be provided by the environment
   if [ -z "$FIRMWARE_VERSION" ]; then
@@ -147,7 +148,7 @@ build_firmware() {
   FIRMWARE_FILENAME="$1-${FIRMWARE_VERSION_STRING}"
 
   # add firmware version info to end of existing platformio build flags in environment vars
-  export PLATFORMIO_BUILD_FLAGS="${PLATFORMIO_BUILD_FLAGS} -DFIRMWARE_BUILD_DATE='\"${FIRMWARE_BUILD_DATE}\"' -DFIRMWARE_VERSION='\"${FIRMWARE_VERSION_STRING}\"'"
+  export PLATFORMIO_BUILD_FLAGS="${PLATFORMIO_BUILD_FLAGS} -DFIRMWARE_BUILD_DATE='\"${FIRMWARE_BUILD_DATE}\"' -DFIRMWARE_VERSION='\"${FIRMWARE_VERSION_STRING}\"' -DFIRMWARE_BUILD_EPOCH=${build_epoch}"
 
   # disable debug flags if requested
   disable_debug_flags

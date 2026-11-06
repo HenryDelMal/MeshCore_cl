@@ -126,6 +126,8 @@ public:
    */
   virtual void tick() { /* no op */}
 
+  void resetUniqueTime(uint32_t time) { last_unique = time; }
+
   uint32_t getCurrentTimeUnique() {
     uint32_t t = getCurrentTime();
     if (t <= last_unique) {

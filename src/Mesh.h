@@ -160,6 +160,9 @@ protected:
   */
   virtual void onGroupDataRecv(Packet* packet, uint8_t type, const GroupChannel& channel, uint8_t* data, size_t len) { }
 
+  // Called for each unseen, structurally valid group packet before channel decryption or routing.
+  virtual void onGroupPacketRecv(Packet* packet) { }
+
   /**
    * \brief  A simple ACK packet has been received.
    *         NOTE: same ACK can be received multiple times, via different routes

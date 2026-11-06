@@ -196,6 +196,7 @@ void Dispatcher::checkRecv() {
     uint8_t raw[MAX_TRANS_UNIT+1];
     int len = _radio->recvRaw(raw, MAX_TRANS_UNIT);
     if (len > 0) {
+      const uint32_t received_millis = _ms->getMillis();
       logRxRaw(_radio->getLastSNR(), _radio->getLastRSSI(), raw, len);
 
       pkt = _mgr->allocNew();
@@ -204,6 +205,7 @@ void Dispatcher::checkRecv() {
       } else {
         if (tryParsePacket(pkt, raw, len)) {
           pkt->_snr = _radio->getLastSNR() * 4.0f;
+          pkt->received_millis = received_millis;
           score = _radio->packetScore(_radio->getLastSNR(), len);
           air_time = _radio->getEstAirtimeFor(len);
           rx_air_time += air_time;

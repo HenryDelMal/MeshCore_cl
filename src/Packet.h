@@ -49,6 +49,7 @@ public:
   uint8_t path[MAX_PATH_SIZE];
   uint8_t payload[MAX_PACKET_PAYLOAD];
   int8_t _snr;
+  uint32_t received_millis = 0; // local receive time, never serialized
 
   /**
    * \brief calculate the hash of payload + type
