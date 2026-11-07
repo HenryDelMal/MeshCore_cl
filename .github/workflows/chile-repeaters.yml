@@ -14,6 +14,7 @@ on:
           - Xiao_S3_repeater
           - Xiao_S3_WIO_repeater
           - ProMicro_repeater
+          - KeepteenLT1_repeater
           - Heltec_v3_repeater
           - heltec_v4_repeater
           - Heltec_WSL3_repeater
@@ -32,13 +33,13 @@ jobs:
         run: |
           set -euo pipefail
           case "$TARGET" in
-            RAK_4631_repeater|Xiao_nrf52_repeater|Xiao_C3_repeater|Xiao_C6_repeater_|Xiao_S3_repeater|Xiao_S3_WIO_repeater|ProMicro_repeater|Heltec_v3_repeater|heltec_v4_repeater|Heltec_WSL3_repeater) ;;
+            RAK_4631_repeater|Xiao_nrf52_repeater|Xiao_C3_repeater|Xiao_C6_repeater_|Xiao_S3_repeater|Xiao_S3_WIO_repeater|ProMicro_repeater|KeepteenLT1_repeater|Heltec_v3_repeater|heltec_v4_repeater|Heltec_WSL3_repeater) ;;
             *) exit 1 ;;
           esac
           export FIRMWARE_VERSION="v18-chile-${GITHUB_SHA:0:8}"
           bash build.sh build-firmware "$TARGET"
           case "$TARGET" in
-            RAK_4631_repeater|Xiao_nrf52_repeater|ProMicro_repeater)
+            RAK_4631_repeater|Xiao_nrf52_repeater|ProMicro_repeater|KeepteenLT1_repeater)
               test -s "out/$TARGET-$FIRMWARE_VERSION.zip"
               test -s "out/$TARGET-$FIRMWARE_VERSION.uf2"
               ;;
